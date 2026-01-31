@@ -6,11 +6,33 @@ nano system/controlDict
 icoFoam
 sonicFoam
 foamToVTK
+foamCleanTutorials (erase mesh and all folders except 0, constant, and systems)
+blockMesh | tee log.blockMesh
+checkMesh | tee log.checkMesh
+icoFoam | tee log.icoFoam
+
+foamLog log.icoFoam
+
+gnuplot3
 
 # General Notes
 ![alt text](image-4.png)
 ![alt text](image-5.png)
-
+![alt text](image-7.png)
+![alt text](image-8.png)
+simpleGrading(0.5 1 1) will cause there to be smaller cells in the +x direction
+![alt text](image-9.png)
+![alt text](image-10.png)
+![alt text](image-11.png)
+![alt text](image-12.png)
+![alt text](image-13.png)
+![alt text](image-14.png)
+![alt text](image-15.png)
+![alt text](image-16.png)
+![alt text](image-17.png)
+![alt text](image-18.png)
+![alt text](image-19.png)
+![alt text](image-20.png)
 # How to create a grid with block mesh in OpenFOAM
 within polyMesh/blockMeshDict.txt file, convertToMeters 1; is units in meter, convertToMeters 0.001; is units in millimeters
 hex blocks are done counter clock wise with respect to the vertices. Ie, hex (0 1 3 2) if vertices are in 0 1 3 2 ccw order
