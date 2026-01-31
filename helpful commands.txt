@@ -1,6 +1,0 @@
-cp controlDict ControlDict.foam
-fluentMeshToFoam .msh_file
-refineMesh -overwrite
-nano system/controlDict
-icoFoam
-foamToVTK

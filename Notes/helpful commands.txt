@@ -1,0 +1,9 @@
+cp controlDict ControlDict.foam
+fluentMeshToFoam .msh_file
+refineMesh -overwrite
+nano system/controlDict
+icoFoam
+foamToVTK
+within polyMesh/blockMeshDict.txt file, convertToMeters 1; is units in meter, convertToMeters 0.001; is units in millimeters
+hex blocks are done counter clock wise with respect to the vertices. Ie, hex (0 1 3 2) if vertices are in 0 1 3 2 ccw order
+declare inlet/outlet faces using RHR to determine proper direction for vertices order
