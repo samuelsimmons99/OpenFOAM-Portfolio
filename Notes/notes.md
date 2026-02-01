@@ -10,10 +10,17 @@ foamCleanTutorials (erase mesh and all folders except 0, constant, and systems)
 blockMesh | tee log.blockMesh
 checkMesh | tee log.checkMesh
 icoFoam | tee log.icoFoam
-
+paraview &
 foamLog log.icoFoam
-
+nano setFieldsDict (to set value of U, T, p fields in all cells)
+setFields (to set field default values using setFieldsDict values, changes the values of U, T, and p within the 0 folder)
+"setFields" command and returned error such as  "Foam Warning: (...) Field U not found", "Foam Warning: (...) Field  T not found", "Foam Warning: (...) Field  P not found", try changing the  "0.orig" to "0"
+cp -r <old_dict> <new_dict_loc>
 gnuplot3
+postProcess -func magU
+postProcess -func sample
+nano system/sample to modify post processing sampling points
+
 
 # General Notes
 ![alt text](image-4.png)
@@ -48,3 +55,7 @@ Symmetry planes means geometry can be mirrored along planes
 Unspecified faces are given type empty, such as the front and back most face of a 2D simulation (OpenFOAM treats it as 1 mesh in the z direction)
 No slip BC:
 ![alt text](image-6.png)
+
+# Divergence
+![alt text](image-22.png)
+Simulation diverged due to high Courant number, reduce deltaT in the controlDict
