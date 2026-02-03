@@ -59,3 +59,7 @@ No slip BC:
 # Divergence
 ![alt text](image-22.png)
 Simulation diverged due to high Courant number, reduce deltaT in the controlDict
+
+# Transport Equations Video by Jozsef Nagy
+![alt text](image-23.png)
+Even with diffusion at 0, numerical diffusion will occur that causes temperature to spread out such as in cases 5-7
