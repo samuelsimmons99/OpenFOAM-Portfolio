@@ -1,0 +1,70 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : simpleFoam -parallel
+Date   : Feb 03 2026
+Time   : 19:06:09
+Host   : rinkoa
+PID    : 9018
+I/O    : uncollated
+Case   : /home/rinkoa/OpenFOAM-v2012/sims/taylor_couette
+nProcs : 8
+Hosts  :
+(
+    (rinkoa 8)
+)
+Pstream initialized with:
+    floatTransfer      : 0
+    nProcsSimpleSum    : 0
+    commsType          : nonBlocking
+    polling iterations : 0
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 627
+
+
+SIMPLE: convergence criteria
+    field U	 tolerance 0.0001
+    field p	 tolerance 0.001
+
+Reading field p
+
+Reading field U
+
+Reading/calculating face flux field phi
+
+Selecting incompressible transport model Newtonian
+Selecting turbulence model type laminar
+Selecting laminar stress model Stokes
+No MRF models present
+
+No finite volume options present
+
+Starting time loop
+
+Time = 628
+
+smoothSolver:  Solving for Ux, Initial residual = 1.2163994e-05, Final residual = 1.15262517e-06, No Iterations 8
+smoothSolver:  Solving for Uy, Initial residual = 1.2162089e-05, Final residual = 1.15604318e-06, No Iterations 8
+smoothSolver:  Solving for Uz, Initial residual = 9.92988327e-05, Final residual = 7.20733257e-06, No Iterations 5
+GAMG:  Solving for p, Initial residual = 2.69255493e-05, Final residual = 1.21929344e-06, No Iterations 2
+time step continuity errors : sum local = 9.59342152e-05, global = 7.4359562e-17, cumulative = 1.55412586e-14
+ExecutionTime = 0.66 s  ClockTime = 1 s
+
+
+SIMPLE solution converged in 628 iterations
+
+End
+
+Finalising parallel run

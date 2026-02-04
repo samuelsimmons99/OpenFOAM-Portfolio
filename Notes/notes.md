@@ -20,7 +20,27 @@ gnuplot3
 postProcess -func magU
 postProcess -func sample
 nano system/sample to modify post processing sampling points
+simpleFoam > log &
+tail -f log
 
+foamLog log
+wmUnset
+cd logs
+gnuplot
+plot 'UzFinalRes_0' with lines
+![alt text](image-24.png)
+
+export WM_PROJECT_DIR=/opt/OpenFOAM/OpenFOAM-11
+
+decomposePar to split domain into multiple parts per CPU core
+
+. ~/OpenFOAM/OpenFOAM-v1812/etc/bashrc
+$ decomposePar
+$ mpirun -np 4 simpleFoam -parallel > log.parallel &
+$ foamLog log.parallel
+$ wmUnset
+$ gnuplot
+gnuplot> plot ’UzFinalRes_0’ with lines
 
 # General Notes
 ![alt text](image-4.png)
@@ -60,6 +80,7 @@ No slip BC:
 ![alt text](image-22.png)
 Simulation diverged due to high Courant number, reduce deltaT in the controlDict
 
-# Transport Equations Video by Jozsef Nagy
+# Transport Equations Video by Jozsef Nagy, scalarTransportFoam transport_baseCase_#
+
 ![alt text](image-23.png)
 Even with diffusion at 0, numerical diffusion will occur that causes temperature to spread out such as in cases 5-7
