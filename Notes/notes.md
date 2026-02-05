@@ -60,6 +60,7 @@ simpleGrading(0.5 1 1) will cause there to be smaller cells in the +x direction
 ![alt text](image-18.png)
 ![alt text](image-19.png)
 ![alt text](image-20.png)
+![alt text](image-25.png)
 # How to create a grid with block mesh in OpenFOAM
 within polyMesh/blockMeshDict.txt file, convertToMeters 1; is units in meter, convertToMeters 0.001; is units in millimeters
 hex blocks are done counter clock wise with respect to the vertices. Ie, hex (0 1 3 2) if vertices are in 0 1 3 2 ccw order
