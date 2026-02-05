@@ -1,0 +1,33 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+blowerLeftWall
+{
+    field U;
+    expressions
+    (
+        {
+            target value;
+            patchName leftWall;
+            variables "maxY=max(pts().y);thres=0.5*maxY;";
+            expression
+              "(pos().y<thres) ? vector(3,3,0)*(maxY-pos().y) : vector(0,0,0)";
+        }
+    );
+}
+
+// ************************************************************************* //
