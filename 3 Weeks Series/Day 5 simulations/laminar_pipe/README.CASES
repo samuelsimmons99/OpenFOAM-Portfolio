@@ -1,0 +1,11 @@
+case0
+	Velocity BC
+
+case1
+	Pressure BC
+
+case2
+	Velocity BC + simpleFoam
+
+case3
+	Velocity BC + modifyMesh to get bad quality cells + writePrecision
