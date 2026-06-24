@@ -1,0 +1,93 @@
+# Wavefront OBJ file written 2026-06-21T16:26:44
+o combined_m_normal_4
+
+# points : 19
+# faces  : 18
+# zones  : 22
+#   0  FRONT_PANEL  (nFaces: 0)
+#   1  Fan_front_blades  (nFaces: 0)
+#   2  Fan_front_frame  (nFaces: 0)
+#   3  Fan_front_inlet  (nFaces: 0)
+#   4  Fan_front_outlet  (nFaces: 18)
+#   5  fan_rear1_blades  (nFaces: 0)
+#   6  fan_rear1_frame  (nFaces: 0)
+#   7  fan_rear1_inlet  (nFaces: 0)
+#   8  fan_rear1_outlet  (nFaces: 0)
+#   9  fan_rear2_blades  (nFaces: 0)
+#   10  fan_rear2_frame  (nFaces: 0)
+#   11  fan_rear2_inlet  (nFaces: 0)
+#   12  fan_rear2_outlet  (nFaces: 0)
+#   13  MINI_BOARD  (nFaces: 0)
+#   14  SMALL_chip1  (nFaces: 0)
+#   15  SMALL_chip2  (nFaces: 0)
+#   16  SMALL_chip3  (nFaces: 0)
+#   17  SMALL_PCB  (nFaces: 0)
+#   18  TIM  (nFaces: 0)
+#   19  Motherboard  (nFaces: 0)
+#   20  CPU  (nFaces: 0)
+#   21  Heatsink  (nFaces: 0)
+
+# <points count="19">
+v 0.106425 0.045 0.16439
+v 0.106425 0.083 0.16439
+v 0.0819991 0.0741097 0.16439
+v 0.0934282 0.0807083 0.16439
+v 0.119422 0.0807083 0.16439
+v 0.0690023 0.0384014 0.16439
+v 0.0690023 0.0515986 0.16439
+v 0.073516 0.064 0.16439
+v 0.0934282 0.00929168 0.16439
+v 0.0819991 0.0158903 0.16439
+v 0.073516 0.026 0.16439
+v 0.130851 0.0158903 0.16439
+v 0.119422 0.00929168 0.16439
+v 0.106425 0.007 0.16439
+v 0.143848 0.0515986 0.16439
+v 0.143848 0.0384014 0.16439
+v 0.139334 0.026 0.16439
+v 0.130851 0.0741097 0.16439
+v 0.139334 0.064 0.16439
+# </points>
+
+# <faces count="18">
+g FRONT_PANEL
+g Fan_front_blades
+g Fan_front_frame
+g Fan_front_inlet
+g Fan_front_outlet
+f 3 4 1
+f 4 2 1
+f 1 2 5
+f 6 7 1
+f 7 8 1
+f 1 8 3
+f 9 10 1
+f 10 11 1
+f 1 11 6
+f 12 13 1
+f 13 14 1
+f 1 14 9
+f 15 16 1
+f 16 17 1
+f 1 17 12
+f 5 18 1
+f 18 19 1
+f 1 19 15
+g fan_rear1_blades
+g fan_rear1_frame
+g fan_rear1_inlet
+g fan_rear1_outlet
+g fan_rear2_blades
+g fan_rear2_frame
+g fan_rear2_inlet
+g fan_rear2_outlet
+g MINI_BOARD
+g SMALL_chip1
+g SMALL_chip2
+g SMALL_chip3
+g SMALL_PCB
+g TIM
+g Motherboard
+g CPU
+g Heatsink
+# </faces>

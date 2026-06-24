@@ -1,0 +1,166 @@
+# Wavefront OBJ file written 2026-06-21T16:26:44
+o combined_m_9
+
+# points : 38
+# faces  : 72
+# zones  : 22
+#   0  FRONT_PANEL  (nFaces: 0)
+#   1  Fan_front_blades  (nFaces: 0)
+#   2  Fan_front_frame  (nFaces: 0)
+#   3  Fan_front_inlet  (nFaces: 0)
+#   4  Fan_front_outlet  (nFaces: 0)
+#   5  fan_rear1_blades  (nFaces: 0)
+#   6  fan_rear1_frame  (nFaces: 0)
+#   7  fan_rear1_inlet  (nFaces: 0)
+#   8  fan_rear1_outlet  (nFaces: 0)
+#   9  fan_rear2_blades  (nFaces: 72)
+#   10  fan_rear2_frame  (nFaces: 0)
+#   11  fan_rear2_inlet  (nFaces: 0)
+#   12  fan_rear2_outlet  (nFaces: 0)
+#   13  MINI_BOARD  (nFaces: 0)
+#   14  SMALL_chip1  (nFaces: 0)
+#   15  SMALL_chip2  (nFaces: 0)
+#   16  SMALL_chip3  (nFaces: 0)
+#   17  SMALL_PCB  (nFaces: 0)
+#   18  TIM  (nFaces: 0)
+#   19  Motherboard  (nFaces: 0)
+#   20  CPU  (nFaces: 0)
+#   21  Heatsink  (nFaces: 0)
+
+# <points count="38">
+v -0.0748902 0.057213 -0.17555
+v -0.0715908 0.0514984 -0.17555
+v -0.089445 0.045 -0.17555
+v -0.070445 0.045 -0.17555
+v -0.0715908 0.0385016 -0.17555
+v -0.0927443 0.0637113 -0.17555
+v -0.0861457 0.0637113 -0.17555
+v -0.079945 0.0614545 -0.17555
+v -0.107299 0.0514984 -0.17555
+v -0.104 0.057213 -0.17555
+v -0.098945 0.0614545 -0.17555
+v -0.104 0.032787 -0.17555
+v -0.107299 0.0385016 -0.17555
+v -0.108445 0.045 -0.17555
+v -0.0861457 0.0262887 -0.17555
+v -0.0927443 0.0262887 -0.17555
+v -0.098945 0.0285455 -0.17555
+v -0.0748902 0.032787 -0.17555
+v -0.079945 0.0285455 -0.17555
+v -0.070445 0.045 -0.16292
+v -0.0715908 0.0514984 -0.16292
+v -0.0748902 0.057213 -0.16292
+v -0.079945 0.0614545 -0.16292
+v -0.0861457 0.0637113 -0.16292
+v -0.0927443 0.0637113 -0.16292
+v -0.098945 0.0614545 -0.16292
+v -0.104 0.057213 -0.16292
+v -0.107299 0.0514984 -0.16292
+v -0.108445 0.045 -0.16292
+v -0.107299 0.0385016 -0.16292
+v -0.104 0.032787 -0.16292
+v -0.098945 0.0285455 -0.16292
+v -0.0927443 0.0262887 -0.16292
+v -0.0861457 0.0262887 -0.16292
+v -0.079945 0.0285455 -0.16292
+v -0.0748902 0.032787 -0.16292
+v -0.0715908 0.0385016 -0.16292
+v -0.089445 0.045 -0.16292
+# </points>
+
+# <faces count="72">
+g FRONT_PANEL
+g Fan_front_blades
+g Fan_front_frame
+g Fan_front_inlet
+g Fan_front_outlet
+g fan_rear1_blades
+g fan_rear1_frame
+g fan_rear1_inlet
+g fan_rear1_outlet
+g fan_rear2_blades
+f 1 2 3
+f 2 4 3
+f 3 4 5
+f 6 7 3
+f 7 8 3
+f 3 8 1
+f 9 10 3
+f 10 11 3
+f 3 11 6
+f 12 13 3
+f 13 14 3
+f 3 14 9
+f 15 16 3
+f 16 17 3
+f 3 17 12
+f 5 18 3
+f 18 19 3
+f 3 19 15
+f 20 4 2
+f 20 2 21
+f 2 1 21
+f 21 1 22
+f 1 8 22
+f 22 8 23
+f 8 7 23
+f 23 7 24
+f 7 6 24
+f 24 6 25
+f 6 11 25
+f 25 11 26
+f 11 10 26
+f 26 10 27
+f 10 9 27
+f 27 9 28
+f 9 14 28
+f 28 14 29
+f 14 13 29
+f 29 13 30
+f 13 12 30
+f 30 12 31
+f 12 17 31
+f 31 17 32
+f 17 16 32
+f 32 16 33
+f 16 15 33
+f 33 15 34
+f 15 19 34
+f 34 19 35
+f 19 18 35
+f 35 18 36
+f 18 5 36
+f 36 5 37
+f 5 4 37
+f 37 4 20
+f 36 37 38
+f 37 20 38
+f 38 20 21
+f 33 34 38
+f 34 35 38
+f 38 35 36
+f 30 31 38
+f 31 32 38
+f 38 32 33
+f 27 28 38
+f 28 29 38
+f 38 29 30
+f 24 25 38
+f 25 26 38
+f 38 26 27
+f 21 22 38
+f 22 23 38
+f 38 23 24
+g fan_rear2_frame
+g fan_rear2_inlet
+g fan_rear2_outlet
+g MINI_BOARD
+g SMALL_chip1
+g SMALL_chip2
+g SMALL_chip3
+g SMALL_PCB
+g TIM
+g Motherboard
+g CPU
+g Heatsink
+# </faces>

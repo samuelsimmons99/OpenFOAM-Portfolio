@@ -1,0 +1,18 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvOptions;
+}
+heatSource
+{
+    type            scalarSemiImplicitSource;
+    active          true;
+    selectionMode   all;
+    volumeMode      specific;
+    injectionRateSuSp
+    {
+        h               (1.863e+07 0);  // 150W / 8.05036e-06 m³ = 1.863e7 W/m³
+    }
+}

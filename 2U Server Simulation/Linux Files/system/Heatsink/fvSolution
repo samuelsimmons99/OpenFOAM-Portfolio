@@ -1,0 +1,34 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+solvers
+{
+    h
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-6;
+        relTol          0.1;
+        minIter         3;
+    }
+    hFinal { $h; relTol 0; minIter 3; }
+}
+SIMPLE
+{
+    nNonOrthogonalCorrectors 2;
+    residualControl
+    {
+        h   1e-4;
+    }
+}
+relaxationFactors
+{
+    equations
+    {
+        h   0.7;
+    }
+}

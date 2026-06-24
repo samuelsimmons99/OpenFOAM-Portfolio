@@ -1,0 +1,143 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : snappyHexMesh -overwrite
+Date   : Jun 21 2026
+Time   : 16:52:24
+Host   : rinkoalaptop
+PID    : 74217
+I/O    : uncollated
+Case   : /home/rinkoa/OpenFOAM-v2012/sims/2U_server
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Read mesh in = 4.02 s
+
+Overall mesh bounding box  : (-0.27 -0.0200078 -0.220026) (0.27 0.110007 0.240005)
+Relative tolerance         : 1e-06
+Absolute matching distance : 7.21202e-07
+
+Reading refinement surfaces.
+Read refinement surfaces in = 0.01 s
+
+Reading refinement shells.
+--> FOAM Warning : 
+    From Foam::shellSurfaces::shellSurfaces(const Foam::searchableSurfaces&, const Foam::dictionary&, bool)
+    in file shellSurfaces/shellSurfaces.C at line 798
+    Reading "/home/rinkoa/OpenFOAM-v2012/sims/2U_server/system/snappyHexMeshDict.castellatedMeshControls.refinementRegions" at line 144 to 157
+    Not all entries in refinementRegions dictionary were used. The following entries were not used : 3(CPU Heatsink TIM)
+Read refinement shells in = 0 s
+
+Setting refinement level of surface to be consistent with shells.
+For geometry combined_m.stl detected 207 uncached triangles out of 9256
+Checked shell refinement in = 0.03 s
+
+Reading features.
+Read features in = 0 s
+
+
+Determining initial surface intersections
+-----------------------------------------
+
+Edge intersection testing:
+    Number of edges             : 3805680
+    Number of edges to retest   : 0
+    Number of intersected edges : 0
+Edge intersection testing:
+    Number of edges             : 3805680
+    Number of edges to retest   : 3805680
+    Number of intersected edges : 228888
+Calculated surface intersections in = 5.88 s
+
+Initial mesh : cells:1133788  faces:3805680  points:1539450
+Cells per refinement level:
+    0	40953
+    1	90815
+    2	597946
+    3	404074
+
+Adding patches for surface regions
+----------------------------------
+
+Patch Type                Region                        
+----- ----                ------                        
+combined_m.stl:
+
+1     wall                FRONT_PANEL                   
+2     patch               Fan_front_blades              
+3     wall                Fan_front_frame               
+4     patch               Fan_front_inlet               
+5     patch               Fan_front_outlet              
+6     patch               fan_rear1_blades              
+7     wall                fan_rear1_frame               
+8     patch               fan_rear1_inlet               
+9     patch               fan_rear1_outlet              
+10    patch               fan_rear2_blades              
+11    wall                fan_rear2_frame               
+12    patch               fan_rear2_inlet               
+13    patch               fan_rear2_outlet              
+14    wall                MINI_BOARD                    
+15    wall                SMALL_chip1                   
+16    wall                SMALL_chip2                   
+17    wall                SMALL_chip3                   
+18    wall                SMALL_PCB                     
+22    wall                TIM                           
+19    wall                Motherboard                   
+20    wall                CPU                           
+21    wall                Heatsink                      
+
+Added patches in = 0.03 s
+
+Edge intersection testing:
+    Number of edges             : 3805680
+    Number of edges to retest   : 420150
+    Number of intersected edges : 420500
+Selecting decompositionMethod none [1]
+
+Refinement phase
+----------------
+
+Found point (0 0.05 0) in cell 29757 on processor 0
+
+Surface refinement iteration 0
+------------------------------
+
+Marked for refinement due to surface intersection          : 136 cells.
+Determined cells to refine in = 0.95 s
+Selected for refinement : 136 cells (out of 1133788)
+hexRef8 : Dumping cell as obj to "/home/rinkoa/OpenFOAM-v2012/sims/2U_server/cell_141432.obj"
+
+
+--> FOAM FATAL ERROR: (openfoam-2012)
+nAnchors:2 facei:3399112
+
+    From void Foam::hexRef8::createInternalFaces(const labelListList&, const labelListList&, const labelList&, const labelList&, const labelList&, const labelList&, Foam::label, Foam::polyTopoChange&) const
+    in file polyTopoChange/polyTopoChange/hexRef8/hexRef8.C at line 1277.
+
+FOAM aborting
+
+#0  Foam::error::printStack(Foam::Ostream&) at ??:?
+#1  Foam::error::exitOrAbort(int, bool) at ??:?
+#2  Foam::hexRef8::createInternalFaces(Foam::List<Foam::List<int> > const&, Foam::List<Foam::List<int> > const&, Foam::List<int> const&, Foam::List<int> const&, Foam::List<int> const&, Foam::List<int> const&, int, Foam::polyTopoChange&) const at ??:?
+#3  Foam::hexRef8::setRefinement(Foam::List<int> const&, Foam::polyTopoChange&) at ??:?
+#4  Foam::meshRefinement::refine(Foam::List<int> const&) at ??:?
+#5  Foam::meshRefinement::balanceAndRefine(Foam::string const&, Foam::decompositionMethod&, Foam::fvMeshDistribute&, Foam::List<int> const&, double) at ??:?
+#6  Foam::snappyRefineDriver::surfaceOnlyRefine(Foam::refinementParameters const&, int) at ??:?
+#7  Foam::snappyRefineDriver::doRefine(Foam::dictionary const&, Foam::refinementParameters const&, Foam::snapParameters const&, bool, Foam::meshRefinement::FaceMergeType, Foam::dictionary const&) at ??:?
+#8  ? at ??:?
+#9  ? in /lib/x86_64-linux-gnu/libc.so.6
+#10  __libc_start_main in /lib/x86_64-linux-gnu/libc.so.6
+#11  ? at ??:?
