@@ -1,0 +1,18 @@
+FoamFile
+{
+    version 2.0; format ascii;
+    class volVectorField; location "0/fluid"; object U;
+}
+dimensions [0 1 -1 0 0 0 0];
+internalField uniform (0 0 -1.0);
+boundaryField
+{
+    fan1_half0 { type cyclic; }
+    fan1_half1 { type cyclic; }
+    fan2_half0 { type cyclic; }
+    fan2_half1 { type cyclic; }
+    base_bottom { type noSlip; }
+    top_wall    { type noSlip; }
+    side_walls  { type noSlip; }
+    fluid_to_solid { type noSlip; }
+}

@@ -1,0 +1,49 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/fluid";
+    object      T;
+}
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 300;
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 300;
+    }
+
+    outlet
+    {
+        type            inletOutlet;
+        inletValue      uniform 300;
+        value           uniform 300;
+    }
+
+    top
+    {
+        // Fin tips — no solid here, treat as adiabatic wall
+        type            zeroGradient;
+    }
+
+    sides
+    {
+        type            zeroGradient;
+    }
+
+    // Coupled interfaces with solid region
+    // Name format after splitMeshRegions: fluid_to_solid
+    fluid_to_solid
+    {
+        type            turbulentTemperatureCoupledBaffleMixed;
+        value           uniform 300;
+        Tnbr            T;
+        kappaMethod     fluidThermo;
+    }
+}

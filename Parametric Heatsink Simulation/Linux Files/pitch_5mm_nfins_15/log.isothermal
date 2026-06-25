@@ -1,0 +1,129 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : chtMultiRegionSimpleFoam
+Date   : Jun 23 2026
+Time   : 09:26:53
+Host   : rinkoalaptop
+PID    : 30163
+I/O    : uncollated
+Case   : /home/rinkoa/OpenFOAM-v2012/sims/heatsink_parametric/pitch_5mm_nfins_15
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create fluid mesh for region fluid for time = 0
+
+Create solid mesh for region solid for time = 0
+
+*** Reading fluid mesh thermophysical properties for region fluid
+
+    Adding to thermoFluid
+
+Selecting thermodynamics package 
+{
+    type            heRhoThermo;
+    mixture         pureMixture;
+    transport       const;
+    thermo          hConst;
+    equationOfState Boussinesq;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
+
+    Adding to rhoFluid
+
+    Adding to UFluid
+
+    Adding to phiFluid
+
+    Adding to hRefFluid
+
+    Adding to ghFluid
+
+    Adding to ghfFluid
+
+    Adding to turbulence
+
+Selecting turbulence model type RAS
+Selecting RAS turbulence model kEpsilon
+RAS
+{
+    RASModel        kEpsilon;
+    turbulence      on;
+    printCoeffs     on;
+    Cmu             0.09;
+    C1              1.44;
+    C2              1.92;
+    C3              0;
+    sigmak          1;
+    sigmaEps        1.3;
+}
+
+Radiation model not active: radiationProperties not found
+Selecting radiationModel none
+    Adding MRF
+
+No MRF models present
+
+    Adding fvOptions
+
+Creating finite volume options from "system/fvOptions"
+
+*** Reading solid mesh thermophysical properties for region solid
+
+    Adding to thermos
+
+Selecting thermodynamics package 
+{
+    type            heSolidThermo;
+    mixture         pureMixture;
+    transport       constIso;
+    thermo          hConst;
+    equationOfState rhoConst;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
+
+    Adding to radiations
+
+Radiation model not active: radiationProperties not found
+Selecting radiationModel none
+    Adding fvOptions
+
+Creating finite volume options from "system/fvOptions"
+
+Time = 1
+
+
+Solving for fluid region fluid
+smoothSolver:  Solving for Ux, Initial residual = 1, Final residual = 0.021097869, No Iterations 2
+smoothSolver:  Solving for Uy, Initial residual = 1, Final residual = 0.084971103, No Iterations 2
+smoothSolver:  Solving for Uz, Initial residual = 1, Final residual = 0.074888462, No Iterations 2
+smoothSolver:  Solving for h, Initial residual = 1, Final residual = 0.091022445, No Iterations 1
+Min/max T:184.77466 1567.7991
+GAMG:  Solving for p_rgh, Initial residual = 0.99999879, Final residual = 0.008030504, No Iterations 6
+time step continuity errors : sum local = 63.359926, global = 15.214584, cumulative = 15.214584
+Min/max rho:0 1.6286153
+#0  Foam::error::printStack(Foam::Ostream&) at ??:?
+#1  Foam::sigFpe::sigHandler(int) at ??:?
+#2  ? in /lib/x86_64-linux-gnu/libc.so.6
+#3  Foam::divide(Foam::Field<double>&, Foam::UList<double> const&, Foam::UList<double> const&) at ??:?
+#4  void Foam::divide<Foam::fvsPatchField, Foam::surfaceMesh>(Foam::GeometricField<double, Foam::fvsPatchField, Foam::surfaceMesh>&, Foam::GeometricField<double, Foam::fvsPatchField, Foam::surfaceMesh> const&, Foam::GeometricField<double, Foam::fvsPatchField, Foam::surfaceMesh> const&) at ??:?
+#5  Foam::tmp<Foam::GeometricField<double, Foam::fvsPatchField, Foam::surfaceMesh> > Foam::operator/<Foam::fvsPatchField, Foam::surfaceMesh>(Foam::GeometricField<double, Foam::fvsPatchField, Foam::surfaceMesh> const&, Foam::tmp<Foam::GeometricField<double, Foam::fvsPatchField, Foam::surfaceMesh> > const&) at ??:?
+#6  Foam::compressibleTurbulenceModel::phi() const at ??:?
+#7  Foam::RASModels::kEpsilon<Foam::EddyDiffusivity<Foam::ThermalDiffusivity<Foam::CompressibleTurbulenceModel<Foam::fluidThermo> > > >::correct() at ??:?
+#8  ? at ??:?
+#9  ? in /lib/x86_64-linux-gnu/libc.so.6
+#10  __libc_start_main in /lib/x86_64-linux-gnu/libc.so.6
+#11  ? at ??:?

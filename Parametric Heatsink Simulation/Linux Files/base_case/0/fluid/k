@@ -1,0 +1,47 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/fluid";
+    object      k;
+}
+
+// k = 1.5*(U*I)^2, I=5% turbulence intensity, U=2.86 m/s
+// k = 1.5 * (2.86 * 0.05)^2 = 0.0154 m2/s2
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 0.0154;
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 0.0154;
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    top
+    {
+        type            kqRWallFunction;
+        value           uniform 0.0154;
+    }
+
+    sides
+    {
+        type            kqRWallFunction;
+        value           uniform 0.0154;
+    }
+
+    fluid_to_solid
+    {
+        type            kqRWallFunction;
+        value           uniform 0.0154;
+    }
+}

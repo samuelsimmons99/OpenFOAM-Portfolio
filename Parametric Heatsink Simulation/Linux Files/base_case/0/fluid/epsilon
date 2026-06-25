@@ -1,0 +1,47 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/fluid";
+    object      epsilon;
+}
+
+// epsilon = Cmu^0.75 * k^1.5 / L, L=0.01m (hydraulic diameter estimate)
+// epsilon = 0.09^0.75 * 0.0154^1.5 / 0.01 = ~0.026 m2/s3
+
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   uniform 0.026;
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 0.026;
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    top
+    {
+        type            epsilonWallFunction;
+        value           uniform 0.026;
+    }
+
+    sides
+    {
+        type            epsilonWallFunction;
+        value           uniform 0.026;
+    }
+
+    fluid_to_solid
+    {
+        type            epsilonWallFunction;
+        value           uniform 0.026;
+    }
+}

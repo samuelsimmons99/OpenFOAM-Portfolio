@@ -1,0 +1,19 @@
+FoamFile
+{
+    version 2.0; format ascii;
+    class volScalarField; location "0/fluid"; object k;
+}
+// k = 1.5*(U*I)^2, I=5%, U~2.86 m/s => k~0.0154 m2/s2
+dimensions [0 2 -2 0 0 0 0];
+internalField uniform 0.0154;
+boundaryField
+{
+    fan1_half0   { type cyclic; }
+    fan1_half1   { type cyclic; }
+    fan2_half0   { type cyclic; }
+    fan2_half1   { type cyclic; }
+    base_bottom  { type kqRWallFunction; value uniform 0.0154; }
+    top_wall     { type kqRWallFunction; value uniform 0.0154; }
+    side_walls   { type kqRWallFunction; value uniform 0.0154; }
+    fluid_to_solid { type kqRWallFunction; value uniform 0.0154; }
+}
