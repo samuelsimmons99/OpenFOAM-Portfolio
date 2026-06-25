@@ -60,7 +60,7 @@ Generated using OpenFOAM's `snappyHexMesh` with `locationsInMesh` for multi-regi
 Server geometry built in Ansys SpaceClaim showing the chassis (orange), motherboard and PCBs (green), aluminium heatsink fin array (brown), and fan assemblies (blue). The simulation domain encompasses the full server interior.
 
 ### Convergence History
-![CPU Temperature Convergence](Linux%20Files/cpu_convergence.png)
+![CPU Temperature Convergence](Linux%20Files/cpu_convergence_final.png)
 
 CPU maximum temperature vs. iteration across all 20,000 steady-state iterations. Step changes in the curve correspond to solver restarts. The curve shows asymptotic behaviour approaching 96°C.
 
