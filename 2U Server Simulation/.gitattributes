@@ -1,3 +1,2 @@
-*.zip filter=lfs diff=lfs merge=lfs -text
 constant/domain0/polyMesh/faces filter=lfs diff=lfs merge=lfs -text
 constant/polyMesh/faces filter=lfs diff=lfs merge=lfs -text
