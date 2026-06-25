@@ -1,0 +1,9 @@
+{
+  "file-series-version" : "1.0",
+  "files" : [
+    { "name" : "taylor_couette_0.vtm", "time" : 0 },
+    { "name" : "taylor_couette_400.vtm", "time" : 400 },
+    { "name" : "taylor_couette_627.vtm", "time" : 627 },
+    { "name" : "taylor_couette_628.vtm", "time" : 628 }
+  ]
+}

@@ -1,0 +1,1 @@
+LIB = $(PWD)/../platforms/$(WM_OPTIONS)/lib/libvelocitySucking_b21f103fbe5e08a69817135d8a8fef95c91d443c

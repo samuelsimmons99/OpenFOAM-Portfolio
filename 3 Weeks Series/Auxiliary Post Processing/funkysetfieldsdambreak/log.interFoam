@@ -1,0 +1,60 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : interFoam
+Date   : Feb 04 2026
+Time   : 17:26:50
+Host   : rinkoa
+PID    : 3642
+I/O    : uncollated
+Case   : /home/rinkoa/OpenFOAM-v2012/sims/cases/funkysetfieldsdambreak
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+--> FOAM Warning : 
+    From static Foam::IOstreamOption::compressionType Foam::IOstreamOption::compressionEnum(const Foam::word&, Foam::IOstreamOption::compressionType)
+    in file db/IOstreams/IOstreams/IOstreamOption.C at line 115
+    Unknown compression specifier 'uncompressed', using compression off
+Create mesh for time = 0
+
+
+PIMPLE: Operating solver in PISO mode
+
+Reading field p_rgh
+
+Reading field U
+
+Reading/calculating face flux field phi
+
+Reading transportProperties
+
+Selecting incompressible transport model Newtonian
+Selecting incompressible transport model Newtonian
+Selecting turbulence model type RASModel
+
+
+--> FOAM FATAL IO ERROR: (openfoam-2012)
+Unknown simulationType type RASModel
+
+Valid simulationType types :
+3(LES RAS laminar)
+
+
+file: /home/rinkoa/OpenFOAM-v2012/sims/cases/funkysetfieldsdambreak/constant/turbulenceProperties at line 18.
+
+    From static Foam::autoPtr<Foam::TurbulenceModel<Alpha, Rho, BasicTurbulenceModel, TransportModel> > Foam::TurbulenceModel<Alpha, Rho, BasicTurbulenceModel, TransportModel>::New(const alphaField&, const rhoField&, const volVectorField&, const surfaceScalarField&, const surfaceScalarField&, const transportModel&, const Foam::word&) [with Alpha = Foam::geometricOneField; Rho = Foam::geometricOneField; BasicTurbulenceModel = Foam::incompressibleTurbulenceModel; TransportModel = Foam::transportModel; Foam::TurbulenceModel<Alpha, Rho, BasicTurbulenceModel, TransportModel>::alphaField = Foam::geometricOneField; Foam::TurbulenceModel<Alpha, Rho, BasicTurbulenceModel, TransportModel>::rhoField = Foam::geometricOneField; Foam::volVectorField = Foam::GeometricField<Foam::Vector<double>, Foam::fvPatchField, Foam::volMesh>; Foam::surfaceScalarField = Foam::GeometricField<double, Foam::fvsPatchField, Foam::surfaceMesh>; Foam::TurbulenceModel<Alpha, Rho, BasicTurbulenceModel, TransportModel>::transportModel = Foam::transportModel]
+    in file /home/pawan/OpenFOAM/OpenFOAM/OpenFOAM-v2012/src/TurbulenceModels/turbulenceModels/lnInclude/TurbulenceModel.C at line 118.
+
+FOAM exiting
+

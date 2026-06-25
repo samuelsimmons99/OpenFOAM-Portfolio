@@ -1,0 +1,155 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : interFoam
+Date   : Feb 04 2026
+Time   : 17:34:14
+Host   : rinkoa
+PID    : 4065
+I/O    : uncollated
+Case   : /home/rinkoa/OpenFOAM-v2012/sims/cases/groovybcdambreak
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+--> FOAM Warning : 
+    From void* Foam::dlLibraryTable::openLibrary(const Foam::fileName&, bool)
+    in file db/dynamicLibrary/dlLibraryTable/dlLibraryTable.C at line 188
+    Could not load "libgroovyBC.so"
+libgroovyBC.so: cannot open shared object file: No such file or directory
+--> FOAM Warning : 
+    From static Foam::IOstreamOption::compressionType Foam::IOstreamOption::compressionEnum(const Foam::word&, Foam::IOstreamOption::compressionType)
+    in file db/IOstreams/IOstreams/IOstreamOption.C at line 115
+    Unknown compression specifier 'uncompressed', using compression off
+Create mesh for time = 0
+
+
+PIMPLE: Operating solver in PISO mode
+
+Reading field p_rgh
+
+Reading field U
+
+
+
+--> FOAM FATAL IO ERROR: (openfoam-2012)
+Unknown patchField type groovyBC for patch type wall
+
+Valid patchField types :
+
+94
+(
+SRFFreestreamVelocity
+SRFVelocity
+SRFWallVelocity
+acousticWaveTransmissive
+activeBaffleVelocity
+activePressureForceBaffleVelocity
+advective
+calculated
+codedFixedValue
+codedMixed
+cyclic
+cyclicACMI
+cyclicAMI
+cyclicSlip
+cylindricalInletVelocity
+directionMixed
+empty
+exprFixedValue
+exprMixed
+extrapolatedCalculated
+fixedGradient
+fixedInternalValue
+fixedJump
+fixedJumpAMI
+fixedMean
+fixedMeanOutletInlet
+fixedNormalInletOutletVelocity
+fixedNormalSlip
+fixedProfile
+fixedShearStress
+fixedValue
+flowRateInletVelocity
+flowRateOutletVelocity
+fluxCorrectedVelocity
+freestream
+freestreamVelocity
+inletOutlet
+interstitialInletVelocity
+kqRWallFunction
+mapped
+mappedField
+mappedFixedInternalValue
+mappedFixedPushedInternalValue
+mappedFlowRate
+mappedMixed
+mappedMixedField
+mappedVelocityFlux
+matchedFlowRateOutletVelocity
+mixed
+movingWallVelocity
+noSlip
+nonuniformTransformCyclic
+outletInlet
+outletMappedUniformInlet
+outletPhaseMeanVelocity
+partialSlip
+pressureDirectedInletOutletVelocity
+pressureDirectedInletVelocity
+pressureInletOutletParSlipVelocity
+pressureInletOutletVelocity
+pressureInletUniformVelocity
+pressureInletVelocity
+pressureNormalInletOutletVelocity
+pressurePIDControlInletVelocity
+processor
+processorCyclic
+rotatingPressureInletOutletVelocity
+rotatingWallVelocity
+scaledFixedValue
+sliced
+slip
+supersonicFreestream
+surfaceNormalFixedValue
+swirlFanVelocity
+swirlFlowRateInletVelocity
+swirlInletVelocity
+symmetry
+symmetryPlane
+timeVaryingMappedFixedValue
+translatingWallVelocity
+turbulentDFSEMInlet
+turbulentDigitalFilterInlet
+turbulentInlet
+uniformFixedGradient
+uniformFixedValue
+uniformInletOutlet
+uniformJump
+uniformJumpAMI
+uniformNormalFixedValue
+variableHeightFlowRateInletVelocity
+waveTransmissive
+waveVelocity
+wedge
+zeroGradient
+)
+
+
+file: /home/rinkoa/OpenFOAM-v2012/sims/cases/groovybcdambreak/0/U.boundaryField.lowerWall at line 2311 to 2331.
+
+    From static Foam::tmp<Foam::fvPatchField<Type> > Foam::fvPatchField<Type>::New(const Foam::fvPatch&, const Foam::DimensionedField<Type, Foam::volMesh>&, const Foam::dictionary&) [with Type = Foam::Vector<double>]
+    in file /home/pawan/OpenFOAM/OpenFOAM/OpenFOAM-v2012/src/finiteVolume/lnInclude/fvPatchFieldNew.C at line 122.
+
+FOAM exiting
+

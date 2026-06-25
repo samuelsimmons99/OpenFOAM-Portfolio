@@ -1,0 +1,6 @@
+{
+  "file-series-version" : "1.0",
+  "files" : [
+    { "name" : "smoking_pipe_steady_state_0.vtm", "time" : 3 }
+  ]
+}

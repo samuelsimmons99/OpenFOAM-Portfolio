@@ -1,0 +1,42 @@
+#How to run me:
+
+
+
+#To clean the directory, this is optional
+
+foamCleanTutorials
+
+
+
+#To generate the mesh and check mesh quality
+
+blockMesh
+
+checkMesh
+
+
+
+# To run in serial:
+
+#icoFoam > log.icofoam 2>log.error | tail -f log.icofoam
+
+icoFoam > log.icofoam | tail -f log.icofoam
+
+
+
+#To do some sampling
+
+postProcess -func sampleDict -latestTime 
+
+
+
+# Visualization
+
+paraFoam
+
+
+
+
+#NOTE0:
+
+#In the file laminar_pipe.ipynb you will find a jupyter notebook (ipython), to plot the analytical vs. the numerical solution.

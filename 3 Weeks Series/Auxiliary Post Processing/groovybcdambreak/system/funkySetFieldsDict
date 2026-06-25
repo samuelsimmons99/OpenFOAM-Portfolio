@@ -1,0 +1,66 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+expressions
+(
+  initFieldAlpha
+  {
+    field alpha.water;
+    expression "0";
+    keepPatches true;
+  }
+
+  initFieldU
+  {
+    field U;
+    expression "vector(0.0,0.0,0.0)";
+    keepPatches true;
+  }
+
+  pressureAir
+  {
+    field p_rgh;
+    expression "0";
+    keepPatches true;
+  }
+
+  floatingCircle
+  {
+    field alpha.water;
+    expression "1";
+    condition "sqrt(pow((pos().x-0.14),2)+pow((pos().y-0.2),2))<0.05";
+    keepPatches true;
+  }
+
+  pressureCircle
+  {
+    field p_rgh;
+    expression "100.0*pos().y";
+    condition "sqrt(pow((pos().x-0.14),2)+pow((pos().y-0.2),2))<0.05";
+    keepPatches true;
+  }
+
+  risingCircle
+  {
+    field U;
+    expression "vector(0.0,1.5,0.0)";
+    condition "sqrt(pow((pos().x-0.14),2)+pow((pos().y-0.2),2))<0.05";
+    keepPatches true;
+  }
+);
+
+// ************************************************************************* //

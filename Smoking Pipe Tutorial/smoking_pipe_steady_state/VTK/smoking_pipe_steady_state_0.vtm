@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+<!-- time='3' -->
+<VTKFile type='vtkMultiBlockDataSet' version='1.0' byte_order='LittleEndian' header_type='UInt64'>
+  <vtkMultiBlockDataSet>
+    <DataSet name='internal' file='smoking_pipe_steady_state_0/internal.vtu' />
+    <Block name='boundary'>
+      <DataSet name='Inlet' file='smoking_pipe_steady_state_0/boundary/Inlet.vtp' />
+      <DataSet name='Outlet' file='smoking_pipe_steady_state_0/boundary/Outlet.vtp' />
+      <DataSet name='PipeHandle' file='smoking_pipe_steady_state_0/boundary/PipeHandle.vtp' />
+      <DataSet name='Walls' file='smoking_pipe_steady_state_0/boundary/Walls.vtp' />
+    </Block>
+  </vtkMultiBlockDataSet>
+  <FieldData>
+    <DataArray type='Float32' Name='TimeValue' NumberOfTuples='1' format='ascii'>
+3
+    </DataArray>
+  </FieldData>
+</VTKFile>
