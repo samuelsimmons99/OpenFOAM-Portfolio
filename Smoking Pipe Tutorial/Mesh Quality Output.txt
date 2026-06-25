@@ -1,0 +1,16 @@
+-------------------
+Quality information
+-------------------
+
+Name:  SmokingPipeSurfaceTriangulation
+Nodes Information:
+    Number of the free nodes: 0
+    Number of the double nodes: 1450
+Edges Information:
+    Number of the double edges: 0
+Faces Information:
+    Number of the double faces: 0
+    Number of the over-constrained: 137
+Volumes Information:
+    Number of the double volumes: 
+    Number of the over-constrained: 
