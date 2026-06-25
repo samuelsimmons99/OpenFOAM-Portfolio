@@ -1,0 +1,29 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system/solid";
+    object      fvOptions;
+}
+
+// Heat source applied to the entire solid region (fins + base).
+// Q_specific = Q_total / V_solid
+// This value is overwritten per-case by generate_cases.py
+// Placeholder value below — DO NOT use without running generate_cases.py
+
+heatSource
+{
+    type            scalarSemiImplicitSource;
+    active          true;
+    selectionMode   all;
+
+    scalarSemiImplicitSourceCoeffs
+    {
+        volumeMode      specific;      // W/m3
+        injectionRateSuSp
+        {
+            h           (HEAT_SOURCE_VALUE 0);  // replaced by generate_cases.py
+        }
+    }
+}

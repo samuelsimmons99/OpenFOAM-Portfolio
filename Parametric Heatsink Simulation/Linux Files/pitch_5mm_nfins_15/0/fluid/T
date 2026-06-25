@@ -1,0 +1,22 @@
+FoamFile
+{
+    version 2.0; format ascii;
+    class volScalarField; object T;
+}
+dimensions [0 0 0 1 0 0 0];
+internalField uniform 300;
+boundaryField
+{
+    fan1_half0     { type fixedValue; value uniform 300; }
+    fan2_half0     { type inletOutlet; inletValue uniform 300; value uniform 300; }
+    base_bottom    { type zeroGradient; }
+    top_wall       { type zeroGradient; }
+    side_walls     { type zeroGradient; }
+    fluid_to_solid
+    {
+        type        compressible::turbulentTemperatureCoupledBaffleMixed;
+        Tnbr        T;
+        kappaMethod fluidThermo;
+        value       uniform 300;
+    }
+}

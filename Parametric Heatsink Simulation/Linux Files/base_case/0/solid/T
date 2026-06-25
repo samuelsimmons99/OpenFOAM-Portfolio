@@ -1,0 +1,51 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/solid";
+    object      T;
+}
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 300;
+
+boundaryField
+{
+    // NOTE: heat flux value is set per-case by generate_cases.py
+    // The fixedGradient approach is simpler than fvOptions for a base patch
+    // flux = Q / A, gradient = -flux / kappa = -150/(A*205)
+    // generate_cases.py writes this value into the BC
+    base_bottom
+    {
+        // Insulated — no air cooling below the base
+        type            zeroGradient;
+    }
+
+    sides
+    {
+        type            zeroGradient;
+    }
+
+    top
+    {
+        // Fin tips — adiabatic (no fluid above fin tips in solid sense)
+        type            zeroGradient;
+    }
+
+    // Coupled interface with fluid
+    solid_to_fluid
+    {
+        type            turbulentTemperatureCoupledBaffleMixed;
+        value           uniform 300;
+        Tnbr            T;
+        kappaMethod     solidThermo;
+    }
+
+    // Heat source: fixed heat flux on the base-top internal face
+    // This face does NOT appear as a boundary patch after splitMeshRegions
+    // because it's an internal face between base cells and fin cells.
+    // Instead, use fvOptions with a volumetric source in the solid region.
+    // See system/solid/fvOptions
+}

@@ -1,0 +1,48 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+actions
+(
+    {
+        name    fan1Cells;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            // inlet plenum z=0 to 0.105m, exclude first cell layer (0 to 0.0042)
+            // use z=0.005 to 0.025 (about 5 cells in from boundary)
+            box (-0.001 -0.001 0.005) (0.081 0.081 0.025);
+        }
+    }
+    {
+        name    fan1Zone;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo { set fan1Cells; }
+    }
+    {
+        name    fan2Cells;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            // outlet plenum z=0.185 to 0.290m, exclude last cell layer
+            // use z=0.265 to 0.285
+            box (-0.001 -0.001 0.265) (0.081 0.081 0.285);
+        }
+    }
+    {
+        name    fan2Zone;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo { set fan2Cells; }
+    }
+);
