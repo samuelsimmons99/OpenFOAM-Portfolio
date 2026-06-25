@@ -136,7 +136,7 @@ Key debugging discoveries made during this project (full notes at `openfoam_CHT_
 - Outer domain boundaries use `slip` condition rather than true open-atmosphere
 - Three heatsink fins show lower-than-expected temperatures due to local mesh quality
 - Fan modelled as uniform velocity inlet (not full fan curve pressure-flow relationship)
-- Full convergence not achieved at 20,000 iterations (~0.004°C/iteration drift remaining)
+- Full convergence not achieved at 20,000 iterations (~0.001°C/iteration drift remaining)
 
 ---
 
