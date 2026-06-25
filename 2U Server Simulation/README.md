@@ -18,7 +18,7 @@ A steady-state Conjugate Heat Transfer (CHT) simulation of a 2U rack-mount serve
 | Fan inlet velocity | 2.86 m/s (Delta FFB0812VH) |
 | **Max CPU temperature** | **96°C** |
 | Inlet air temperature | 27°C (300 K) |
-| Estimated heatsink thermal resistance | 0.46 K/W |
+| Estimated heatsink thermal resistance | 0.46 C/W |
 
 ---
 
@@ -115,7 +115,7 @@ reconstructPar → ParaView post-processing
 
 ---
 
-## Hard-Won Lessons
+## Future Lessons
 
 Key debugging discoveries made during this project (full notes at `openfoam_CHT_debugging_notes.md`):
 
