@@ -1,9 +1,0 @@
-# fin_pitch=6.0mm  n_fins=12
-# channel_width  = 4.50 mm
-# side_gap       = 6.25 mm
-# fin_array_w    = 67.5 mm
-# domain W x H   = 80 x 80 mm
-# total Z length = 290 mm
-# solid_volume   = 82400.0 mm3
-# heat_src_vol   = 1.8204e+06 W/m3
-# Fan curve: dP = 73.99 + -1164.25*phi + -34615.0*phi^2 [Pa]
