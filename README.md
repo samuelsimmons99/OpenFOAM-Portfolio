@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Simulation Engineer**
 
-A collection of CFD simulations built with OpenFOAM, demonstrating thermal-fluid simulation capability across the full workflow — from CAD geometry and mesh generation through parallel computation and post-processing.
+A collection of CFD simulations built with OpenFOAM, demonstrating thermal-fluid simulation capability across the full workflow from CAD geometry and mesh generation through parallel computation and post-processing.
 
 ---
 
