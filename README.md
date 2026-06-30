@@ -22,7 +22,7 @@ Internal pipe flow simulation of a smoking pipe geometry using `simpleFoam` (ste
 ---
 
 ### [Cylinder Flow Reynolds Number Sweep](./Cylinder%20Flow/)
-Parametric study of 2D flow past a circular cylinder across six Reynolds numbers (3 to 5×10⁶), from creeping Stokes flow through laminar vortex shedding to turbulent (`kOmegaSST`) regimes. Background mesh + `snappyHexMesh` with a built-in cylinder geometry, run with `pimpleFoam` and post-processed via `forceCoeffs` for drag/lift coefficients.
+Parametric study of 2D flow past a circular cylinder across five Reynolds numbers (Re = 3 to 8×10⁵), from creeping Stokes flow through laminar vortex shedding to turbulent (`kOmegaSST`) supercritical shedding. Background mesh + `snappyHexMesh` with a built-in cylinder geometry, run with `pimpleFoam` and post-processed via `forceCoeffs` for drag/lift coefficients across all regimes.
 
 **Tools:** OpenFOAM v2012 · snappyHexMesh · ParaView · OpenMPI
 
