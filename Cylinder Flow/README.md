@@ -14,10 +14,9 @@ A parametric study of 2D flow over a circular cylinder (diameter = 1 m) across a
 | Re_40 | 40 | 6.0e-04 | laminar | 1.64 | ~0 | Steady, fixed symmetric recirculation bubble |
 | Re_100 | 100 | 1.5e-03 | laminar | 1.35 | 0.31 | Periodic von Karman vortex shedding |
 | Re_30000 | 3.0e4 | 0.45 | kOmegaSST | 1.21 | 1.09 | Turbulent subcritical shedding |
-| Re_800000 | 8.0e5 | 12 | kOmegaSST | pending | pending | Supercritical turbulent (run in progress) |
-| Re_5000000 | 5.0e6 | 75 | kOmegaSST | pending | pending | Transcritical turbulent (queued) |
+| Re_800000 | 8.0e5 | 12 | kOmegaSST | 1.27 | 1.22 | Supercritical turbulent shedding |
 
-Cd is the final or near-converged drag coefficient, Cl amplitude is the peak-to-peak lift coefficient swing divided by two, taken over the last 20% of each run. Re_800000 and Re_5000000 use the same mesh and solver recipe but need a much smaller Courant-limited timestep at their higher inlet velocity, so they take on the order of a day each to solve and are not yet finished.
+Cd is the final drag coefficient, Cl amplitude is the peak-to-peak lift coefficient swing divided by two, taken over the last 20% of each run.
 
 ---
 
@@ -59,7 +58,11 @@ This mesh approach was chosen after an earlier hand-built O-grid `blockMeshDict`
 |---|---|
 | ![Re_100 velocity](Linux%20Files/Re_100_U_contour.png) | ![Re_30000 velocity](Linux%20Files/Re_30000_U_contour.png) |
 
-At Re = 3 and Re = 40 the wake stays attached and symmetric about the centreline, matching the unseparated and fixed-bubble regimes expected at these Reynolds numbers. At Re = 100 and above, the wake breaks symmetry and sheds alternating vortices, the signature von Karman street.
+![Re_800000 velocity](Linux%20Files/Re_800000_U_contour.png)
+
+*Re = 800,000 velocity magnitude, showing a compact turbulent wake with tighter vortex spacing relative to the lower-Re cases.*
+
+At Re = 3 and Re = 40 the wake stays attached and symmetric about the centreline, matching the unseparated and fixed-bubble regimes expected at these Reynolds numbers. At Re = 100 and above, the wake breaks symmetry and sheds alternating vortices, the signature von Karman street. At Re = 800,000 the wake becomes more compact and turbulent, consistent with the supercritical regime.
 
 ### Lift coefficient history
 
@@ -74,6 +77,10 @@ Final 20% of the Re = 100 run, showing the fully developed shedding cycle, perio
 ![Re_30000 Cl zoom](Linux%20Files/Re_30000_Cl_zoom.png)
 
 Re = 30,000 lift coefficient over the last 20% of its run. Shedding is faster and stronger in this turbulent case, the amplitude is still growing toward saturation at the current end time.
+
+![Re_800000 Cl zoom](Linux%20Files/Re_800000_Cl_zoom.png)
+
+Re = 800,000 fully saturated periodic shedding over the last 20% of the run, amplitude around 1.22, with a noticeably higher frequency than Re = 30,000 due to the much higher inlet velocity.
 
 ### Drag coefficient convergence
 
@@ -138,7 +145,7 @@ Turbulent cases (`Re_30000`, `Re_800000`, `Re_5000000`) use `kOmegaSST` and requ
 
 ## Limitations
 
-- Re_800000 and Re_5000000 are still solving at the time of writing, results will be added once they finish.
+- Re_800000 was stopped at t = 89.6 s (out of a planned 100 s end time) once the Cl history confirmed fully saturated periodic shedding, so the final Cd/Cl values are representative of the converged solution.
 - 2D domain with `empty` front/back patches, no spanwise three-dimensional shedding effects are captured.
 - Fixed kinematic viscosity with inlet velocity scaled per case, rather than holding velocity fixed and varying viscosity, this keeps the geometry and mesh identical across the sweep but means each case has a very different physical timescale.
 - Re = 3 drag coefficient is still drifting by a fraction of a percent per 2000 s of simulated time at the point captured here, a known feature of how slowly low-Reynolds-number cylinder drag approaches its asymptote (related to the Oseen/Stokes paradox).
