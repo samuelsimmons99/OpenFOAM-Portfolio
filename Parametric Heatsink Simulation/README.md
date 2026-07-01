@@ -1,8 +1,8 @@
 # Parametric Heatsink Conjugate Heat Transfer Study
 
-**OpenFOAM 13 · foamMultiRun (buoyant, multi-region) · Parallel/Serial Verified · 20,000 Iterations**
+**OpenFOAM 13 · foamMultiRun (buoyant, multi-region) · 3-Point Fin-Pitch Sweep · Parallel/Serial Verified**
 
-A steady-state Conjugate Heat Transfer (CHT) simulation of a CPU + fin-array heatsink inside a fan-driven duct, built with a fully parametric Python mesh generator so fin pitch can be swept without rebuilding geometry by hand. Developed as part of an OpenFOAM CFD portfolio demonstrating industrial thermal simulation methodology.
+A steady-state Conjugate Heat Transfer (CHT) simulation of a CPU + fin-array heatsink inside a fan-driven duct, built with a fully parametric Python mesh generator so fin pitch can be swept without rebuilding geometry by hand. A 3-point pitch sweep (3 mm / 4 mm / 5 mm) was completed to identify the thermal optimum for this fan/duct combination. Developed as part of an OpenFOAM CFD portfolio demonstrating industrial thermal simulation methodology.
 
 ---
 
@@ -12,15 +12,22 @@ A steady-state Conjugate Heat Transfer (CHT) simulation of a CPU + fin-array hea
 |-----------|-------|
 | Solver | `foamMultiRun` (buoyant, 3-region CHT) |
 | Regions | `fluid` (air) + `solid` → `heatsink` (Al) + `cpu` (Si) cell zones |
-| Total mesh cells | 649,200 (577,200 fluid + 72,000 solid) |
-| Total iterations | 20,000 (steady-state) |
 | CPU heat dissipation | 150 W |
 | Fan | Delta FFB0812VH (quadratic curve, `fanPressure` BC) |
 | Fan outlet velocity (converged) | 3.87 m/s |
-| Fin pitch / fin count (baseline) | 5 mm / 15 fins |
-| **Max CPU temperature** | **343.90 K (70.9°C)** |
 | Inlet air temperature | 300 K (27°C) |
-| Verification | Serial run vs. 8-core parallel run agree to 0.001 K |
+| Verification | Serial run vs. 8-core parallel run agree to 0.001 K (5 mm baseline) |
+| **Best CPU temperature** | **336.96 K (63.96°C) — 3 mm pitch, 24 fins** |
+
+### Parametric Sweep Results
+
+| Fin Pitch | Fin Count | Mesh Cells | T_max (K) | T_max (°C) | ΔT vs. ambient |
+|-----------|-----------|------------|-----------|------------|----------------|
+| 5 mm (baseline) | 15 | 649,200 | 343.90 | 70.90 | 43.90 K |
+| 4 mm | 18 | ~695,520 | 338.06 | 64.06 | 38.06 K |
+| **3 mm** | **24** | **~780,000** | **336.96** | **63.96** | **36.96 K** |
+
+Tighter pitch yields lower CPU temperature, with strongly diminishing returns below 4 mm (4→3 mm saves only 1.1 K vs. 5→4 mm saving 5.8 K), indicating the fan operating point shifts to lower flow rates as channel resistance increases.
 
 ---
 
@@ -51,7 +58,8 @@ Block-structured hex mesh from `blockMesh`, split into regions with `splitMeshRe
 - **Heat source**: `heatSource` fvModel, `cellZone allCpuCells`, `Q 150` (W), applied directly to the CPU silicon zone
 - **Fan BC**: `fanPressure` at `fan1_half0`, driven by a tabulated `pressureVsQ.csv` curve fit from the Delta FFB0812VH fan curve `dP = 73.99 − 1164.25·Q − 34615·Q²` [Pa, Q in m³/s]
 - **Turbulence**: k-ε
-- **Run length**: 20,000 iterations to steady state, monitored via `cpuTmax`/`solidTmax` `volFieldValue`/`surfaceFieldValue` function objects
+- **Run length**: 16,000 iterations to steady state (endTime tuned from 20,000 after the 5 mm baseline confirmed convergence plateau ~15,000 steps), monitored via `cpuTmax`/`solidTmax` `volFieldValue`/`surfaceFieldValue` function objects
+- **Relaxation factors**: `p_rgh 0.4`, `U 0.6`, `h/k/ε 0.4` — dialled back from 0.7–0.8 defaults to maintain stability on finer-pitch meshes
 
 ### Verification
 The baseline 5 mm case was run twice — once serial, once decomposed across 8 MPI ranks — to confirm the parallel decomposition doesn't change the converged solution. Both runs land on **T_max = 343.900 K**, agreeing to within 0.001 K, which is a standard (and reassuring) parallel-vs-serial cross-check before trusting a decomposed run for larger sweeps.
@@ -61,41 +69,56 @@ The baseline 5 mm case was run twice — once serial, once decomposed across 8 M
 ## Results
 
 ### Convergence
-CPU max temperature settles to 343.90 K by ~15,000 iterations in both runs (see `postProcessing/cpu/cpuTmax/*/volFieldValue.dat`); residuals for U, h, e, and p_rgh are all below 1e-6 at iteration 20,000.
+CPU maximum temperature is monitored each iteration via the `cpuTmax` `volFieldValue` function object. All three cases plateau well before `endTime = 16,000`:
+- **5 mm**: T_max settles to 343.90 K by ~15,000 steps; residuals below 1×10⁻⁶ at completion
+- **4 mm**: T_max plateaus to 338.06 K; 16,000-step run (~22 h wall-clock on a single core)
+- **3 mm**: T_max plateaus to 336.96 K; 16,000-step run (~21.8 h wall-clock on a single core)
 
 ### Thermal performance
-At 150 W dissipation and a 5 mm/15-fin array, the duct reaches a converged fan exit velocity of 3.87 m/s and holds the CPU die at 70.9°C above a 27°C inlet — a CPU-to-ambient temperature rise of ~44 K under fan-curve-driven (not fixed-velocity) airflow.
+All three cases dissipate 150 W from the CPU die with fan-curve-driven (not fixed-velocity) airflow. The 5 mm baseline reaches a converged fan exit velocity of 3.87 m/s. Tightening the fin pitch from 5 mm to 4 mm saves **5.84 K** (the dominant effect — substantially more fin surface area); going further to 3 mm saves an additional **1.10 K** (diminishing returns as channel restriction begins offsetting the surface area gain). The data suggest the thermal optimum for this fan/duct combination lies in the 3–4 mm range, with little benefit expected below 3 mm.
+
+### Pitch Sweep Summary
+
+| Fin Pitch | Fins | T_max (K) | T_max (°C) | ΔT vs. 5 mm |
+|-----------|------|-----------|------------|-------------|
+| 5 mm | 15 | 343.90 | 70.90 | — |
+| 4 mm | 18 | 338.06 | 64.06 | −5.84 K |
+| **3 mm** | **24** | **336.96** | **63.96** | **−6.94 K** |
 
 ---
 
 ## Workflow
 
 ```
-gen_cases_v2.py (parametric blockMeshDict generator)
+gen_cases_v2.py (parametric blockMeshDict generator — fin pitch + count as inputs)
         ↓
 blockMesh (hex mesh, fin/channel/side-gap strips + fan/wall patches)
         ↓
 splitMeshRegions -cellZones (fluid | heatsink | cpu)
         ↓
-foamMultiRun (buoyant fluid + conductive solid, coupled, 20,000 iterations)
+topoSet -region cpu (recreate allCpuCells cellZone for heatSource fvModel)
+        ↓
+foamMultiRun (buoyant fluid + conductive solid, coupled, 16,000 iterations)
         ↓
 postProcessing (cpuTmax, solidTmax, fan patch flow/velocity)
+        ↓
+[repeat for each pitch — each case is a fresh blockMesh + splitMeshRegions]
 ```
 
 ---
 
-## Status & Future Work
+## Status
 
-This is the **baseline case** of an intended 3-point fin-pitch sweep (4 mm / 5 mm / 6 mm). Current state in the `sims` directory:
+All three cases of the fin-pitch sweep are complete:
 
-| Case folder | Status | Result |
-|-------------|--------|--------|
-| 5 mm pitch, 15 fins (serial) | ✅ Converged, 20,000 it. | T_max = 343.90 K |
-| 5 mm pitch, 15 fins (8-core parallel) | ✅ Converged, 20,000 it. | T_max = 343.90 K |
-| 4 mm pitch (18 fins) | 🔲 Planned — regenerate mesh via `gen_cases_v2.py` with `fin_pitch=4e-3` | — |
-| 6 mm pitch (12 fins) | 🔲 Planned — regenerate mesh via `gen_cases_v2.py` with `fin_pitch=6e-3` | — |
+| Case | Fin Pitch | Fins | Status | T_max |
+|------|-----------|------|--------|-------|
+| `p5_cpu` (serial) | 5 mm | 15 | ✅ Converged, 20,000 it. | 343.90 K |
+| `p5_cpu` (8-core parallel verification) | 5 mm | 15 | ✅ Converged, 20,000 it. | 343.90 K |
+| `p4_cpu` | 4 mm | 18 | ✅ Converged, 16,000 it. | 338.06 K |
+| `p3_cpu` | 3 mm | 24 | ✅ Converged, 16,000 it. | 336.96 K |
 
-Next step: parameterize `gen_cases_v2.py`'s `fin_pitch`/`n_fins` per case folder, rerun, and compare T_max across pitches to find the thermal optimum for this fan/duct combination (tighter fins → more flow resistance; wider fins → less surface area — the expected result is a minimum CPU temperature at an intermediate pitch).
+The sweep confirms a clear trend: tighter pitch lowers CPU temperature, with strongly diminishing returns below 4 mm. The 3–4 mm range represents the practical thermal optimum for this fan/duct geometry.
 
 ---
 
