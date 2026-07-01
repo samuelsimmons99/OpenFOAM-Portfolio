@@ -172,8 +172,18 @@ story += [table(
 ), sp(6)]
 
 story += img("nozzle_Mach_contour.png",
-             caption="Fig. 3 — Mach number contour from original nozzle-only domain. "
+             caption="Fig. 3 — Mach number contour (nozzle-only domain, validated design point). "
                      "Exit Mach ≈ 3.22 matches isentropic theory (3.20) to within 1%.")
+
+story += [h2("3.2 Extended plume domain — early transient (t = 0.0005 s)"), p(
+    "The hot-gas case on the extended 5-block plume domain is shown at t = 0.5 ms. "
+    "The inlet shock is propagating into the initially-atmospheric plume region. "
+    "Long-time steady state is represented by the validated nozzle-only result above."
+)]
+story += img("Nozzle_overview.png",
+             caption="Fig. 4 — T, p, |U| at t = 0.5 ms (extended plume domain, startup transient).")
+story += img("Nozzle_axis_profiles.png",
+             caption="Fig. 5 — Axis profiles of T, p, |U| at t = 0.5 ms.")
 
 # ── Section 4: Premixed combustion ───────────────────────────────────────────
 story += [PageBreak(), h1("4. Case 2 — Premixed Combustion (rhoReactingFoam)"), hr()]
