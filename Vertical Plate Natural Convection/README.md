@@ -136,6 +136,27 @@ CFD with `kEpsilon` gives Nu=311.5, which is 15.3% below the all-Ra Churchill-Ch
 
 ---
 
+## Flow Visualisation
+
+### Full Domain - Temperature and Velocity
+
+| Laminar (Ra=4.56e8) | Transitional (Ra=4.09e9) | Turbulent (Ra=3.27e10) |
+|---------------------|--------------------------|------------------------|
+| ![](images/laminar_T.png) | ![](images/base_T.png) | ![](images/turbulent_T.png) |
+| ![](images/laminar_U.png) | ![](images/base_U.png) | ![](images/turbulent_U.png) |
+
+The full-domain views show the thermal plume rising off the plate and spreading across the top of the domain. The laminar case (dT=5K) shows almost no visible temperature gradient in the bulk - the 5K driving difference is tiny relative to the domain scale. The transitional and turbulent cases show the warm plume rolling over at the top boundary and beginning to recirculate.
+
+### Near-Plate Zoom - Thermal Boundary Layer
+
+| Laminar - Temperature | Transitional - Temperature | Turbulent - Velocity |
+|-----------------------|---------------------------|----------------------|
+| ![](images/laminar_T_zoom.png) | ![](images/base_T_zoom.png) | ![](images/turbulent_U_zoom.png) |
+
+The zoomed views reveal the thin thermal boundary layer at x=0 (the heated plate). In the transitional case, the boundary layer thickens from bottom to top as the flow develops - this local thickening is why the local Nusselt number Nu_x is highest at the leading edge (y=0) and lowest at the trailing edge (y=L). The turbulent velocity zoom shows the buoyant jet accelerating continuously up the 2m plate, reaching peak speed near the top.
+
+---
+
 ## Key Physics
 
 - **Gr >> 1**: Buoyancy forces dominate viscous forces across all cases - inertial flow rather than creeping flow.
