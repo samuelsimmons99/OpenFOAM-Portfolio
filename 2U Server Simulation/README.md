@@ -119,11 +119,11 @@ reconstructPar → ParaView post-processing
 
 Key debugging discoveries made during this project (full notes at `openfoam_CHT_debugging_notes.md`):
 
-1. Use `perfectGas` not `incompressiblePerfectGas` — incompressible causes diagonal solver crash with `steadyState`
-2. Delete global `system/fvOptions` — it silently overrides region-specific `fvOptions`
+1. Use `perfectGas` not `incompressiblePerfectGas` - incompressible causes diagonal solver crash with `steadyState`
+2. Delete global `system/fvOptions` - it silently overrides region-specific `fvOptions`
 3. Heat source: `scalarSemiImplicitSource`, `volumeMode specific`, value `1.863e7 W/m³`
 4. Both sides of coupled interfaces must use `turbulentTemperatureCoupledBaffleMixed`
-5. Checkpoints overwrite coupled BCs with `fixedValue` — must manually fix after restart
+5. Checkpoints overwrite coupled BCs with `fixedValue` - must manually fix after restart
 6. Run isothermal first to establish flow, then switch to coupled BCs
 7. `chtMultiRegionSimpleFoam` requires `SIMPLE` block in all region `fvSolution` files
 8. Use `chtMultiRegionSimpleFoam` (not `chtMultiRegionFoam`) for steady-state runs
@@ -155,4 +155,4 @@ Key debugging discoveries made during this project (full notes at `openfoam_CHT_
 
 ## Repository
 
-Part of the [OpenFOAM Portfolio](https://github.com/samuelsimmons99/OpenFOAM-Portfolio) — a collection of CFD simulations demonstrating thermal and fluid simulation skills relevant to thermal engineering roles.
+Part of the [OpenFOAM Portfolio](https://github.com/samuelsimmons99/OpenFOAM-Portfolio) - a collection of CFD simulations demonstrating thermal and fluid simulation skills relevant to thermal engineering roles.

@@ -32,7 +32,7 @@ Three progressively complex CFD simulations of airflow through a smoking pipe ge
 
 ---
 
-## Simulation 1 — Steady-State Flow (`simpleFoam`)
+## Simulation 1 - Steady-State Flow (`simpleFoam`)
 
 Fixed inlet velocity, no-slip walls, pressure outlet. Laminar Stokes model. Converged in **51 iterations**.
 
@@ -45,10 +45,10 @@ Fixed inlet velocity, no-slip walls, pressure outlet. Laminar Stokes model. Conv
 ### Results
 
 ![Velocity magnitude](smoking_pipe_steady_state/U_mag_contour.png)
-*Velocity magnitude — centreline slice*
+*Velocity magnitude - centreline slice*
 
 ![Pressure distribution](smoking_pipe_steady_state/p_mag_contour.png)
-*Pressure distribution — high at inlet bowl, low at mouthpiece*
+*Pressure distribution - high at inlet bowl, low at mouthpiece*
 
 ![Streamlines](smoking_pipe_steady_state/streamlines_U.png)
 *Streamlines coloured by U magnitude*
@@ -58,7 +58,7 @@ Fixed inlet velocity, no-slip walls, pressure outlet. Laminar Stokes model. Conv
 
 ---
 
-## Simulation 2 — Transient Impulsive Start (`pimpleFoam`)
+## Simulation 2 - Transient Impulsive Start (`pimpleFoam`)
 
 Same geometry and boundary conditions as steady-state but started from rest. Adaptive Co-based timestepping (maxCo=0.5). Flow reached steady state by **t=0.25s**.
 
@@ -74,17 +74,17 @@ Same geometry and boundary conditions as steady-state but started from rest. Ada
 ### Results
 
 ![t=0s](smoking_pipe_transient/U_mag_0.png)
-*t=0s — zero velocity, flow at rest*
+*t=0s - zero velocity, flow at rest*
 
 ![t=0.01s](smoking_pipe_transient/U_mag_0.01.png)
-*t=0.01s — impulsive start, jet forming at bowl-stem junction*
+*t=0.01s - impulsive start, jet forming at bowl-stem junction*
 
 ![t=0.1s](smoking_pipe_transient/U_mag_0.1.png)
-*t=0.1s — approaching steady state*
+*t=0.1s - approaching steady state*
 
 ---
 
-## Simulation 3 — Physiological Breathing Cycle (`pimpleFoam`)
+## Simulation 3 - Physiological Breathing Cycle (`pimpleFoam`)
 
 Time-varying suction boundary condition at the mouthpiece using OpenFOAM's `codedFixedValue` to simulate realistic breathing. Flow is driven by suction rather than a fixed inlet velocity. Simulation ran for **8 seconds** capturing two complete breath cycles.
 
@@ -101,37 +101,37 @@ dotVBreath     = 1.33e-3 m³/s  // volumetric flow rate (2L / 1.5s)
 | Time | Phase | Flow |
 |---|---|---|
 | 0.0 → 0.1s | Pre-breath | No flow |
-| 0.1 → 1.6s | First breath | Suction active — flow drawn through pipe |
-| 1.6 → 6.6s | Pause | Flow decays — pipe clears |
+| 0.1 → 1.6s | First breath | Suction active - flow drawn through pipe |
+| 1.6 → 6.6s | Pause | Flow decays - pipe clears |
 | 6.6 → 8.1s | Second breath | Suction resumes |
 
 ### Results
 
 ![t=1s](smoking_pipe_codedFixedValue/U_mag_1s.png)
-*t=1s — active breath, suction jet at mouthpiece (max 1.0 m/s)*
+*t=1s - active breath, suction jet at mouthpiece (max 1.0 m/s)*
 
 ![t=2s](smoking_pipe_codedFixedValue/U_mag_2s.png)
-*t=2s — end of first breath, flow decelerating*
+*t=2s - end of first breath, flow decelerating*
 
 ![t=4s](smoking_pipe_codedFixedValue/U_mag_4s.png)
-*t=4s — pause phase, near-zero flow throughout*
+*t=4s - pause phase, near-zero flow throughout*
 
 ![t=7s](smoking_pipe_codedFixedValue/U_mag_7s.png)
-*t=7s — second breath, suction jet re-established*
+*t=7s - second breath, suction jet re-established*
 
 ---
 
 ## Key Challenges
 
-**Tetrahedral background mesh** — snappyHexMesh requires hex cells. Rebuilt using Salome hex algorithm and `ideasUnvToFoam`.
+**Tetrahedral background mesh** - snappyHexMesh requires hex cells. Rebuilt using Salome hex algorithm and `ideasUnvToFoam`.
 
-**Open STL edges** — 136 open edges at the outlet caused snappyHexMesh to hang. Fixed by re-sewing geometry in Salome and re-exporting as a closed manifold surface.
+**Open STL edges** - 136 open edges at the outlet caused snappyHexMesh to hang. Fixed by re-sewing geometry in Salome and re-exporting as a closed manifold surface.
 
-**Persistent bad mesh face** — single 161° non-orthogonal face located by face index lookup at `(-0.009, 0.017, -0.020)`. Eliminated using a `searchableSphere` refinement region targeting that cell.
+**Persistent bad mesh face** - single 161° non-orthogonal face located by face index lookup at `(-0.009, 0.017, -0.020)`. Eliminated using a `searchableSphere` refinement region targeting that cell.
 
-**Adaptive timestep collapse** — deltaT collapsed to ~1e-62 due to bad face producing spurious Courant number spike. Fixed by `minDeltaT` and switching `writeControl` to `timeStep`.
+**Adaptive timestep collapse** - deltaT collapsed to ~1e-62 due to bad face producing spurious Courant number spike. Fixed by `minDeltaT` and switching `writeControl` to `timeStep`.
 
-**codedFixedValue timing** — breathing condition used absolute simulation time, requiring `breathingStart` offset when restarting from non-zero time.
+**codedFixedValue timing** - breathing condition used absolute simulation time, requiring `breathingStart` offset when restarting from non-zero time.
 
 ---
 

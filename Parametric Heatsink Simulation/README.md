@@ -17,7 +17,7 @@ A steady-state Conjugate Heat Transfer (CHT) simulation of a CPU + fin-array hea
 | Fan outlet velocity (converged) | 3.87 m/s |
 | Inlet air temperature | 300 K (27°C) |
 | Verification | Serial run vs. 8-core parallel run agree to 0.001 K (5 mm baseline) |
-| **Best CPU temperature** | **336.96 K (63.96°C) — 3 mm pitch, 24 fins** |
+| **Best CPU temperature** | **336.96 K (63.96°C) - 3 mm pitch, 24 fins** |
 
 ### Parametric Sweep Results
 
@@ -33,8 +33,8 @@ Tighter pitch yields lower CPU temperature, with strongly diminishing returns be
 
 ## Simulation Overview
 
-### Geometry — parametric, not hand-built
-Geometry is generated directly as a `blockMeshDict` by [`gen_cases_v2.py`](Linux%20Files/gen_cases_v2.py): given a fin pitch and fin count, the script lays out alternating fin/channel/side-gap strips across the duct width, splits them against the CPU footprint, and emits a full hex-block mesh with fan, wall, and region-zone tagging baked in. This means a new pitch is a one-line parameter change, not a CAD rebuild — the point of the study being a *parametric* sweep rather than a single fixed design.
+### Geometry: Parametric, not hand-built
+Geometry is generated directly as a `blockMeshDict` by [`gen_cases_v2.py`](Linux%20Files/gen_cases_v2.py): given a fin pitch and fin count, the script lays out alternating fin/channel/side-gap strips across the duct width, splits them against the CPU footprint, and emits a full hex-block mesh with fan, wall, and region-zone tagging baked in. This means a new pitch is a one-line parameter change, not a CAD rebuild. The parametric approach is the core point of the study rather than a single fixed design.
 
 Fixed geometry (from `gen_cases_v2.py`):
 - Fan/duct cross-section: 80 × 80 mm
@@ -59,10 +59,10 @@ Block-structured hex mesh from `blockMesh`, split into regions with `splitMeshRe
 - **Fan BC**: `fanPressure` at `fan1_half0`, driven by a tabulated `pressureVsQ.csv` curve fit from the Delta FFB0812VH fan curve `dP = 73.99 − 1164.25·Q − 34615·Q²` [Pa, Q in m³/s]
 - **Turbulence**: k-ε
 - **Run length**: 16,000 iterations to steady state (endTime tuned from 20,000 after the 5 mm baseline confirmed convergence plateau ~15,000 steps), monitored via `cpuTmax`/`solidTmax` `volFieldValue`/`surfaceFieldValue` function objects
-- **Relaxation factors**: `p_rgh 0.4`, `U 0.6`, `h/k/ε 0.4` — dialled back from 0.7–0.8 defaults to maintain stability on finer-pitch meshes
+- **Relaxation factors**: `p_rgh 0.4`, `U 0.6`, `h/k/ε 0.4`, dialled back from 0.7-0.8 defaults to maintain stability on finer-pitch meshes
 
 ### Verification
-The baseline 5 mm case was run twice — once serial, once decomposed across 8 MPI ranks — to confirm the parallel decomposition doesn't change the converged solution. Both runs land on **T_max = 343.900 K**, agreeing to within 0.001 K, which is a standard (and reassuring) parallel-vs-serial cross-check before trusting a decomposed run for larger sweeps.
+The baseline 5 mm case was run twice (once serial, once decomposed across 8 MPI ranks) to confirm the parallel decomposition does not change the converged solution. Both runs land on **T_max = 343.900 K**, agreeing to within 0.001 K, which is a standard parallel-vs-serial cross-check before trusting a decomposed run for larger sweeps.
 
 ---
 
@@ -75,22 +75,34 @@ CPU maximum temperature is monitored each iteration via the `cpuTmax` `volFieldV
 - **3 mm**: T_max plateaus to 336.96 K; 16,000-step run (~21.8 h wall-clock on a single core)
 
 ### Thermal performance
-All three cases dissipate 150 W from the CPU die with fan-curve-driven (not fixed-velocity) airflow. The 5 mm baseline reaches a converged fan exit velocity of 3.87 m/s. Tightening the fin pitch from 5 mm to 4 mm saves **5.84 K** (the dominant effect — substantially more fin surface area); going further to 3 mm saves an additional **1.10 K** (diminishing returns as channel restriction begins offsetting the surface area gain). The data suggest the thermal optimum for this fan/duct combination lies in the 3–4 mm range, with little benefit expected below 3 mm.
+All three cases dissipate 150 W from the CPU die with fan-curve-driven (not fixed-velocity) airflow. The 5 mm baseline reaches a converged fan exit velocity of 3.87 m/s. Tightening the fin pitch from 5 mm to 4 mm saves **5.84 K** (the dominant effect, substantially more fin surface area); going further to 3 mm saves an additional **1.10 K** (diminishing returns as channel restriction begins offsetting the surface area gain). The data suggest the thermal optimum for this fan/duct combination lies in the 3–4 mm range, with little benefit expected below 3 mm.
 
 ### Pitch Sweep Summary
 
 | Fin Pitch | Fins | T_max (K) | T_max (°C) | ΔT vs. 5 mm |
 |-----------|------|-----------|------------|-------------|
-| 5 mm | 15 | 343.90 | 70.90 | — |
+| 5 mm | 15 | 343.90 | 70.90 | baseline |
 | 4 mm | 18 | 338.06 | 64.06 | −5.84 K |
 | **3 mm** | **24** | **336.96** | **63.96** | **−6.94 K** |
+
+### Fan Operating Points
+
+![Fan curve with simulated operating points](fan_curve_operating_points.png)
+
+As fin pitch decreases, channel flow resistance increases, shifting each case's operating point left along the fan curve (lower flow, higher static pressure). All three cases operate in the high-Q, low-ΔP region of the curve; the fan is lightly loaded, confirming the duct resistance is well below the fan's stall pressure.
+
+| Case | Q (m³/min) | ΔP (Pa) | Fan outlet velocity |
+|------|-----------|---------|-------------------|
+| 5 mm | 1.486 | 23.9 | 3.87 m/s |
+| 4 mm | 1.404 | 27.8 | 3.65 m/s |
+| 3 mm | 1.359 | 29.9 | 3.54 m/s |
 
 ---
 
 ## Workflow
 
 ```
-gen_cases_v2.py (parametric blockMeshDict generator — fin pitch + count as inputs)
+gen_cases_v2.py (parametric blockMeshDict generator: fin pitch + count as inputs)
         ↓
 blockMesh (hex mesh, fin/channel/side-gap strips + fan/wall patches)
         ↓
@@ -102,7 +114,7 @@ foamMultiRun (buoyant fluid + conductive solid, coupled, 16,000 iterations)
         ↓
 postProcessing (cpuTmax, solidTmax, fan patch flow/velocity)
         ↓
-[repeat for each pitch — each case is a fresh blockMesh + splitMeshRegions]
+[repeat for each pitch: each case is a fresh blockMesh + splitMeshRegions]
 ```
 
 ---
@@ -129,10 +141,10 @@ The sweep confirms a clear trend: tighter pitch lowers CPU temperature, with str
 | OpenFOAM | 13 | CFD solver (`foamMultiRun`, buoyant multi-region CHT) |
 | Python | 3.x | Parametric `blockMeshDict` generation |
 | Ubuntu (WSL2) | 24.04 | OS |
-| OpenMPI | — | 8-core parallel verification run |
+| OpenMPI | n/a | 8-core parallel verification run |
 
 ---
 
 ## Repository
 
-Part of the [OpenFOAM Portfolio](https://github.com/samuelsimmons99/OpenFOAM-Portfolio) — a collection of CFD simulations demonstrating thermal and fluid simulation skills relevant to thermal engineering roles.
+Part of the [OpenFOAM Portfolio](https://github.com/samuelsimmons99/OpenFOAM-Portfolio): a collection of CFD simulations demonstrating thermal and fluid simulation skills relevant to thermal engineering roles.

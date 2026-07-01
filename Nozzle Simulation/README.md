@@ -54,7 +54,7 @@ x = -0.30          x = 0.00     x = 0.15     x = 0.50     x = 1.50
 
 ---
 
-## Case 1 — Hot Gas (rhoCentralFoam)
+## Case 1 - Hot Gas (rhoCentralFoam)
 
 ### Physics
 
@@ -65,7 +65,7 @@ x = -0.30          x = 0.00     x = 0.15     x = 0.50     x = 1.50
 | Cp | 2 267 J/(kg K) | From γ, M |
 | μ | 1×10⁻⁴ Pa s | At 3 000 K |
 | Chamber pressure | 3 MPa | Total |
-| Chamber temperature | 3 000 K | Total — LOX/kerosene adiabatic flame |
+| Chamber temperature | 3 000 K | Total - LOX/kerosene adiabatic flame |
 | Back pressure | 101 325 Pa | Sea level |
 
 ### Boundary conditions
@@ -91,7 +91,7 @@ Throat Mach = 1.0 confirmed; exit Mach ≈ 3.22, matching the isentropic design 
 
 ---
 
-## Case 2 — Premixed Combustion (rhoReactingFoam)
+## Case 2 - Premixed Combustion (rhoReactingFoam)
 
 ### Physics
 
@@ -126,7 +126,7 @@ Thermodynamic data: JANAF NASA-7 polynomials. Transport: Sutherland viscosity.
 
 ---
 
-## Case 3 — Separate Injection (rhoReactingFoam)
+## Case 3 - Separate Injection (rhoReactingFoam)
 
 ### Physics
 
@@ -170,9 +170,9 @@ Post-processing:
 
 ### Key solver notes
 
-- **`rhoCentralFoam`**: requires consistent `(ρ, p, T)` initial condition — mismatching the outer-boundary density against the interior pressure causes the Newton iteration for temperature to diverge in `hePsiThermo::correct()`. Fix: initialise `ρ` from `p / (R_spec · T)` uniformly and use `zeroGradient` for ρ at far-field boundaries.
-- **`rhoReactingFoam` thermo reader**: `foamChemistryReader::readSpeciesComposition()` requires an `elements {}` sub-dictionary directly inside each species block in `constant/thermo` — placing it inside the nested `specie {}` block is silently ignored.
-- **Species initialisation**: all species mass fractions must sum to 1 at every patch at t = 0, including at outlet `value` fields — a zero-sum triggers a floating-point exception in `multiComponentMixture::patchFaceVolMixture()`.
+- **`rhoCentralFoam`**: requires consistent `(ρ, p, T)` initial condition - mismatching the outer-boundary density against the interior pressure causes the Newton iteration for temperature to diverge in `hePsiThermo::correct()`. Fix: initialise `ρ` from `p / (R_spec · T)` uniformly and use `zeroGradient` for ρ at far-field boundaries.
+- **`rhoReactingFoam` thermo reader**: `foamChemistryReader::readSpeciesComposition()` requires an `elements {}` sub-dictionary directly inside each species block in `constant/thermo` - placing it inside the nested `specie {}` block is silently ignored.
+- **Species initialisation**: all species mass fractions must sum to 1 at every patch at t = 0, including at outlet `value` fields - a zero-sum triggers a floating-point exception in `multiComponentMixture::patchFaceVolMixture()`.
 - **`waveTransmissive`** BC for the far-field outer boundary of a high-pressure interior domain (3 MPa vs 101 kPa) amplifies the startup transient rather than damping it. `zeroGradient` for pressure at that boundary is more stable at t = 0.
 - **Wedge block ordering**: direction 3 (extrusion axis) must start from a wall vertex, not the degenerate axis vertex, to avoid "inward-pointing face" errors during `blockMesh`.
 
@@ -180,11 +180,11 @@ Post-processing:
 
 ## Limitations
 
-- Conical nozzle profile — a bell or Rao-optimised shape reduces divergence loss.
-- Single-step global Arrhenius — does not capture intermediate species (CO, OH, H) or dissociation at high temperature.
-- Adiabatic walls — no regenerative cooling or heat-transfer to the structure.
-- Laminar — no turbulence model; relevant for the mixing layer between fuel and oxidiser in Case 3.
-- 2D axisymmetric — no azimuthal instabilities, swirl, or injector pattern effects.
+- Conical nozzle profile - a bell or Rao-optimised shape reduces divergence loss.
+- Single-step global Arrhenius - does not capture intermediate species (CO, OH, H) or dissociation at high temperature.
+- Adiabatic walls - no regenerative cooling or heat-transfer to the structure.
+- Laminar - no turbulence model; relevant for the mixing layer between fuel and oxidiser in Case 3.
+- 2D axisymmetric - no azimuthal instabilities, swirl, or injector pattern effects.
 - Over-expanded exit shock structure is partially captured in the extended plume domain but requires longer physical time to reach steady state.
 
 ---
