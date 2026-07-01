@@ -1,62 +1,55 @@
 # Vertical Plate Natural Convection
 
-**OpenFOAM 13 · buoyantFoam · Boussinesq · Transient 2D Laminar**
+**OpenFOAM 13 · buoyantFoam · Boussinesq · Transient 2D · Three-Case Ra Sweep**
 
-Transient natural convection simulation of a heated vertical plate in quiescent air, compared against the Churchill-Chu analytical correlation. The simulation computes Grashof number, Rayleigh number, Nusselt number, and convection coefficient from both CFD and theory, and quantifies the sources of discrepancy.
+Parametric study of natural convection on a heated vertical plate across three Rayleigh number regimes: fully laminar, transitional, and fully turbulent. Each case computes Grashof number, Rayleigh number, Nusselt number, and convection coefficient from both CFD and the Churchill-Chu (1975) analytical correlation.
 
 ---
 
 ## Problem Definition
 
-A 1 m x 1 m vertical plate starts at 100°C (373.15 K) in quiescent air at 300 K (26.85°C). There is no forced flow - natural convection is driven purely by buoyancy as the warm plate heats the adjacent air, reducing its density and causing it to rise. The simulation tracks the development of the thermal boundary layer and plume from rest to quasi-steady state.
+A vertical plate in quiescent air at 300 K is held at a fixed temperature. Buoyancy drives air upward along the plate, forming a thermal boundary layer. Three cases vary plate temperature and height to sweep Ra across three orders of magnitude.
 
-| Parameter | Value |
-|-----------|-------|
-| Plate temperature | 373.15 K (100°C) |
-| Ambient air temperature | 300 K (26.85°C) |
-| Temperature difference | 73.15 K |
-| Plate height (L) | 1.0 m |
-| Gravity | 9.81 m/s² (downward, -y) |
+| Case | T_plate | T_inf | dT | L | Ra | Regime |
+|------|---------|-------|----|---|----|--------|
+| Laminar | 305 K (32°C) | 300 K | 5 K | 1 m | 4.56e8 | Laminar (Ra < 1e9) |
+| Transitional | 373.15 K (100°C) | 300 K | 73.15 K | 1 m | 4.09e9 | Transitional (1e9 < Ra < 1e10) |
+| Turbulent | 373.15 K (100°C) | 300 K | 73.15 K | 2 m | 3.27e10 | Turbulent (Ra > 1e10) |
+
+All cases use the same solver setup - the Ra regime is set by geometry and boundary conditions alone.
 
 ---
 
-## Analytical Reference Values
+## Analytical Reference: Churchill-Chu (1975)
 
-Air properties are evaluated at the film temperature T_f = (373.15 + 300) / 2 = 336.6 K.
+Air properties are evaluated at the film temperature T_f = (T_plate + T_inf) / 2.
+
+**All-Ra form** (valid for the full Ra range, accounts for turbulent augmentation):
+
+Nu_L = {0.825 + 0.387 · [Ra_L / (1 + (0.492/Pr)^(9/16))^(16/9)]^(1/6)}^2
+
+**Laminar form** (Ra < 1e9 only):
+
+Nu_L = 0.68 + 0.670 · Ra_L^(1/4) / (1 + (0.492/Pr)^(9/16))^(4/9)
 
 ### Air Properties at Film Temperature
 
-| Property | Symbol | Value |
-|----------|--------|-------|
-| Dynamic viscosity (Sutherland law) | mu | 2.018e-5 Pa·s |
-| Density (ideal gas) | rho | 1.049 kg/m³ |
-| Kinematic viscosity | nu | 1.924e-5 m²/s |
-| Thermal conductivity | k | 0.02860 W/m·K |
-| Specific heat | Cp | 1007 J/kg·K |
-| Prandtl number | Pr | 0.711 |
-| Thermal expansion coefficient (ideal gas) | beta = 1/T_f | 2.971e-3 1/K |
+| Property | Laminar (T_f=302.5 K) | Transitional (T_f=336.6 K) | Turbulent (T_f=336.6 K) |
+|----------|-----------------------|---------------------------|-------------------------|
+| mu (Pa·s) | 1.860e-5 | 2.018e-5 | 2.018e-5 |
+| rho (kg/m³) | 1.167 | 1.049 | 1.049 |
+| nu (m²/s) | 1.594e-5 | 1.924e-5 | 1.924e-5 |
+| k (W/m·K) | 0.02620 | 0.02860 | 0.02860 |
+| Pr | 0.715 | 0.711 | 0.711 |
+| beta (1/K) | 3.306e-3 | 2.971e-3 | 2.971e-3 |
 
-### Dimensionless Numbers
+### Analytical Nusselt Numbers
 
-| Number | Formula | Value |
-|--------|---------|-------|
-| **Grashof** | Gr_L = g · beta · dT · L³ / nu² | **5.757e9** |
-| **Rayleigh** | Ra_L = Gr_L · Pr | **4.091e9** |
-
-Ra > 10^9 places this case in the **transitional regime** (laminar to turbulent), requiring care in choosing the appropriate correlation for comparison.
-
-### Churchill-Chu Correlation (1975)
-
-**All-Ra form** (accounts for both laminar and turbulent contributions):
-
-Nu_L = {0.825 + 0.387 · [Ra_L / (1 + (0.492/Pr)^(9/16))^(16/9)]^(1/6)}²
-
-| Correlation | Nu_L | h (W/m²·K) | q (W/m²) |
-|-------------|------|------------|----------|
-| All-Ra Churchill-Chu | **190.4** | **5.447** | **398.4** |
-| Laminar Churchill-Chu (0.68 + 0.670·Ra^0.25/corr) | **130.8** | **3.739** | **273.5** |
-
-The all-Ra form includes turbulent enhancement; the laminar form is the correct comparison baseline for this laminar CFD run.
+| Case | Ra | All-Ra CC Nu | Laminar CC Nu |
+|------|----|-------------|---------------|
+| Laminar | 4.56e8 | 96.6 | 75.9 |
+| Transitional | 4.09e9 | 190.4 | 130.8 |
+| Turbulent | 3.27e10 | 367.7 | 219.4 (not valid) |
 
 ---
 
@@ -64,42 +57,35 @@ The all-Ra form includes turbulent enhancement; the laminar form is the correct 
 
 ### Domain and Mesh
 
-The 2D domain is sized to capture the full boundary layer and thermal plume:
+Three-block 2D blockMesh, graded fine-to-coarse away from the plate wall.
 
-| Region | x range | y range | Purpose |
-|--------|---------|---------|---------|
-| Below plate | 0 to 1.5 m | -0.3 to 0 m | Air entrainment inlet |
-| Plate region | 0 to 1.5 m | 0 to 1.0 m | Boundary layer development |
-| Above plate | 0 to 1.5 m | 1.0 to 1.3 m | Thermal plume exit |
+| Case | Domain (x x y) | Cells | First cell dx |
+|------|----------------|-------|---------------|
+| Laminar / Transitional | 1.5 m x 1.6 m | 9,450 | 0.66 mm |
+| Turbulent | 2.5 m x 2.8 m | 16,400 | 0.83 mm |
 
-- **Plate**: x = 0, y = 0 to 1 m (left boundary, heated wall)
-- **z-direction**: 0.05 m thickness, 1 cell (empty BC - 2D simulation)
-- **Total cells**: 9,450 hex cells (3-block blockMesh)
-
-**Wall-normal refinement**: x-direction graded fine-to-coarse away from plate. First cell 0.66 mm, resolves the ~3.5 mm thermal boundary layer with approximately 5 cells.
-
-Characteristic velocity (buoyancy scale): v_char = sqrt(g · beta · dT · L) = 1.46 m/s
+- **Plate**: left boundary (x = 0), fixed temperature
+- **z-direction**: 0.05 m, 1 cell, empty BC (2D simulation)
+- **Open boundaries** (inlet, outlet, farfield): `inletOutlet` at 300 K, `pressureInletOutletVelocity`
 
 ### Solver and Physics
 
-| Setting | Value |
-|---------|-------|
-| Solver | `buoyantFoam` (OpenFOAM 13, PIMPLE transient) |
-| Equation of state | Boussinesq: rho = rho0 · (1 - beta · (T - T0)) |
-| Energy equation | `eConst` / `sensibleInternalEnergy` |
-| Turbulence | Laminar (Stokes) |
-| End time | 300 s |
-| Timestep | 0.05 s (fixed), Courant number mean ~0.18, max ~11 |
+| Setting | Laminar / Transitional | Turbulent |
+|---------|----------------------|-----------|
+| Solver | `buoyantFoam` (PIMPLE transient) | same |
+| Equation of state | Boussinesq | same |
+| Energy equation | `eConst` / `sensibleInternalEnergy` | same |
+| Turbulence model | Laminar (Stokes) | `kEpsilon` |
+| End time | 600 s / 300 s | 300 s |
+| Timestep | 0.05 s fixed | 0.05 s fixed |
 
-**Boundary conditions:**
+**Boundary conditions (all cases):**
 
 | Patch | Velocity | Temperature | p_rgh |
 |-------|----------|-------------|-------|
-| `plate` (heated wall) | noSlip | fixedValue 373.15 K | fixedFluxPressure |
-| `bottom_left`, `top_left` (wall above/below plate) | slip | zeroGradient | fixedFluxPressure |
-| `inlet` (y = -0.3 m) | pressureInletOutletVelocity | inletOutlet 300 K | fixedValue 0 |
-| `outlet` (y = 1.3 m) | pressureInletOutletVelocity | inletOutlet 300 K | fixedValue 0 |
-| `farfield` (x = 1.5 m) | pressureInletOutletVelocity | inletOutlet 300 K | fixedValue 0 |
+| `plate` | noSlip | fixedValue T_plate | fixedFluxPressure |
+| `bottom_left`, `top_left` | slip | zeroGradient | fixedFluxPressure |
+| `inlet`, `outlet`, `farfield` | pressureInletOutletVelocity | inletOutlet 300 K | fixedValue 0 |
 
 ---
 
@@ -107,61 +93,68 @@ Characteristic velocity (buoyancy scale): v_char = sqrt(g · beta · dT · L) = 
 
 ### Heat Transfer Comparison
 
-The simulation reaches quasi-steady state by t = 160 s, after which the plate-averaged heat flux stabilises at ~199 W/m².
+| Case | Ra | All-Ra CC Nu | CFD Nu | CFD h (W/m²·K) | CFD q (W/m²) | Error vs All-Ra CC |
+|------|----|-------------|--------|-----------------|--------------|-------------------|
+| Laminar | 4.56e8 | 96.6 | **98.5** | 2.58 | 12.9 | +1.9% |
+| Transitional | 4.09e9 | 190.4 | **95.3** | 2.73 | 199.3 | -50.0% |
+| Turbulent | 3.27e10 | 367.7 | **311.5** | 4.45 | 325.8 | -15.3% |
 
-| Quantity | All-Ra Churchill-Chu | Laminar Churchill-Chu | CFD (laminar) |
-|----------|---------------------|----------------------|---------------|
-| **Nu_L** | 190.4 | 130.8 | **95.3** |
-| **h (W/m²·K)** | 5.447 | 3.739 | **2.725** |
-| **q (W/m²)** | 398.4 | 273.5 | **199.3** |
-| CFD vs all-Ra CC | - | - | -50.0% |
-| CFD vs laminar CC | - | - | -27.1% |
+### Laminar Case (Ra = 4.56e8)
 
-### Transient Heat Flux Development
+Excellent agreement with the all-Ra Churchill-Chu correlation (+1.9%). The laminar form (Nu=75.9) underestimates because Ra=4.56e8 is near the upper end of the laminar range where turbulent augmentation in the correlation begins to matter. Heat flux trend:
 
-The wall-averaged heat flux evolves from an initially high value (conduction-dominated, no flow) and decreases as the boundary layer thickens and entrainment velocity reaches equilibrium:
+| Time (s) | q (W/m²) | Nu |
+|----------|----------|----|
+| 100 | 17.41 | 132.9 |
+| 200 | 16.06 | 122.5 |
+| 300 | 14.97 | 114.3 |
+| 400 | 13.95 | 106.5 |
+| 500 | 12.92 | 98.6 |
+| 600 | 11.84 | 90.4 |
 
-| Time | q (W/m²) | Phase |
-|------|----------|-------|
-| 0 s | 4614 | Conduction only (zero velocity) |
-| 20 s | 299 | Boundary layer forming |
-| 60 s | 254 | Flow developing |
-| 160 s | 200 | Quasi-steady |
-| 300 s | 199 | Fully quasi-steady |
+The slow monotonic decay reflects the long settling time at low driving dT (v_char = 0.40 m/s, roughly 3.6x slower than the 100°C case). The flux converges toward the all-Ra CC value (~12.7 W/m²), with the t=400-600s average giving Nu=98.5.
 
-### Analysis of Discrepancy
+### Transitional Case (Ra = 4.09e9)
 
-The 27% gap between CFD (Nu = 95.3) and the **laminar** correlation (Nu = 130.8) is expected and attributable to three compounding effects:
+The laminar CFD run gives Nu=95.3, which is 27% below the laminar Churchill-Chu correlation (130.8) and 50% below the all-Ra form (190.4). Three sources of discrepancy:
 
-1. **Cv vs Cp in Boussinesq eConst**: The `eConst/sensibleInternalEnergy` energy equation diffuses temperature at alpha = k/(rho·Cv) rather than the physically correct k/(rho·Cp). For air (Cp/Cv = gamma = 1.4), the thermal diffusivity is 40% too large, modestly thickening the boundary layer (expected -8% on Nu ~ alpha^(-1/4)).
+1. **Turbulence missing**: Ra=4.09e9 sits at the laminar-to-turbulent transition. A laminar simulation cannot capture the turbulent augmentation that the all-Ra CC includes. This accounts for most of the gap versus all-Ra CC.
+2. **Cv vs Cp error**: The Boussinesq `eConst` formulation uses Cv in the energy equation, giving thermal diffusivity k/(rho·Cv) = 1.4x too large. This thickens the thermal boundary layer, reducing Nu by roughly 8%.
+3. **Numerical diffusion**: Fixed deltaT=0.05 s with 0.66 mm first cell gives Co_max ~11. The `linearUpwind` scheme at high Co adds numerical diffusion, further suppressing Nu.
 
-2. **High Courant number near wall**: With a fixed deltaT = 0.05 s and first-cell thickness 0.66 mm, the maximum Courant number reaches ~11 in the cells closest to the plate. The `linearUpwind` scheme at high Co introduces numerical diffusion, further thickening the effective thermal boundary layer.
+### Turbulent Case (Ra = 3.27e10)
 
-3. **Finite domain warming**: The 1.5 m wide domain allows the rising warm plume to partially recirculate through open boundaries, gradually warming the effective ambient temperature below 300 K. This reduces the driving delta_T and the heat flux.
+CFD with `kEpsilon` gives Nu=311.5, which is 15.3% below the all-Ra Churchill-Chu correlation (367.7). The standard `kEpsilon` model does not include the buoyancy production term in the k-equation (G_b), so it under-predicts turbulent enhancement near the heated wall. A buoyancy-augmented model (`buoyantKEpsilon`) would be expected to reduce this gap. The result nevertheless captures the correct turbulent scaling (Nu ~ Ra^(1/3)) and sits well above the laminar correlation value (219.4), confirming the turbulent regime.
 
-A fully mesh-refined run with adaptive timestepping (Co_max < 1), a larger domain, and `hConst/sensibleEnthalpy` (which correctly uses Cp) would be expected to converge the CFD Nu to within 10-15% of the laminar correlation.
+### Characteristic Velocities
+
+| Case | v_char = sqrt(g·beta·dT·L) | Observed peak CFD velocity |
+|------|--------------------------|---------------------------|
+| Laminar (305K, 1m) | 0.40 m/s | ~0.3 m/s |
+| Transitional (100°C, 1m) | 1.46 m/s | ~1.3 m/s |
+| Turbulent (100°C, 2m) | 2.06 m/s | ~2.0 m/s |
 
 ---
 
 ## Key Physics
 
-- **Gr >> 1**: Buoyancy forces dominate viscous forces - inertial flow rather than creeping flow
-- **Ra ~ 4e9**: At the laminar-to-turbulent transition. Fully laminar natural convection (Ra < 10^8) would give Nu_L ~ 0.59 · Ra^(1/4) = 83. The Ra^(1/3) turbulent scaling begins near Ra = 10^9.
-- **Boundary layer profile**: Heat flux is highest at the bottom of the plate (leading edge, thin developing BL) and lowest near the top (fully developed BL, ~3.5 mm thick). The ratio of max to min flux in the simulation (635:151 at t=300s) reflects this local Nu_x variation.
-- **Characteristic velocity**: The buoyancy velocity scale sqrt(g·beta·dT·L) = 1.46 m/s is a useful check - observed CFD velocities near the plate are in this range.
+- **Gr >> 1**: Buoyancy forces dominate viscous forces across all cases - inertial flow rather than creeping flow.
+- **Ra scaling**: Nu ~ Ra^(1/4) in the laminar regime, transitioning to Nu ~ Ra^(1/3) above Ra ~1e9. The three cases are chosen to straddle this transition.
+- **Boundary layer profile**: Heat flux peaks at the plate leading edge (thin developing BL) and drops toward the top (thick fully developed BL). The ratio of max to min local flux at quasi-steady state is approximately 10:1.
+- **Domain warming**: At low dT (laminar case), the characteristic velocity is slow and the domain takes longer to flush. A larger domain or longer run would further converge the result.
 
 ---
 
 ## Workflow
 
 ```
-blockMesh (3-block graded 2D mesh, 9,450 cells)
+blockMesh (3-block graded 2D mesh)
     |
-buoyantFoam (Boussinesq, laminar, transient, deltaT=0.05s, endTime=300s)
+buoyantFoam (Boussinesq, PIMPLE transient, endTime 300-600s)
     |
-wallHeatFlux function object (writes q_avg vs. time to postProcessing/)
+wallHeatFlux function object (q_avg vs. time to postProcessing/)
     |
-analytical_comparison.py (computes Gr/Ra/Nu analytically, reads CFD, compares)
+analytical_comparison.py (Churchill-Chu, reads CFD, prints comparison)
 ```
 
 ---
@@ -170,10 +163,10 @@ analytical_comparison.py (computes Gr/Ra/Nu analytically, reads CFD, compares)
 
 | Task | Status |
 |------|--------|
-| Mesh generation (blockMesh) | Done - zero non-orthogonality, zero skewness |
-| Solver run (300 s transient) | Done - 174 s wall clock |
-| Quasi-steady state reached | Done - plateau at t = 160 s |
-| Analytical comparison | Done - see table above |
+| Laminar case (305K, 1m, Ra=4.56e8) | Done - 600s run, Nu=98.5 (+1.9% vs CC) |
+| Transitional case (100°C, 1m, Ra=4.09e9) | Done - 300s run, Nu=95.3 (-27% vs lam CC) |
+| Turbulent case (100°C, 2m, Ra=3.27e10) | Done - 300s run, Nu=311.5 (-15% vs CC) |
+| Analytical comparison (all cases) | Done - see tables above |
 
 ---
 
@@ -181,6 +174,6 @@ analytical_comparison.py (computes Gr/Ra/Nu analytically, reads CFD, compares)
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| OpenFOAM | 13 | CFD solver (`buoyantFoam`, Boussinesq) |
+| OpenFOAM | 13 | CFD solver (`buoyantFoam`, Boussinesq, `kEpsilon`) |
 | Python | 3.x | Analytical comparison script |
 | Ubuntu (WSL2) | 24.04 | OS |

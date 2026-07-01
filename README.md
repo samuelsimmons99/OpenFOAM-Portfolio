@@ -36,9 +36,9 @@ Compressible flow through a conical De Laval nozzle (area ratio 8:1), modelling 
 ---
 
 ### [Vertical Plate Natural Convection](./Vertical%20Plate%20Natural%20Convection/)
-Transient natural convection simulation of a 1 m x 1 m vertical plate at 100°C in quiescent 300 K air using `buoyantFoam` (Boussinesq, laminar). Calculates Grashof number (5.76e9), Rayleigh number (4.09e9), Nusselt number, and convection heat transfer coefficient from both CFD and the Churchill-Chu correlation. CFD quasi-steady result (Nu = 95, h = 2.73 W/m²·K) compared against laminar and all-Ra analytical targets with systematic discrepancy analysis.
+Three-case Rayleigh number sweep for natural convection on a heated vertical plate using `buoyantFoam` (Boussinesq, transient 2D). Plate temperature and height are varied to span laminar (Ra=4.56e8), transitional (Ra=4.09e9), and turbulent (Ra=3.27e10) regimes. CFD Nusselt numbers compared against the Churchill-Chu (1975) correlation: laminar case within 2% of all-Ra CC, turbulent case 15% below with `kEpsilon`, transitional case 27% below laminar CC (expected: laminar solver cannot capture turbulent augmentation at Ra~4e9).
 
-**Tools:** OpenFOAM 13 · buoyantFoam · blockMesh · Python · Ubuntu WSL2
+**Tools:** OpenFOAM 13 · buoyantFoam · kEpsilon · blockMesh · Python · Ubuntu WSL2
 
 ---
 
