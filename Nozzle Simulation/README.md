@@ -1,123 +1,203 @@
 # Rocket Nozzle Simulation
 
-**OpenFOAM v2012 · rhoCentralFoam · Axisymmetric wedge · Compressible supersonic flow**
+**OpenFOAM v2012 · Axisymmetric wedge · Compressible reacting flow**
 
-A parametric study of flow through a De Laval (converging-diverging) rocket nozzle, comparing an idealised hot-gas model against a reacting LOX/kerosene combustion case. Both cases use the same axisymmetric wedge geometry and are run with density-based compressible solvers capable of capturing the transonic throat, supersonic expansion, and shock structure at the nozzle exit.
+Three coupled simulations of a De Laval (converging-diverging) rocket nozzle on an identical extended mesh that captures the supersonic core flow, the diverging plume, and the ambient far-field. The study progresses from a frozen-composition hot-gas model through premixed combustion to separate LOX/kerosene injection, isolating the effect of each modelling assumption on the exit flow and species distribution.
 
 ---
 
 ## Cases
 
-| Case | Solver | Inlet model | Status |
-|---|---|---|---|
-| [Hot gas (frozen composition)](#hot-gas-case) | `rhoCentralFoam` | Combustion products approximated as a perfect gas (M=22 g/mol, gamma=1.2) | Complete |
-| [LOX/kerosene reacting flow](#lox-kerosene-case) | TBD | Full combustion chemistry with species transport | In progress |
+| # | Case | Solver | Description |
+|---|------|--------|-------------|
+| 1 | **Hot gas** | `rhoCentralFoam` | Combustion products as a single-species perfect gas (M = 22 g/mol, γ = 1.2). Density-based explicit solver captures the transonic throat and supersonic plume. |
+| 2 | **Premixed combustion** | `rhoReactingFoam` | C₁₂H₂₆/O₂ mixture (kerosene surrogate) enters pre-mixed at stoichiometry. Single-step global Arrhenius reaction; JANAF thermodynamics; Sutherland transport. |
+| 3 | **Separate injection** | `rhoReactingFoam` | Kerosene (fuel_inlet) and LOX (lox_inlet) are injected separately at O/F ≈ 2.7. Mixing and reaction develop downstream. |
 
 ---
 
-## Nozzle Geometry
+## Mesh
 
-All cases share the same axisymmetric conical De Laval profile:
+All three cases share the same 5-block axisymmetric wedge mesh (5° wedge angle) built with `blockMesh`.
+
+### Domain layout
+
+```
+x = -0.30          x = 0.00     x = 0.15     x = 0.50     x = 1.50
+   |  Chamber     |  Converging |  Diverging  |  Plume      |  Far field
+   |  (r = 0.15)  |  section    |  section    |  core       |  ambient
+```
 
 | Parameter | Value |
-|---|---|
-| Inlet radius | 0.150 m |
+|-----------|-------|
+| Chamber radius | 0.150 m |
 | Throat radius | 0.050 m |
 | Exit radius | 0.1414 m |
-| Throat position | x = 0.15 m |
-| Total nozzle length | 0.50 m |
-| Converging area ratio | 9:1 |
-| Diverging area ratio | 8:1 |
-| Design exit Mach (gamma=1.2) | ~3.2 |
+| Throat position | x = 0.150 m |
+| Domain: x range | −0.30 m → 1.50 m |
+| Domain: r range | 0 → 0.50 m |
+| Total cells | 14 400 |
+| Cell distribution | 40 radial × 360 axial (5 blocks) |
 
-The mesh is a 5-degree wedge (axisymmetric) built with `blockMesh`, 40 radial cells x 150 axial cells = 6,000 cells total. The two-block structure (converging + diverging) uses `wedge` boundary patches on the front and back faces and an `empty` patch on the degenerate axis line.
+**Patches:** `inlet`, `outlet`, `outer_boundary` (far-field annulus + radial), `nozzle_wall`, `axis` (empty), `front`/`back` (wedge).
+
+### Mesh visualisation
+
+#### Hot gas / no-reaction case
+![Nozzle mesh](Linux%20Files/Nozzle_mesh.png)
+
+#### Premixed combustion
+![Combustion mesh](Linux%20Files/Nozzle_combustion_mesh.png)
+
+#### Separate injection
+![Injected mesh](Linux%20Files/Nozzle_injected_mesh.png)
 
 ---
 
-## Hot Gas Case
+## Case 1 — Hot Gas (rhoCentralFoam)
 
-### Setup
-
-Combustion products of LOX/kerosene are approximated as a single-species perfect gas with properties representative of the chamber exit composition:
+### Physics
 
 | Property | Value | Notes |
-|---|---|---|
-| Molecular weight | 22 g/mol | Mix of CO2, H2O, CO, H2 |
-| gamma | 1.2 | Tri-atomic dominated at high T |
-| Cp | 2267 J/(kg K) | Derived from gamma, M |
-| Dynamic viscosity | 1e-4 Pa s | Approximate at 3000 K |
-| Chamber total pressure | 3 MPa | |
-| Chamber total temperature | 3000 K | Approximate LOX/kerosene adiabatic flame temperature |
-| Ambient back pressure | 101,325 Pa | Sea level — nozzle is over-expanded at design |
+|----------|-------|-------|
+| Molecular weight | 22 g/mol | CO₂/H₂O/CO/H₂ mixture |
+| γ | 1.2 | Triatomic-dominated |
+| Cp | 2 267 J/(kg K) | From γ, M |
+| μ | 1×10⁻⁴ Pa s | At 3 000 K |
+| Chamber pressure | 3 MPa | Total |
+| Chamber temperature | 3 000 K | Total — LOX/kerosene adiabatic flame |
+| Back pressure | 101 325 Pa | Sea level |
 
-Boundary conditions: `totalPressure` and `totalTemperature` at the inlet, `waveTransmissive` at the outlet. The case is run laminar (viscous effects are secondary for this geometry and Reynolds number).
+### Boundary conditions
 
-Solver: `rhoCentralFoam` with Kurganov-Tadmor flux scheme, MUSCL reconstruction (`vanLeer` for rho and T, `vanLeerV` for U), CFL = 0.1. Initialised with an isentropic pressure and temperature ramp along x to avoid the numerical temperature inversion that occurs when starting from uniform chamber conditions against a near-vacuum outlet.
+| Patch | p | T | U | ρ |
+|-------|---|---|---|---|
+| inlet | `totalPressure` 3 MPa | `fixedValue` 3 000 K | `pressureInletOutletVelocity` | `fixedValue` 2.646 kg/m³ |
+| outlet | `waveTransmissive` | `inletOutlet` 300 K | `zeroGradient` | `zeroGradient` |
+| outer_boundary | `zeroGradient` | `inletOutlet` 300 K | `inletOutlet` (0 0 0) | `zeroGradient` |
+| nozzle_wall | `zeroGradient` | `zeroGradient` | `noSlip` | `zeroGradient` |
 
-### Results
-
-**Mach number contour**
+### Mach number result (prior nozzle-only domain)
 
 ![Mach number contour](Linux%20Files/nozzle_Mach_contour.png)
 
-The flow accelerates from rest at the inlet, reaches sonic conditions (Mach 1) at the throat (x = 0.15 m), then expands supersonically through the diverging section to a peak exit Mach of **3.22**, matching the isentropic design prediction of 3.2 to within 1%.
+Throat Mach = 1.0 confirmed; exit Mach ≈ 3.22, matching the isentropic design value of 3.20 to within 1%.
 
 | Quantity | Simulated | Isentropic theory |
-|---|---|---|
+|----------|-----------|-------------------|
 | Exit Mach | 3.22 | 3.20 |
-| Exit static T | 1488 K | 1482 K |
-| Peak exit velocity | 2667 m/s | 2637 m/s |
-
-The oblique feature visible near x = 0.2 m is an expansion fan originating from the sharp throat corner — a real compressible flow effect, not a numerical artefact. The nozzle is over-expanded at sea level (design exit pressure ~43.5 kPa vs 101.3 kPa ambient), which would produce oblique shocks outside the nozzle exit in a full domain; those are outside the current computational domain.
+| Exit static T | 1 488 K | 1 482 K |
+| Peak exit velocity | 2 667 m/s | 2 637 m/s |
 
 ---
 
-## LOX/Kerosene Case
+## Case 2 — Premixed Combustion (rhoReactingFoam)
 
-*(In progress)* — Full reacting flow with species transport and combustion chemistry, replacing the frozen-composition inlet condition with actual LOX/kerosene combustion. Same nozzle geometry.
+### Physics
+
+Pre-mixed C₁₂H₂₆/O₂ (Y_fuel = 0.2, Y_O₂ = 0.8) enters at 500 K and 3 MPa. A single-step global Arrhenius reaction consumes the reactants:
+
+```
+2 C₁₂H₂₆ + 37 O₂ → 24 CO₂ + 26 H₂O
+A = 5.1×10¹¹ m³/(kmol·s),  Eₐ/Rᵤ = 15 034 K
+```
+
+Thermodynamic data: JANAF NASA-7 polynomials. Transport: Sutherland viscosity.
+
+### Boundary conditions (species)
+
+| Patch | C₁₂H₂₆ | O₂ | CO₂ | H₂O |
+|-------|---------|-----|-----|-----|
+| inlet | 0.20 (fixed) | 0.80 (fixed) | 0 | 0 |
+| outlet | `inletOutlet` 0 | `inletOutlet` 1.0 | `inletOutlet` 0 | `inletOutlet` 0 |
+| outer_boundary | `inletOutlet` 0 | `inletOutlet` 1.0 | `inletOutlet` 0 | `inletOutlet` 0 |
+
+### Flow fields (t = 0.003 s)
+
+![Overview fields](Linux%20Files/Nozzle_combustion_overview.png)
+
+![Axis profiles](Linux%20Files/Nozzle_combustion_axis_profiles.png)
+
+### Species distributions (t = 0.003 s)
+
+![Species 2D](Linux%20Files/Nozzle_combustion_species.png)
+
+![Species axis profiles](Linux%20Files/Nozzle_combustion_species_profiles.png)
+
+---
+
+## Case 3 — Separate Injection (rhoReactingFoam)
+
+### Physics
+
+Kerosene and LOX enter through dedicated concentric annular inlets (`fuel_inlet` and `lox_inlet`) at the chamber head. The initial chamber fill is combustion products (CO₂ = 0.693, H₂O = 0.307 by mass). Reaction occurs where mixing brings reactants to stoichiometry and above the ignition temperature.
+
+| Parameter | Value |
+|-----------|-------|
+| Fuel inlet | C₁₂H₂₆, 3 MPa total pressure |
+| Oxidiser inlet | O₂, 3 MPa total pressure |
+| O/F ratio (design) | ≈ 2.7 (stoichiometric for C₁₂H₂₆/O₂) |
+| Chamber fill (t = 0) | CO₂ + H₂O equilibrium products |
+
+### Flow fields (t = 0.005 s)
+
+![Overview fields](Linux%20Files/Nozzle_injected_overview.png)
+
+![Axis profiles](Linux%20Files/Nozzle_injected_axis_profiles.png)
+
+### Species distributions (t = 0.005 s)
+
+![Species 2D](Linux%20Files/Nozzle_injected_species.png)
+
+![Species axis profiles](Linux%20Files/Nozzle_injected_species_profiles.png)
 
 ---
 
 ## Workflow
 
 ```
-blockMesh (5-degree wedge, 6000 cells)
-        |
-rhoCentralFoam (density-based, explicit, CFL=0.1)
-        |
-Post-processing: Mach = |U| / sqrt(gamma * R_spec * T)
+blockMesh  (5-block wedge, 14 400 cells, x = -0.30 → 1.50 m)
+     │
+     ├── rhoCentralFoam      (Case 1: hot gas, density-based explicit)
+     │
+     ├── rhoReactingFoam     (Case 2: premixed C₁₂H₂₆/O₂, PIMPLE)
+     │
+     └── rhoReactingFoam     (Case 3: separate LOX/kerosene injection)
+
+Post-processing:
+  python3 plot_nozzle_cases.py  →  mesh, T, p, |U|, species PNGs
 ```
 
-**Key solver notes:**
+### Key solver notes
 
-- `rhoCentralFoam` requires `fluxScheme Kurganov` and `vanLeer` interpolation schemes — these are not inherited from `fvSchemes` defaults and must be set explicitly.
-- `totalTemperature` BC in v2012 requires a `gamma` entry in the field file, not just in `thermophysicalProperties`.
-- Initialising with uniform chamber conditions causes temperature inversion in the first timestep due to the large pressure gradient across the domain. An isentropic ramp initialisation resolves this.
-- The wedge block vertex ordering must ensure direction 3 (the extrusion direction, v0 to v4) is a non-degenerate edge — starting both groups with a wall vertex rather than an axis vertex avoids the "inward-pointing faces" error from the degenerate zero-length axis edge.
+- **`rhoCentralFoam`**: requires consistent `(ρ, p, T)` initial condition — mismatching the outer-boundary density against the interior pressure causes the Newton iteration for temperature to diverge in `hePsiThermo::correct()`. Fix: initialise `ρ` from `p / (R_spec · T)` uniformly and use `zeroGradient` for ρ at far-field boundaries.
+- **`rhoReactingFoam` thermo reader**: `foamChemistryReader::readSpeciesComposition()` requires an `elements {}` sub-dictionary directly inside each species block in `constant/thermo` — placing it inside the nested `specie {}` block is silently ignored.
+- **Species initialisation**: all species mass fractions must sum to 1 at every patch at t = 0, including at outlet `value` fields — a zero-sum triggers a floating-point exception in `multiComponentMixture::patchFaceVolMixture()`.
+- **`waveTransmissive`** BC for the far-field outer boundary of a high-pressure interior domain (3 MPa vs 101 kPa) amplifies the startup transient rather than damping it. `zeroGradient` for pressure at that boundary is more stable at t = 0.
+- **Wedge block ordering**: direction 3 (extrusion axis) must start from a wall vertex, not the degenerate axis vertex, to avoid "inward-pointing face" errors during `blockMesh`.
 
 ---
 
 ## Limitations
 
-- Conical nozzle profile — a bell or Rao-optimised profile would reduce exit flow divergence angle and improve specific impulse.
-- Adiabatic wall assumption — no heat transfer to the nozzle wall.
-- Laminar — boundary layer transition and turbulent mixing near the wall are not modelled.
-- 2D axisymmetric — no three-dimensional instabilities or asymmetric shock structures captured.
-- The over-expanded exit shock structure forms outside the domain.
+- Conical nozzle profile — a bell or Rao-optimised shape reduces divergence loss.
+- Single-step global Arrhenius — does not capture intermediate species (CO, OH, H) or dissociation at high temperature.
+- Adiabatic walls — no regenerative cooling or heat-transfer to the structure.
+- Laminar — no turbulence model; relevant for the mixing layer between fuel and oxidiser in Case 3.
+- 2D axisymmetric — no azimuthal instabilities, swirl, or injector pattern effects.
+- Over-expanded exit shock structure is partially captured in the extended plume domain but requires longer physical time to reach steady state.
 
 ---
 
 ## Software Stack
 
 | Tool | Version | Purpose |
-|---|---|---------|
-| OpenFOAM | v2012 | CFD solver |
-| ParaView | 5.11 | Post-processing |
-| Python / matplotlib | 3.x | Mach contour plot |
-| Ubuntu (WSL2) | 24.04 | OS |
+|------|---------|---------|
+| OpenFOAM | v2012 | CFD solver (rhoCentralFoam, rhoReactingFoam) |
+| Python / matplotlib | 3.x | Field extraction and plotting |
+| Ubuntu (WSL2) | 22.04 | Operating system |
+| ParaView | 5.11 | 3-D visualisation |
 
 ---
 
-## Repository
-
-Part of the [OpenFOAM Portfolio](https://github.com/samuelsimmons99/OpenFOAM-Portfolio), a collection of CFD simulations demonstrating thermal and fluid simulation skills relevant to thermal engineering roles.
+Part of the [OpenFOAM Portfolio](https://github.com/samuelsimmons99/OpenFOAM-Portfolio).
