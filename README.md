@@ -28,6 +28,13 @@ Parametric study of 2D flow past a circular cylinder across five Reynolds number
 
 ---
 
+### [Rocket Nozzle Simulation](./Nozzle%20Simulation/)
+Compressible flow through a conical De Laval nozzle (area ratio 8:1), modelling LOX/kerosene combustion products as a perfect gas at T0=3000 K and p0=3 MPa. `rhoCentralFoam` density-based solver on a 5-degree axisymmetric wedge mesh captures the transonic throat, supersonic expansion to Mach 3.22, and the exit expansion fan. A reacting LOX/kerosene case with full combustion chemistry is in progress.
+
+**Tools:** OpenFOAM v2012 · rhoCentralFoam · blockMesh · ParaView · Python
+
+---
+
 ### Heatsink Parametric Study *(in progress)*
 Parametric study of fin array heatsink geometries with fan curve modelling. Coming soon.
 
