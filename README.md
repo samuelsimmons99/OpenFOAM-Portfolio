@@ -35,6 +35,13 @@ Compressible flow through a conical De Laval nozzle (area ratio 8:1), modelling 
 
 ---
 
+### [Vertical Plate Natural Convection](./Vertical%20Plate%20Natural%20Convection/)
+Transient natural convection simulation of a 1 m x 1 m vertical plate at 100°C in quiescent 300 K air using `buoyantFoam` (Boussinesq, laminar). Calculates Grashof number (5.76e9), Rayleigh number (4.09e9), Nusselt number, and convection heat transfer coefficient from both CFD and the Churchill-Chu correlation. CFD quasi-steady result (Nu = 95, h = 2.73 W/m²·K) compared against laminar and all-Ra analytical targets with systematic discrepancy analysis.
+
+**Tools:** OpenFOAM 13 · buoyantFoam · blockMesh · Python · Ubuntu WSL2
+
+---
+
 ### [Parametric Heatsink CHT Simulation](./Parametric%20Heatsink%20Simulation/)
 Steady-state conjugate heat transfer simulation of a CPU + fin-array heatsink inside a fan-driven duct using `foamMultiRun` (3-region: air, aluminium heatsink, silicon CPU). The mesh is generated parametrically from a Python script so fin pitch can be swept without rebuilding geometry. A 3-point pitch sweep (3 mm / 4 mm / 5 mm) was completed, reducing peak CPU temperature from 343.90 K (5 mm, 15 fins) to 336.96 K (3 mm, 24 fins) - a 6.94 K improvement. Fan operating points extracted from converged flow fields and plotted against the published Delta FFB0812VH fan curve. Baseline 5 mm case cross-verified between serial and 8-core parallel runs (agreement to 0.001 K).
 
