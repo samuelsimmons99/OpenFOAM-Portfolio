@@ -14,7 +14,7 @@ Six simulation projects spanning compressible aerothermodynamics, conjugate heat
 | **Compressible flow** | Density-based explicit (rhoCentralFoam), supersonic nozzle, Mach 3+ expansion fan, shock structure |
 | **Reacting flow** | rhoReactingFoam, JANAF thermodynamics, single-step Arrhenius, species transport (C₁₂H₂₆ / O₂ / CO₂ / H₂O) |
 | **Conjugate heat transfer** | chtMultiRegionSimpleFoam, foamMultiRun, solid–fluid coupling, CPU junction temperature prediction |
-| **Radiation** | P1 / discrete-ordinates radiation model, view factors, mesh convergence study |
+| **Radiation** | P1 radiation model via fvModels, participating medium, GCI mesh convergence, radiant heat load prediction |
 | **Natural convection** | buoyantFoam, Boussinesq approximation, validated against Churchill–Chu correlation |
 | **External aerodynamics** | pimpleFoam, Re sweep (3 → 8×10⁵), kOmegaSST, Cd/Cl time-averaged |
 | **Turbulence modelling** | k-ε, k-ω SST, laminar — applied and compared across cases |
@@ -60,12 +60,13 @@ CPU + fin-array heatsink in a fan-driven duct. Mesh is generated parametrically 
 
 ---
 
-### [Radiation Heat Transfer — Mesh Convergence Study](./Radiation%20Simulation/)
-**Study:** systematic mesh refinement, GCI error estimation
+### [Campfire Radiation - P1 Radiation & Mesh Convergence Study](./Campfire%20Radiation/)
+**Solver:** `foamRun -solver fluid` (OF13 buoyantFoam) &nbsp;|&nbsp; **Radiation:** P1 model via fvModels &nbsp;|&nbsp; **Mesh:** 3-level GCI study, 1,400 / 5,600 / 22,400 cells
 
-Radiative heat transfer simulation with a structured mesh convergence study. Grid Convergence Index (GCI) methodology applied across refinement levels to quantify discretisation error and demonstrate solution independence. Complements the convection-only heatsink cases by adding the radiation exchange mechanism relevant to high-temperature or vacuum environments.
+<img src="Campfire Radiation/images/temperature_field.png" width="700">
+<img src="Campfire Radiation/images/radiation_field.png" width="700">
 
-*(In progress — images coming soon)*
+Transient buoyant plume from a 1200 K campfire radiating onto a person modelled as a 2 m x 0.3 m obstacle, using the P1 participating-medium radiation model activated as an fvModel (OF13's `foamRun -solver fluid` pathway) together with a perfectGas equation of state to handle the 4:1 temperature ratio. A three-level Grid Convergence Index study (Roache 1994) confirms the 5,600-cell medium mesh is grid-independent (GCI = 0.14%, apparent order p = 1.86, asymptotic ratio 1.01). The person's front face receives 21 kW/m2 combined convective and radiative heat flux at 1.5 m standoff, with a front-to-back flux ratio of 2.59x from radiation shadowing - well above the roughly 1,000 W/m2 NIOSH threshold for radiant heat stress.
 
 ---
 
@@ -116,7 +117,7 @@ OpenFOAM-Portfolio/
 ├── Cylinder Flow/                 # Re sweep, external aero, drag/lift
 ├── Nozzle Simulation/             # Compressible + reacting, 3 cases
 ├── Parametric Heatsink Simulation/# Parametric CHT, fin sweep
-├── Radiation Simulation/          # Radiation + mesh convergence  (in progress)
+├── Campfire Radiation/             # P1 radiation, buoyant plume, GCI mesh convergence
 ├── Smoking Pipe Tutorial/         # Internal flow, full pipeline walkthrough
 ├── Vertical Plate Natural Convection/ # Ra sweep, Nu validation
 └── README.md                      # This file
