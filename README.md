@@ -1,58 +1,110 @@
 # OpenFOAM CFD Portfolio
-**Samuel Simmons · Thermal Simulation Engineer**
+**Samuel Simmons · Thermal Engineer**
 
-A collection of CFD simulations built with OpenFOAM, demonstrating thermal-fluid simulation capability across the full workflow from CAD geometry and mesh generation through parallel computation and post-processing.
+Six simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, and external aerodynamics — each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+
+[LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
+
+---
+
+## Skills at a glance
+
+| Domain | Methods demonstrated |
+|--------|----------------------|
+| **Compressible flow** | Density-based explicit (rhoCentralFoam), supersonic nozzle, Mach 3+ expansion fan, shock structure |
+| **Reacting flow** | rhoReactingFoam, JANAF thermodynamics, single-step Arrhenius, species transport (C₁₂H₂₆ / O₂ / CO₂ / H₂O) |
+| **Conjugate heat transfer** | chtMultiRegionSimpleFoam, foamMultiRun, solid–fluid coupling, CPU junction temperature prediction |
+| **Radiation** | P1 / discrete-ordinates radiation model, view factors, mesh convergence study |
+| **Natural convection** | buoyantFoam, Boussinesq approximation, validated against Churchill–Chu correlation |
+| **External aerodynamics** | pimpleFoam, Re sweep (3 → 8×10⁵), kOmegaSST, Cd/Cl time-averaged |
+| **Turbulence modelling** | k-ε, k-ω SST, laminar — applied and compared across cases |
+| **Mesh generation** | blockMesh, snappyHexMesh, parametric Python meshing, axisymmetric wedge, multi-region |
+| **Parallel & HPC** | OpenMPI, up to 16 cores, decomposePar, serial/parallel cross-verification |
+| **Post-processing** | ParaView, Python/matplotlib, forceCoeffs, probes, mesh convergence plots |
+| **Validation** | Isentropic nozzle theory, Churchill–Chu Nu correlation, fan curve comparison, serial vs parallel agreement |
 
 ---
 
 ## Projects
 
-### [2U Server Conjugate Heat Transfer Simulation](./2U%20Server%20Simulation/)
-Steady-state conjugate heat transfer simulation of a 2U rack-mount server chassis using `chtMultiRegionSimpleFoam`. Couples turbulent forced convection in the air domain with heat conduction through CPU silicon, aluminium heatsink, and steel front panel. Predicts 96°C CPU junction temperature under 150 W dissipation across a 1.1-million-cell multi-region mesh run on 16 MPI cores.
+### [Rocket Nozzle — Compressible & Reacting Flow](./Nozzle%20Simulation/)
+**Solvers:** `rhoCentralFoam` · `rhoReactingFoam` &nbsp;|&nbsp; **Mesh:** 5-block axisymmetric wedge, 14 400 cells &nbsp;|&nbsp; **Domain:** x = −0.30 → 1.50 m (chamber + plume)
 
-**Tools:** OpenFOAM v2012 · Ansys SpaceClaim · snappyHexMesh · ParaView · Python · OpenMPI
+Three coupled simulations on a conical De Laval nozzle (area ratio 8:1, design Mach 3.2) at LOX/kerosene chamber conditions (T₀ = 3 000 K, p₀ = 3 MPa):
 
----
+- **Hot gas** — frozen-composition perfect gas (M = 22 g/mol, γ = 1.2); exit Mach 3.22 vs isentropic theory 3.20 (< 1% error); exit T and velocity within 0.5% of theory.
+- **Premixed combustion** — C₁₂H₂₆/O₂ pre-mixed inlet, single-step Arrhenius, JANAF thermodynamics, Sutherland transport; species (C₁₂H₂₆, O₂, CO₂, H₂O) tracked through nozzle and plume.
+- **Separate injection** — fuel and LOX through dedicated concentric annular inlets at O/F ≈ 2.7; mixing and reaction develop downstream.
 
-### [Smoking Pipe Tutorial](./Smoking%20Pipe%20Tutorial/)
-Internal pipe flow simulation of a smoking pipe geometry using `simpleFoam` (steady-state) and `pimpleFoam` (transient). Covers the full workflow from STL geometry preparation through snappyHexMesh meshing, solver configuration, and ParaView post-processing.
-
-**Tools:** OpenFOAM · snappyHexMesh · ParaView · Salome
-
----
-
-### [Cylinder Flow Reynolds Number Sweep](./Cylinder%20Flow/)
-Parametric study of 2D flow past a circular cylinder across five Reynolds numbers (Re = 3 to 8×10⁵), from creeping Stokes flow through laminar vortex shedding to turbulent (`kOmegaSST`) supercritical shedding. Background mesh + `snappyHexMesh` with a built-in cylinder geometry, run with `pimpleFoam` and post-processed via `forceCoeffs` for drag/lift coefficients across all regimes.
-
-**Tools:** OpenFOAM v2012 · snappyHexMesh · ParaView · OpenMPI
+The extended domain resolves the supersonic plume interaction with the far-field atmospheric boundary.
 
 ---
 
-### [Rocket Nozzle Simulation](./Nozzle%20Simulation/)
-Compressible flow through a conical De Laval nozzle (area ratio 8:1), modelling LOX/kerosene combustion products as a perfect gas at T0=3000 K and p0=3 MPa. `rhoCentralFoam` density-based solver on a 5-degree axisymmetric wedge mesh captures the transonic throat, supersonic expansion to Mach 3.22, and the exit expansion fan. A reacting LOX/kerosene case with full combustion chemistry is in progress.
+### [2U Server Conjugate Heat Transfer](./2U%20Server%20Simulation/)
+**Solver:** `chtMultiRegionSimpleFoam` &nbsp;|&nbsp; **Mesh:** 1.1 M cells, 16 MPI cores &nbsp;|&nbsp; **Regions:** air · CPU silicon · aluminium heatsink · steel chassis
 
-**Tools:** OpenFOAM v2012 · rhoCentralFoam · blockMesh · ParaView · Python
-
----
-
-### [Vertical Plate Natural Convection](./Vertical%20Plate%20Natural%20Convection/)
-Three-case Rayleigh number sweep for natural convection on a heated vertical plate using `buoyantFoam` (Boussinesq, transient 2D). Plate temperature and height are varied to span laminar (Ra=4.56e8), transitional (Ra=4.09e9), and turbulent (Ra=3.27e10) regimes. CFD Nusselt numbers compared against the Churchill-Chu (1975) correlation: laminar case within 2% of all-Ra CC, turbulent case 15% below with `kEpsilon`, transitional case 27% below laminar CC (expected: laminar solver cannot capture turbulent augmentation at Ra~4e9).
-
-**Tools:** OpenFOAM 13 · buoyantFoam · kEpsilon · blockMesh · Python · Ubuntu WSL2
+Steady-state CHT of a rack-mount server under 150 W CPU dissipation. Couples turbulent forced convection (k-ω SST) in the air domain with solid conduction through three material regions. Predicts **96°C CPU junction temperature** — within the thermal design power envelope. Full parallel workflow: geometry from Ansys SpaceClaim, snappyHexMesh for air domain, blockMesh for solid regions.
 
 ---
 
-### [Parametric Heatsink CHT Simulation](./Parametric%20Heatsink%20Simulation/)
-Steady-state conjugate heat transfer simulation of a CPU + fin-array heatsink inside a fan-driven duct using `foamMultiRun` (3-region: air, aluminium heatsink, silicon CPU). The mesh is generated parametrically from a Python script so fin pitch can be swept without rebuilding geometry. A 3-point pitch sweep (3 mm / 4 mm / 5 mm) was completed, reducing peak CPU temperature from 343.90 K (5 mm, 15 fins) to 336.96 K (3 mm, 24 fins) - a 6.94 K improvement. Fan operating points extracted from converged flow fields and plotted against the published Delta FFB0812VH fan curve. Baseline 5 mm case cross-verified between serial and 8-core parallel runs (agreement to 0.001 K).
+### [Parametric Heatsink CHT — Fin Pitch Sweep](./Parametric%20Heatsink%20Simulation/)
+**Solver:** `foamMultiRun` &nbsp;|&nbsp; **Mesh:** Python-parametric blockMesh, 3 regions (air · Al · Si) &nbsp;|&nbsp; **Study:** 3 mm / 4 mm / 5 mm fin pitch
 
-**Tools:** OpenFOAM 13 · foamMultiRun · blockMesh · Python · OpenMPI · Ubuntu WSL2
-
----
-
-## References
-The `3 Weeks Series` folder contains study materials and reference cases used to learn OpenFOAM.
+CPU + fin-array heatsink in a fan-driven duct. Mesh is generated parametrically so fin count and pitch are swept without manual geometry rebuilding. Peak CPU temperature drops from **343.9 K → 337.0 K** (−6.9 K) as pitch decreases from 5 mm to 3 mm. Fan operating points extracted from converged flow fields and overlaid on the published fan curve. Serial/parallel cross-verification to 0.001 K.
 
 ---
 
-## Contact
-[LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
+### [Radiation Heat Transfer — Mesh Convergence Study](./Radiation%20Simulation/)
+**Solver:** `buoyantFoam` / radiation model &nbsp;|&nbsp; **Study:** systematic mesh refinement, GCI error estimation
+
+Radiative heat transfer simulation with a structured mesh convergence study. Grid Convergence Index (GCI) methodology applied across refinement levels to quantify discretisation error and demonstrate solution independence. Complements the convection-only heatsink cases by adding the radiation exchange mechanism relevant to high-temperature or vacuum environments.
+
+*(In progress)*
+
+---
+
+### [Cylinder Flow — Reynolds Number Sweep](./Cylinder%20Flow/)
+**Solver:** `pimpleFoam` &nbsp;|&nbsp; **Mesh:** background box + snappyHexMesh cylinder, 5 cases &nbsp;|&nbsp; **Re:** 3 · 40 · 30 000 · 800 000 · 5 000 000
+
+Five-case parametric study from creeping Stokes flow through laminar vortex shedding to turbulent supercritical shedding (k-ω SST). Drag and lift coefficients extracted via `forceCoeffs` and compared against published data across all regimes. Demonstrates solver and turbulence model selection as a function of flow physics, not just case setup.
+
+---
+
+### [Vertical Plate Natural Convection — Rayleigh Sweep](./Vertical%20Plate%20Natural%20Convection/)
+**Solver:** `buoyantFoam` (Boussinesq, transient 2D) &nbsp;|&nbsp; **Ra:** 4.56×10⁸ · 4.09×10⁹ · 3.27×10¹⁰
+
+Three-case sweep from laminar to turbulent natural convection on a heated vertical plate. CFD Nusselt numbers benchmarked against the Churchill–Chu (1975) all-Ra correlation: laminar case within **2%**, turbulent k-ε case 15% below (expected under-prediction for k-ε in buoyant flows). Demonstrates both the capability and the quantified limits of the chosen turbulence closure.
+
+---
+
+### [Internal Pipe Flow](./Smoking%20Pipe%20Tutorial/)
+**Solvers:** `simpleFoam` (steady) · `pimpleFoam` (transient) &nbsp;|&nbsp; **Mesh:** snappyHexMesh from STL
+
+Full workflow demonstration on a smoking pipe geometry: STL import → snappyHexMesh → boundary condition setup → steady and transient solve → ParaView post-processing. Foundational case establishing the mesh-to-result pipeline used in all subsequent projects.
+
+---
+
+## What's next
+
+| Gap | Why it matters |
+|-----|---------------|
+| Turbulence model comparison study | Show model selection judgement (k-ε vs k-ω SST vs LES) on a single geometry with quantified differences |
+| CHT with radiation coupling | Combine conduction, convection, and radiation in one domain — directly applicable to high-temperature electronics and spacecraft thermal control |
+
+---
+
+## Repository structure
+
+```
+OpenFOAM-Portfolio/
+├── 2U Server Simulation/          # CHT, turbulent forced convection, parallel
+├── Cylinder Flow/                 # Re sweep, external aero, drag/lift
+├── Nozzle Simulation/             # Compressible + reacting, 3 cases
+├── Parametric Heatsink Simulation/# Parametric CHT, fin sweep
+├── Radiation Simulation/          # Radiation + mesh convergence  (in progress)
+├── Smoking Pipe Tutorial/         # Internal flow, full pipeline walkthrough
+├── Vertical Plate Natural Convection/ # Ra sweep, Nu validation
+└── README.md                      # This file
+```
+
+**Software stack:** OpenFOAM v2012 / OF13 · Python 3 / matplotlib · ParaView · Ansys SpaceClaim · OpenMPI · Ubuntu WSL2
