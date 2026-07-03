@@ -30,7 +30,8 @@ Six simulation projects spanning compressible aerothermodynamics, conjugate heat
 ### [Rocket Nozzle — Compressible & Reacting Flow](./Nozzle%20Simulation/)
 **Solvers:** `rhoCentralFoam` · `rhoReactingFoam` &nbsp;|&nbsp; **Mesh:** 5-block axisymmetric wedge, 14 400 cells &nbsp;|&nbsp; **Domain:** chamber + plume (x = −0.30 → 1.50 m)
 
-<img src="Nozzle Simulation/Linux Files/nozzle_Mach_contour.png" width="700">
+<img src="Nozzle Simulation/Linux Files/Nozzle_overview.png" width="700">
+<img src="Nozzle Simulation/Linux Files/Nozzle_combustion_species.png" width="700">
 
 Three coupled simulations on a conical De Laval nozzle (area ratio 8:1, design Mach 3.2) at LOX/kerosene chamber conditions (T₀ = 3 000 K, p₀ = 3 MPa):
 
@@ -44,6 +45,7 @@ Three coupled simulations on a conical De Laval nozzle (area ratio 8:1, design M
 **Solver:** `chtMultiRegionSimpleFoam` &nbsp;|&nbsp; **Mesh:** 1.1 M cells, 16 MPI cores &nbsp;|&nbsp; **Regions:** air · CPU silicon · aluminium heatsink · steel chassis
 
 <img src="2U Server Simulation/Linux Files/heatsink_thermal_plume.png" width="700">
+<img src="2U Server Simulation/Linux Files/combined_solid_regions_temperature.png" width="700">
 
 Steady-state CHT of a rack-mount server under 150 W CPU dissipation. Couples turbulent forced convection (k-ω SST) in the air domain with solid conduction through three material regions. Predicts **96°C CPU junction temperature** — within the thermal design power envelope. Full parallel workflow: geometry from Ansys SpaceClaim, snappyHexMesh for air domain, blockMesh for solid regions.
 
@@ -71,6 +73,7 @@ Radiative heat transfer simulation with a structured mesh convergence study. Gri
 **Solver:** `pimpleFoam` &nbsp;|&nbsp; **Mesh:** background box + snappyHexMesh cylinder &nbsp;|&nbsp; **Re:** 3 · 40 · 30 000 · 800 000 · 5 000 000
 
 <img src="Cylinder Flow/Linux Files/Re_30000_U_contour.png" width="700">
+<img src="Cylinder Flow/Linux Files/Cd_convergence_all.png" width="700">
 
 Five-case parametric study from creeping Stokes flow through laminar vortex shedding to turbulent supercritical shedding (k-ω SST). Drag and lift coefficients extracted via `forceCoeffs` and compared against published data across all regimes. Demonstrates solver and turbulence model selection as a function of flow physics, not just case setup.
 
@@ -80,6 +83,7 @@ Five-case parametric study from creeping Stokes flow through laminar vortex shed
 **Solver:** `buoyantFoam` (Boussinesq, transient 2D) &nbsp;|&nbsp; **Ra:** 4.56×10⁸ · 4.09×10⁹ · 3.27×10¹⁰
 
 <img src="Vertical Plate Natural Convection/images/base_T.png" width="700">
+<img src="Vertical Plate Natural Convection/images/turbulent_T.png" width="700">
 
 Three-case sweep from laminar to turbulent natural convection on a heated vertical plate. CFD Nusselt numbers benchmarked against the Churchill–Chu (1975) all-Ra correlation: laminar case within **2%**, turbulent k-ε case 15% below (expected under-prediction for k-ε in buoyant flows). Demonstrates both the capability and the quantified limits of the chosen turbulence closure.
 
@@ -89,6 +93,7 @@ Three-case sweep from laminar to turbulent natural convection on a heated vertic
 **Solvers:** `simpleFoam` (steady) · `pimpleFoam` (transient) &nbsp;|&nbsp; **Mesh:** snappyHexMesh from STL
 
 <img src="Smoking Pipe Tutorial/smoking_pipe_steady_state/streamlines_U.png" width="700">
+<img src="Smoking Pipe Tutorial/smoking_pipe_steady_state/p_mag_contour.png" width="700">
 
 Full workflow demonstration on a smoking pipe geometry: STL import → snappyHexMesh → boundary condition setup → steady and transient solve → ParaView post-processing. Foundational case establishing the mesh-to-result pipeline used in all subsequent projects.
 
