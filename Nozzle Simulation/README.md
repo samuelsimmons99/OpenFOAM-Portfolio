@@ -77,7 +77,7 @@ x = -0.30          x = 0.00     x = 0.15     x = 0.50     x = 1.50
 | outer_boundary | `zeroGradient` | `inletOutlet` 300 K | `inletOutlet` (0 0 0) | `zeroGradient` |
 | nozzle_wall | `zeroGradient` | `zeroGradient` | `noSlip` | `zeroGradient` |
 
-### Mach number result (nozzle-only domain — validated design point)
+### Mach number result (nozzle-only domain, validated design point)
 
 ![Mach number contour](Linux%20Files/nozzle_Mach_contour.png)
 
@@ -89,7 +89,7 @@ Throat Mach = 1.0 confirmed; exit Mach ≈ 3.22, matching the isentropic design 
 | Exit static T | 1 488 K | 1 482 K |
 | Peak exit velocity | 2 667 m/s | 2 637 m/s |
 
-### Extended plume domain — early transient (t = 0.0005 s)
+### Extended plume domain, early transient (t = 0.0005 s)
 
 The hot-gas case on the extended 5-block domain captures the inlet shock propagating from chamber conditions into the initially-atmospheric plume region. At t = 0.5 ms the compression front is visible mid-domain; the long-time steady-state field is represented by the validated nozzle-only result above.
 

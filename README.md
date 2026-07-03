@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Six simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, and external aerodynamics — each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Six simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, and external aerodynamics: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -17,7 +17,7 @@ Six simulation projects spanning compressible aerothermodynamics, conjugate heat
 | **Radiation** | P1 radiation model via fvModels, participating medium, GCI mesh convergence, radiant heat load prediction |
 | **Natural convection** | buoyantFoam, Boussinesq approximation, validated against Churchill–Chu correlation |
 | **External aerodynamics** | pimpleFoam, Re sweep (3 → 8×10⁵), kOmegaSST, Cd/Cl time-averaged |
-| **Turbulence modelling** | k-ε, k-ω SST, laminar — applied and compared across cases |
+| **Turbulence modelling** | k-ε, k-ω SST, laminar - applied and compared across cases |
 | **Mesh generation** | blockMesh, snappyHexMesh, parametric Python meshing, axisymmetric wedge, multi-region |
 | **Parallel & HPC** | OpenMPI, up to 16 cores, decomposePar, serial/parallel cross-verification |
 | **Post-processing** | ParaView, Python/matplotlib, forceCoeffs, probes, mesh convergence plots |
@@ -27,7 +27,7 @@ Six simulation projects spanning compressible aerothermodynamics, conjugate heat
 
 ## Projects
 
-### [Rocket Nozzle — Compressible & Reacting Flow](./Nozzle%20Simulation/)
+### [Rocket Nozzle - Compressible & Reacting Flow](./Nozzle%20Simulation/)
 **Solvers:** `rhoCentralFoam` · `rhoReactingFoam` &nbsp;|&nbsp; **Mesh:** 5-block axisymmetric wedge, 14 400 cells &nbsp;|&nbsp; **Domain:** chamber + plume (x = −0.30 → 1.50 m)
 
 <img src="Nozzle Simulation/Linux Files/Nozzle_overview.png" width="700">
@@ -35,9 +35,9 @@ Six simulation projects spanning compressible aerothermodynamics, conjugate heat
 
 Three coupled simulations on a conical De Laval nozzle (area ratio 8:1, design Mach 3.2) at LOX/kerosene chamber conditions (T₀ = 3 000 K, p₀ = 3 MPa):
 
-- **Hot gas** — frozen-composition perfect gas (M = 22 g/mol, γ = 1.2); exit Mach 3.22 vs isentropic theory 3.20 (< 1% error)
-- **Premixed combustion** — C₁₂H₂₆/O₂ pre-mixed inlet, single-step Arrhenius, JANAF thermodynamics; species tracked through nozzle and plume
-- **Separate injection** — fuel and LOX through dedicated annular inlets at O/F ≈ 2.7; mixing and reaction develop downstream
+- **Hot gas**: frozen-composition perfect gas (M = 22 g/mol, γ = 1.2); exit Mach 3.22 vs isentropic theory 3.20 (< 1% error)
+- **Premixed combustion**: C₁₂H₂₆/O₂ pre-mixed inlet, single-step Arrhenius, JANAF thermodynamics; species tracked through nozzle and plume
+- **Separate injection**: fuel and LOX through dedicated annular inlets at O/F ≈ 2.7; mixing and reaction develop downstream
 
 ---
 
@@ -47,11 +47,11 @@ Three coupled simulations on a conical De Laval nozzle (area ratio 8:1, design M
 <img src="2U Server Simulation/Linux Files/heatsink_thermal_plume.png" width="700">
 <img src="2U Server Simulation/Linux Files/combined_solid_regions_temperature.png" width="700">
 
-Steady-state CHT of a rack-mount server under 150 W CPU dissipation. Couples turbulent forced convection (k-ω SST) in the air domain with solid conduction through three material regions. Predicts **96°C CPU junction temperature** — within the thermal design power envelope. Full parallel workflow: geometry from Ansys SpaceClaim, snappyHexMesh for air domain, blockMesh for solid regions.
+Steady-state CHT of a rack-mount server under 150 W CPU dissipation. Couples turbulent forced convection (k-ω SST) in the air domain with solid conduction through three material regions. Predicts **96°C CPU junction temperature**: within the thermal design power envelope. Full parallel workflow: geometry from Ansys SpaceClaim, snappyHexMesh for air domain, blockMesh for solid regions.
 
 ---
 
-### [Parametric Heatsink CHT — Fin Pitch Sweep](./Parametric%20Heatsink%20Simulation/)
+### [Parametric Heatsink CHT - Fin Pitch Sweep](./Parametric%20Heatsink%20Simulation/)
 **Solver:** `foamMultiRun` &nbsp;|&nbsp; **Mesh:** Python-parametric blockMesh, 3 regions (air · Al · Si) &nbsp;|&nbsp; **Study:** 3 mm / 4 mm / 5 mm fin pitch
 
 <img src="Parametric Heatsink Simulation/fan_curve_operating_points.png" width="700">
@@ -70,7 +70,7 @@ Transient buoyant plume from a 1200 K campfire radiating onto a person modelled 
 
 ---
 
-### [Cylinder Flow — Reynolds Number Sweep](./Cylinder%20Flow/)
+### [Cylinder Flow - Reynolds Number Sweep](./Cylinder%20Flow/)
 **Solver:** `pimpleFoam` &nbsp;|&nbsp; **Mesh:** background box + snappyHexMesh cylinder &nbsp;|&nbsp; **Re:** 3 · 40 · 30 000 · 800 000 · 5 000 000
 
 <img src="Cylinder Flow/Linux Files/Re_30000_U_contour.png" width="700">
@@ -80,7 +80,7 @@ Five-case parametric study from creeping Stokes flow through laminar vortex shed
 
 ---
 
-### [Vertical Plate Natural Convection — Rayleigh Sweep](./Vertical%20Plate%20Natural%20Convection/)
+### [Vertical Plate Natural Convection - Rayleigh Sweep](./Vertical%20Plate%20Natural%20Convection/)
 **Solver:** `buoyantFoam` (Boussinesq, transient 2D) &nbsp;|&nbsp; **Ra:** 4.56×10⁸ · 4.09×10⁹ · 3.27×10¹⁰
 
 <img src="Vertical Plate Natural Convection/images/base_T.png" width="700">
@@ -105,7 +105,7 @@ Full workflow demonstration on a smoking pipe geometry: STL import → snappyHex
 | Gap | Why it matters |
 |-----|---------------|
 | Turbulence model comparison study | Show model selection judgement (k-ε vs k-ω SST vs LES) on a single geometry with quantified differences |
-| CHT with radiation coupling | Combine conduction, convection, and radiation in one domain — directly applicable to high-temperature electronics and spacecraft thermal control |
+| CHT with radiation coupling | Combine conduction, convection, and radiation in one domain: directly applicable to high-temperature electronics and spacecraft thermal control |
 
 ---
 
