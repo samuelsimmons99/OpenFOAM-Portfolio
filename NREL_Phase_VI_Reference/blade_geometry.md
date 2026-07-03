@@ -73,8 +73,8 @@ The standard Phase VI validation conditions (from Hand et al. NREL/TP-500-29494)
 | 10              | Near stall |
 | 13              | Post stall (most challenging for RANS) |
 | 15              | Deep stall |
-| 20              | Deep stall |
-| 25              | Deep stall |
+| 18              | Deep stall |
+| 21              | Deep stall |
 
 Rotor speed: 72 rpm (tip speed ratio λ = ω R / V∞)
 
@@ -85,8 +85,8 @@ Rotor speed: 72 rpm (tip speed ratio λ = ω R / V∞)
 | 10       | 3.77      |
 | 13       | 2.90      |
 | 15       | 2.52      |
-| 20       | 1.89      |
-| 25       | 1.51      |
+| 18       | 2.10      |
+| 21       | 1.80      |
 
 ω = 72 rpm × 2π/60 = 7.54 rad/s
 
