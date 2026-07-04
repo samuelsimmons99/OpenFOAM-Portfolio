@@ -27,6 +27,23 @@ Six simulation projects spanning compressible aerothermodynamics, conjugate heat
 
 ## Projects
 
+### [NREL Phase VI Wind Turbine - Turbulence Model Validation](./NREL_Phase_VI_Reference/)
+**Solver:** `simpleFoam` + MRF &nbsp;|&nbsp; **Mesh:** snappyHexMesh, 2-blade rotor, rotating zone &nbsp;|&nbsp; **Models:** Laminar · Realizable k-ε · k-ω SST
+
+<img src="NREL_Phase_VI_Reference/turbulence_model_validation.png" width="700">
+
+Validation study on the NREL Phase VI 2-blade HAWT — one of the most widely used CFD benchmarks for rotating machinery, with open experimental data from the NASA Ames 80×120 ft wind tunnel (Hand et al., NREL/TP-500-29494). Blade geometry (NREL S809 airfoil, tapered and twisted from hub to tip) generated programmatically in Python and imported into snappyHexMesh. A cylindrical MRF rotating zone captures blade loading without mesh motion; all 21 cases (3 models × 7 wind speeds) run in parallel on 8 cores.
+
+Results benchmarked against both Hand et al. experimental data and the published CFD results of Song & Perot (2015):
+
+- **k-ω SST** — matches design-point shaft torque (V = 7 m/s) to within **0.2%**; tracks Song & Perot CFD closely across all regimes
+- **Realizable k-ε** — comparable accuracy in attached flow; numerically less stable at off-design conditions
+- **Laminar** — over-predicts in attached regime, establishes the no-turbulence baseline
+
+All RANS models under-predict the stall plateau (V ≥ 10 m/s) — consistent with Song & Perot and the broader literature. Steady RANS cannot resolve the 3D dynamic-stall vortices responsible for the torque peak; LES or DES would be required.
+
+---
+
 ### [Rocket Nozzle - Compressible & Reacting Flow](./Nozzle%20Simulation/)
 **Solvers:** `rhoCentralFoam` · `rhoReactingFoam` &nbsp;|&nbsp; **Mesh:** 5-block axisymmetric wedge, 14 400 cells &nbsp;|&nbsp; **Domain:** chamber + plume (x = −0.30 → 1.50 m)
 
@@ -104,8 +121,7 @@ Full workflow demonstration on a smoking pipe geometry: STL import → snappyHex
 
 | Gap | Why it matters |
 |-----|---------------|
-| Turbulence model comparison study | Show model selection judgement (k-ε vs k-ω SST vs LES) on a single geometry with quantified differences |
-| CHT with radiation coupling | Combine conduction, convection, and radiation in one domain: directly applicable to high-temperature electronics and spacecraft thermal control |
+| CHT with radiation coupling | Combine conduction, convection, and radiation in one domain — directly applicable to high-temperature electronics and spacecraft thermal control |
 
 ---
 
