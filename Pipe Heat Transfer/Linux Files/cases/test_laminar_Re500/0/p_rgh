@@ -1,0 +1,12 @@
+FoamFile { version 2.0; format ascii; class volScalarField; object p_rgh; }
+dimensions      [1 -1 -2 0 0 0 0];
+internalField   uniform 101325;
+boundaryField
+{
+    inlet   { type zeroGradient; }
+    outlet  { type fixedValue; value uniform 101325; }
+    wall    { type fixedFluxPressure; value uniform 101325; }
+    front   { type wedge; }
+    back    { type wedge; }
+    axis    { type empty; }
+}

@@ -1,0 +1,12 @@
+FoamFile { version 2.0; format ascii; class volScalarField; object omega; }
+dimensions      [0 0 -1 0 0 0 0];
+internalField   uniform 287.494454249973;
+boundaryField
+{
+    inlet   { type fixedValue; value uniform 287.494454249973; }
+    outlet  { type zeroGradient; }
+    wall    { type omegaWallFunction; value uniform 287.494454249973; }
+    front   { type wedge; }
+    back    { type wedge; }
+    axis    { type empty; }
+}

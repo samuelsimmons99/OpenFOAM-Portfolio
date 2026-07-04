@@ -1,0 +1,37 @@
+/*---------------------------------------------------------------------------*
+  Axisymmetric wedge: D=0.05 m, L=2.5 m (50D), 5-degree wedge
+  Longer than friction case to capture thermal entry length
+\*---------------------------------------------------------------------------*/
+FoamFile { version 2.0; format ascii; class dictionary; object blockMeshDict; }
+
+scale 1;
+
+// R=0.025, sin(2.5°)=0.043619 → R*sin=0.0010905, L=2.5 m
+
+vertices
+(
+    ( 0       0           0   )   // 0
+    ( 0.025  -0.0010905   0   )   // 1
+    ( 0.025   0.0010905   0   )   // 2
+    ( 0       0           2.5 )   // 3
+    ( 0.025  -0.0010905   2.5 )   // 4
+    ( 0.025   0.0010905   2.5 )   // 5
+);
+
+blocks
+(
+    // 25 radial × 1 circ × 250 axial; radial grading 0.1 (finer at wall)
+    hex (0 1 2 0 3 4 5 3) (25 1 250) simpleGrading (0.1 1 1)
+);
+
+edges ();
+
+boundary
+(
+    inlet  { type patch; faces ( (0 1 2 0) ); }
+    outlet { type patch; faces ( (3 4 5 3) ); }
+    wall   { type wall;  faces ( (1 4 5 2) ); }
+    front  { type wedge; faces ( (0 3 4 1) ); }
+    back   { type wedge; faces ( (0 2 5 3) ); }
+    axis   { type empty; faces ( (0 3 3 0) ); }
+);

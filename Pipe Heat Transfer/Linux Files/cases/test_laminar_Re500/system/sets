@@ -1,0 +1,25 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      sampleDict;
+}
+
+type            sets;
+libs            ("libsampling.so");
+interpolationScheme cellPoint;
+setFormat       raw;
+fields          (T U);
+
+sets
+(
+    radialProfile_z2p4
+    {
+        type    uniform;
+        axis    x;
+        start   (0.0001  0  2.4);
+        end     (0.025   0  2.4);
+        nPoints 50;
+    }
+);
