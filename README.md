@@ -21,7 +21,7 @@ Six simulation projects spanning compressible aerothermodynamics, conjugate heat
 | **Mesh generation** | blockMesh, snappyHexMesh, parametric Python meshing, axisymmetric wedge, multi-region |
 | **Parallel & HPC** | OpenMPI, up to 16 cores, decomposePar, serial/parallel cross-verification |
 | **Post-processing** | ParaView, Python/matplotlib, forceCoeffs, probes, mesh convergence plots |
-| **Validation** | Isentropic nozzle theory, Churchill–Chu Nu correlation, fan curve comparison, serial vs parallel agreement |
+| **Validation** | Isentropic nozzle theory, Churchill–Chu Nu correlation, Moody chart friction factor, fan curve comparison, serial vs parallel agreement |
 
 ---
 
@@ -87,6 +87,20 @@ Transient buoyant plume from a 1200 K campfire radiating onto a person modelled 
 
 ---
 
+### [Pipe Flow - Laminar & Turbulent Friction Factor Validation](./Pipe%20Flow%20Validation/)
+**Solver:** `simpleFoam` &nbsp;|&nbsp; **Mesh:** axisymmetric wedge, periodic domain &nbsp;|&nbsp; **Re:** 100 · 500 · 1 000 · 2 000 · 5 000 · 10 000 · 20 000 · 50 000
+
+<img src="Pipe Flow Validation/moody_validation.png" width="700">
+
+Friction factor sweep across laminar and turbulent pipe flow, validated against the Moody chart. The periodic axisymmetric domain (D = 50 mm, L = 5D) eliminates entry-length effects; a `meanVelocityForce` body force drives each case to its target bulk velocity and directly yields the pressure gradient.
+
+- **Laminar (Re 100–2000)** — within **0.11%** of the Hagen-Poiseuille solution f = 64/Re across all cases; demonstrates near-exact laminar solver accuracy
+- **k-ω SST (Re 5 000–50 000)** — within **±9%** of the Blasius correlation (0.316 Re⁻¼), consistent with wall-function RANS at moderate y⁺; results fall on the smooth-pipe Moody curve
+
+The transition zone (Re 2 300–4 000) is intentionally omitted: steady RANS cannot capture the intermittent laminar-turbulent switching that governs transitional friction. The plot makes this limitation explicit.
+
+---
+
 ### [Cylinder Flow - Reynolds Number Sweep](./Cylinder%20Flow/)
 **Solver:** `pimpleFoam` &nbsp;|&nbsp; **Mesh:** background box + snappyHexMesh cylinder &nbsp;|&nbsp; **Re:** 3 · 40 · 30 000 · 800 000 · 5 000 000
 
@@ -134,6 +148,7 @@ OpenFOAM-Portfolio/
 ├── Nozzle Simulation/             # Compressible + reacting, 3 cases
 ├── Parametric Heatsink Simulation/# Parametric CHT, fin sweep
 ├── Campfire Radiation/             # P1 radiation, buoyant plume, GCI mesh convergence
+├── Pipe Flow Validation/          # Moody chart, laminar + turbulent, periodic domain
 ├── Smoking Pipe Tutorial/         # Internal flow, full pipeline walkthrough
 ├── Vertical Plate Natural Convection/ # Ra sweep, Nu validation
 └── README.md                      # This file
