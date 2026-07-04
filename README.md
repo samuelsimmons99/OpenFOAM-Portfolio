@@ -91,6 +91,7 @@ Transient buoyant plume from a 1200 K campfire radiating onto a person modelled 
 **Solver:** `simpleFoam` &nbsp;|&nbsp; **Mesh:** axisymmetric wedge, periodic domain &nbsp;|&nbsp; **Re:** 100 · 500 · 1 000 · 2 000 · 5 000 · 10 000 · 20 000 · 50 000
 
 <img src="Pipe Flow Validation/moody_validation.png" width="700">
+<img src="Pipe Flow Validation/velocity_profiles.png" width="700">
 
 Friction factor sweep across laminar and turbulent pipe flow, validated against the Moody chart. The periodic axisymmetric domain (D = 50 mm, L = 5D) eliminates entry-length effects; a `meanVelocityForce` body force drives each case to its target bulk velocity and directly yields the pressure gradient.
 

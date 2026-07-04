@@ -37,6 +37,7 @@ Fluid: air at 20°C (ν = 1.5×10⁻⁵ m²/s). Darcy friction factor: f = 8τ_w
 ## Results
 
 ![Moody chart validation](moody_validation.png)
+![Velocity profiles](velocity_profiles.png)
 
 Laminar cases are within **0.11%** of Hagen-Poiseuille across all Re — essentially the numerical precision limit of the solver. Turbulent cases fall within **±9%** of Blasius, consistent with wall-function k-ω SST at moderate y⁺ on a medium mesh.
 
