@@ -1,0 +1,96 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  NREL Phase VI — blockMesh
+  Wind tunnel: 24.4 m x 36.6 m cross-section (NASA-Ames dimensions)
+  Streamwise: -20R to +30R  (R = 5.03 m)  → -100.6 m to 150.9 m
+  Rotating cylinder: radius 5.8 m (1.15R), centred on rotor axis (x-axis)
+
+  Coordinate system:
+    x = streamwise (inflow +x)
+    y = lateral
+    z = vertical (rotor axis = x, blade tips at y=±5.03, z=±5.03)
+
+  Actually for a rotor spinning about x-axis:
+    Rotor hub at origin (0,0,0)
+    Blade spans in +y and -y (2-bladed, 180° apart)
+    Inflow along +x
+
+  Simplified background box — rotating cylinder added by snappyHexMesh
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+
+// Wind tunnel half-dimensions
+// Cross section: 24.4 x 36.6 m → use 18.3 x 12.2 (half) → 12 m either side conservatively
+// Keep tunnel width at ±13 m (close to real 12.2 m half-width)
+// Streamwise: -3R upstream (-15 m), +6R downstream (30 m)
+
+scale   1;
+
+xMin    -15;
+xMax     30;
+yMin    -13;
+yMax     13;
+zMin    -13;
+zMax     13;
+
+vertices
+(
+    ( $xMin  $yMin  $zMin )   // 0
+    ( $xMax  $yMin  $zMin )   // 1
+    ( $xMax  $yMax  $zMin )   // 2
+    ( $xMin  $yMax  $zMin )   // 3
+    ( $xMin  $yMin  $zMax )   // 4
+    ( $xMax  $yMin  $zMax )   // 5
+    ( $xMax  $yMax  $zMax )   // 6
+    ( $xMin  $yMax  $zMax )   // 7
+);
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7)
+    ( 30 18 18 )
+    simpleGrading (1 1 1)
+);
+
+edges ();
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces ( (0 4 7 3) );
+    }
+    outlet
+    {
+        type patch;
+        faces ( (1 2 6 5) );
+    }
+    top
+    {
+        type slip;
+        faces ( (4 5 6 7) );
+    }
+    bottom
+    {
+        type slip;
+        faces ( (0 3 2 1) );
+    }
+    side1
+    {
+        type slip;
+        faces ( (0 1 5 4) );
+    }
+    side2
+    {
+        type slip;
+        faces ( (3 7 6 2) );
+    }
+);
+
+mergePatchPairs ();

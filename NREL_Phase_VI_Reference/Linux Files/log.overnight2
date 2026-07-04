@@ -1,0 +1,73 @@
+nohup: ignoring input
+==============================
+ NREL Phase VI — parallel sweep
+ 8 cores  |  Started: Fri Jul  3 21:58:16 PDT 2026
+==============================
+[SKIP] kOmegaSST V=5 already done
+[SKIP] kOmegaSST V=7 already done
+[SKIP] kOmegaSST V=10 already done
+[SKIP] kOmegaSST V=13 already done
+[SKIP] kOmegaSST V=15 already done
+[SKIP] kOmegaSST V=18 already done
+[SKIP] kOmegaSST V=21 already done
+
+--------------------------------------
+ Case 8/21: realizableKE  V=5 m/s  Fri Jul  3 21:58:16 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for realizableKE V=5 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/realizableKE_V5/log.simpleFoam
+
+--------------------------------------
+ Case 9/21: realizableKE  V=7 m/s  Fri Jul  3 21:59:01 PDT 2026
+--------------------------------------
+  realizableKE  V=7.0 m/s  |torque|=409.4 N·m  P=3.09 kW
+
+--------------------------------------
+ Case 10/21: realizableKE  V=10 m/s  Fri Jul  3 22:31:35 PDT 2026
+--------------------------------------
+  realizableKE  V=10.0 m/s  |torque|=460.9 N·m  P=3.47 kW
+
+--------------------------------------
+ Case 11/21: realizableKE  V=13 m/s  Fri Jul  3 22:59:41 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for realizableKE V=13 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/realizableKE_V13/log.simpleFoam
+
+--------------------------------------
+ Case 12/21: realizableKE  V=15 m/s  Fri Jul  3 23:00:28 PDT 2026
+--------------------------------------
+  realizableKE  V=15.0 m/s  |torque|=519.3 N·m  P=3.92 kW
+
+--------------------------------------
+ Case 13/21: realizableKE  V=18 m/s  Fri Jul  3 23:25:47 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for realizableKE V=18 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/realizableKE_V18/log.simpleFoam
+
+--------------------------------------
+ Case 14/21: realizableKE  V=21 m/s  Fri Jul  3 23:26:18 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for realizableKE V=21 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/realizableKE_V21/log.simpleFoam
+[SKIP] laminar V=5 already done
+[SKIP] laminar V=7 already done
+[SKIP] laminar V=10 already done
+[SKIP] laminar V=13 already done
+[SKIP] laminar V=15 already done
+[SKIP] laminar V=18 already done
+[SKIP] laminar V=21 already done
+
+==============================
+ All cases complete!
+ Started:  Fri Jul  3 21:58:16 PDT 2026
+ Finished: Fri Jul  3 23:26:44 PDT 2026
+==============================
+
+Saved: /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/postProcess/../plots/turbulence_model_validation.png
+
+Torque error vs experiment:
+    V∞    Exp [N·m]     Laminar  Realizable k-ε     k-ω SST
+     5          130     +258.2%         N/A     +192.5%
+     7          420      +16.0%       -2.5%       -0.2%
+    10         1490      -60.6%      -69.1%      -66.5%
+    13         1620      -61.4%         N/A      -65.9%
+    15         1490      -56.3%      -65.1%      -62.7%
+    18         1400      -46.4%         N/A      -52.4%
+    21         1370      -34.1%         N/A      -43.1%
+Plot: /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/plots/turbulence_model_validation.png

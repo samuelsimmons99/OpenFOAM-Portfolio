@@ -1,0 +1,31 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  NREL Phase VI — MRFProperties
+  The rotatingZone cellZone spins at 72 rpm about the x-axis.
+  All cells inside the zone (blade + surrounding fluid) are in the rotating frame.
+  simpleFoam resolves the steady RANS equations in this mixed (lab/rotating) frame.
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      MRFProperties;
+}
+
+MRF1
+{
+    cellZone    rotatingZone;
+
+    active      yes;
+
+    // Rotation about x-axis (rotor axis), positive = right-hand rule from +x
+    // 72 rpm = 7.5398 rad/s
+    axis        (1 0 0);
+    origin      (0 0 0);
+    omega       7.5398;
+
+    // Patches inside the rotating zone that should be excluded from MRF velocity correction
+    // (the blade wall must NOT be in this list — it moves with the zone)
+    nonRotatingPatches ();
+}

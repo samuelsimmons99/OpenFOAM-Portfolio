@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  NREL Phase VI — createPatchDict
+  Splits the AMI interface face zone into two cyclicAMI patches:
+    AMI_rotating   — patch on the rotating zone side
+    AMI_stationary — patch on the stationary zone side
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      createPatchDict;
+}
+
+pointSync false;
+
+patches
+(
+    // Rotating side of AMI interface
+    {
+        name            AMI_rotating;
+        patchInfo
+        {
+            type            cyclicAMI;
+            matchTolerance  0.0001;
+            neighbourPatch  AMI_stationary;
+            transform       noOrdering;
+        }
+        constructFrom   set;
+        set             AMI_faces;
+    }
+
+    // Stationary side (automatically the other side of the same face set)
+    {
+        name            AMI_stationary;
+        patchInfo
+        {
+            type            cyclicAMI;
+            matchTolerance  0.0001;
+            neighbourPatch  AMI_rotating;
+            transform       noOrdering;
+        }
+        constructFrom   set;
+        set             AMI_faces;
+    }
+);

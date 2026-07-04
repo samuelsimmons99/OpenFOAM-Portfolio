@@ -1,0 +1,8 @@
+model,V_inf_ms,torque_Nm,power_kW
+laminar,5.0,465.6,3.511
+laminar,7.0,487.0,3.672
+laminar,10.0,586.8,4.424
+laminar,13.0,625.2,4.714
+laminar,15.0,650.6,4.906
+laminar,18.0,750.6,5.659
+laminar,21.0,902.9,6.807

@@ -1,0 +1,160 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  NREL Phase VI — snappyHexMeshDict
+  Creates two regions:
+    1. rotatingZone  — cylinder r=5.8 m about x-axis (AMI rotating region)
+    2. blade         — surface from blade.stl (boundary layer refinement)
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+castellatedMesh  true;
+snap             true;
+addLayers        true;
+
+geometry
+{
+    blade
+    {
+        type triSurfaceMesh;
+        file "blade.stl";
+    }
+
+    blade2
+    {
+        type triSurfaceMesh;
+        file "blade2.stl";
+    }
+
+    // Rotating cylinder centred on x-axis (rotor axis), r=5.8 m
+    rotatingCylinder
+    {
+        type searchableCylinder;
+        point1 ( -6.0  0.0  0.0 );   // upstream face
+        point2 (  3.0  0.0  0.0 );   // downstream face
+        radius  5.8;
+    }
+}
+
+castellatedMeshControls
+{
+    maxLocalCells   2000000;
+    maxGlobalCells  8000000;
+    minRefinementCells 0;
+    maxLoadUnbalance 0.10;
+    nCellsBetweenLevels 3;
+
+    features
+    (
+        { file "blade.eMesh";  level 4; }
+        { file "blade2.eMesh"; level 4; }
+    );
+
+    refinementSurfaces
+    {
+        blade
+        {
+            level (5 6);
+            patchInfo
+            {
+                type wall;
+                inGroups (wallGroup);
+            }
+        }
+        blade2
+        {
+            level (5 6);
+            patchInfo
+            {
+                type wall;
+                inGroups (wallGroup);
+            }
+        }
+    }
+
+    refinementRegions
+    {
+        rotatingCylinder
+        {
+            mode inside;
+            levels ((1E15 3));
+        }
+
+        blade
+        {
+            mode distance;
+            levels ((0.05 6) (0.15 5) (0.50 4));
+        }
+
+        blade2
+        {
+            mode distance;
+            levels ((0.05 6) (0.15 5) (0.50 4));
+        }
+    }
+
+    resolveFeatureAngle  30;
+    allowFreeStandingZoneFaces true;
+
+    locationInMesh (10.0 0.01 0.01);   // point clearly outside blade and cylinder
+}
+
+snapControls
+{
+    nSmoothPatch    5;
+    tolerance       2.0;
+    nSolveIter      30;
+    nRelaxIter      5;
+    nFeatureSnapIter 10;
+    implicitFeatureSnap false;
+    explicitFeatureSnap true;
+    multiRegionFeatureSnap true;
+}
+
+addLayersControls
+{
+    relativeSizes true;
+
+    layers
+    {
+        blade
+        {
+            nSurfaceLayers 8;
+        }
+        blade2
+        {
+            nSurfaceLayers 8;
+        }
+    }
+
+    expansionRatio      1.15;
+    finalLayerThickness 0.4;
+    minThickness        0.01;
+    nGrow               0;
+    featureAngle        130;
+    slipFeatureAngle    30;
+    nRelaxIter          5;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals      3;
+    nSmoothThickness    10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedialAxisAngle  90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter          50;
+}
+
+meshQualityControls
+{
+    #include "meshQualityDict"
+
+    nSmoothScale    4;
+    errorReduction  0.75;
+}
+
+debug           0;
+mergeTolerance  1e-6;

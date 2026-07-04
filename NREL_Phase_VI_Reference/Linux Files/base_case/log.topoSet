@@ -1,0 +1,49 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : topoSet
+Date   : Jul 03 2026
+Time   : 11:14:34
+Host   : rinkoalaptop
+PID    : 152043
+I/O    : uncollated
+Case   : /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create polyMesh for time = 0
+
+Reading topoSetDict
+
+Time = 0
+    mesh not changed.
+Created cellZoneSet rotatingZone
+    Applying source cylinderToCell
+    Adding cells with centre within cylinder, with p1 = (-6 0 0), p2 = (3 0 0), radius = 5.75
+    cellZoneSet rotatingZone now size 368477
+Created faceSet AMI_faces
+    Applying source cellToFace
+    Adding faces according to cellSet (rotatingZone)
+    faceSet AMI_faces now size 1149386
+Read set faceSet AMI_faces with size 1149386
+    Applying source cellToFace
+    Removing faces according to cellSet (rotatingZone)
+    faceSet AMI_faces now size 37010
+Created faceZoneSet AMI_faceZone
+    Applying source setToFaceZone
+    Adding all faces from faceSet AMI_faces ...
+    faceZoneSet AMI_faceZone now size 37010
+
+End
+

@@ -1,0 +1,70 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  NREL Phase VI — topoSetDict
+  Creates:
+    rotatingZone  — cellZone for AMI rotating region
+    AMI_faces     — faceSet: interface between rotating and stationary cells
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      topoSetDict;
+}
+
+actions
+(
+    // 1. Cell zone for the rotating cylinder
+    {
+        name    rotatingZone;
+        type    cellZoneSet;
+        action  new;
+        source  cylinderToCell;
+        sourceInfo
+        {
+            p1      ( -6.0  0.0  0.0 );
+            p2      (  3.0  0.0  0.0 );
+            radius  5.75;
+        }
+    }
+
+    // 2. All faces touching any rotating cell
+    {
+        name    AMI_faces;
+        type    faceSet;
+        action  new;
+        source  cellToFace;
+        sourceInfo
+        {
+            set     rotatingZone;
+            option  all;
+        }
+    }
+
+    // 3. Subtract faces where BOTH cells are in the rotating zone
+    //    → leaves only faces on the cylinder-surface AMI interface
+    {
+        name    AMI_faces;
+        type    faceSet;
+        action  subtract;
+        source  cellToFace;
+        sourceInfo
+        {
+            set     rotatingZone;
+            option  both;
+        }
+    }
+
+    // 4. Face zone needed by createPatch
+    {
+        name    AMI_faceZone;
+        type    faceZoneSet;
+        action  new;
+        source  setToFaceZone;
+        sourceInfo
+        {
+            faceSet AMI_faces;
+        }
+    }
+);

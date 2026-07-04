@@ -1,0 +1,137 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : surfaceFeatureExtract
+Date   : Jul 03 2026
+Time   : 11:12:52
+Host   : rinkoalaptop
+PID    : 151698
+I/O    : uncollated
+Case   : /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+
+Note: Feature line extraction only valid on closed manifold surfaces
+
+Reading surfaceFeatureExtractDict
+
+Surfaces     : blade.stl
+Output       : blade
+Load options : offset
+Write options: writeObj=yes writeVTK=off
+
+Statistics:
+Triangles    : 1904 in 1 region(s)
+Vertices     : 952
+Bounding Box : (-0.2011787 -0.2053021 0.66000003) (0.1262064 0.47543159 5.0300002)
+
+Constructing feature set from included angle 150
+Selecting edges based purely on geometric tests: no
+
+Initial Feature set:
+    points : 6
+    edges  : 126
+    of which
+        region edges   : 8
+        external edges : 118
+        internal edges : 0
+
+Final Feature set:
+    points : 119
+    of which
+        convex             : 2
+        concave            : 0
+        mixed              : 4
+        non-feature        : 113
+    edges  : 126
+    of which
+        external edges     : 118
+        internal edges     : 0
+        flat edges         : 0
+        open edges         : 4
+        multiply connected : 4
+
+Writing extendedFeatureEdgeMesh to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade"
+Writing 2 convex feature points to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_convexFeaturePts.obj"
+Writing 0 concave feature points to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_concaveFeaturePts.obj"
+Writing 4 mixed feature points to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_mixedFeaturePts.obj"
+Writing 4 mixed feature point structure to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_mixedFeaturePtsStructure.obj"
+Writing 118 external edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_externalEdges.obj"
+Writing 0 internal edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_internalEdges.obj"
+Writing 0 flat edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_flatEdges.obj"
+Writing 4 open edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_openEdges.obj"
+Writing 4 multiple edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_multipleEdges.obj"
+Writing 8 region edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_regionEdges.obj"
+Writing 126 edge directions to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade_edgeDirections.obj"
+
+Writing featureEdgeMesh to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/triSurface/blade.eMesh"
+Surfaces     : blade2.stl
+Output       : blade2
+Load options : offset
+Write options: writeObj=yes writeVTK=off
+
+Statistics:
+Triangles    : 1904 in 1 region(s)
+Vertices     : 952
+Bounding Box : (-0.201179 -0.47543201 -5.0300002) (0.126206 0.205302 -0.66000003)
+
+Constructing feature set from included angle 150
+Selecting edges based purely on geometric tests: no
+
+Initial Feature set:
+    points : 6
+    edges  : 126
+    of which
+        region edges   : 8
+        external edges : 118
+        internal edges : 0
+
+Final Feature set:
+    points : 119
+    of which
+        convex             : 2
+        concave            : 0
+        mixed              : 4
+        non-feature        : 113
+    edges  : 126
+    of which
+        external edges     : 118
+        internal edges     : 0
+        flat edges         : 0
+        open edges         : 4
+        multiply connected : 4
+
+Writing extendedFeatureEdgeMesh to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2"
+Writing 2 convex feature points to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_convexFeaturePts.obj"
+Writing 0 concave feature points to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_concaveFeaturePts.obj"
+Writing 4 mixed feature points to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_mixedFeaturePts.obj"
+Writing 4 mixed feature point structure to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_mixedFeaturePtsStructure.obj"
+Writing 118 external edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_externalEdges.obj"
+Writing 0 internal edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_internalEdges.obj"
+Writing 0 flat edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_flatEdges.obj"
+Writing 4 open edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_openEdges.obj"
+Writing 4 multiple edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_multipleEdges.obj"
+Writing 8 region edges to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_regionEdges.obj"
+Writing 126 edge directions to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/extendedFeatureEdgeMesh/blade2_edgeDirections.obj"
+
+Writing featureEdgeMesh to "/home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/base_case/constant/triSurface/blade2.eMesh"
+ExecutionTime = 0.01 s  ClockTime = 0 s
+
+End
+

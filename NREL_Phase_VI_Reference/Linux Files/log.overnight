@@ -1,0 +1,129 @@
+nohup: ignoring input
+==============================
+ NREL Phase VI — parallel sweep
+ 8 cores  |  Started: Fri Jul  3 11:14:35 PDT 2026
+==============================
+
+--------------------------------------
+ Case 1/21: kOmegaSST  V=5 m/s  Fri Jul  3 11:14:35 PDT 2026
+--------------------------------------
+  kOmegaSST  V=5.0 m/s  |torque|=380.2 N·m  P=2.87 kW
+
+--------------------------------------
+ Case 2/21: kOmegaSST  V=7 m/s  Fri Jul  3 11:46:25 PDT 2026
+--------------------------------------
+  kOmegaSST  V=7.0 m/s  |torque|=419.2 N·m  P=3.16 kW
+
+--------------------------------------
+ Case 3/21: kOmegaSST  V=10 m/s  Fri Jul  3 12:17:25 PDT 2026
+--------------------------------------
+  kOmegaSST  V=10.0 m/s  |torque|=498.9 N·m  P=3.76 kW
+
+--------------------------------------
+ Case 4/21: kOmegaSST  V=13 m/s  Fri Jul  3 12:47:27 PDT 2026
+--------------------------------------
+  kOmegaSST  V=13.0 m/s  |torque|=552.0 N·m  P=4.16 kW
+
+--------------------------------------
+ Case 5/21: kOmegaSST  V=15 m/s  Fri Jul  3 14:12:33 PDT 2026
+--------------------------------------
+  kOmegaSST  V=15.0 m/s  |torque|=556.0 N·m  P=4.19 kW
+
+--------------------------------------
+ Case 6/21: kOmegaSST  V=18 m/s  Fri Jul  3 14:36:28 PDT 2026
+--------------------------------------
+  kOmegaSST  V=18.0 m/s  |torque|=665.8 N·m  P=5.02 kW
+
+--------------------------------------
+ Case 7/21: kOmegaSST  V=21 m/s  Fri Jul  3 15:01:36 PDT 2026
+--------------------------------------
+  kOmegaSST  V=21.0 m/s  |torque|=779.7 N·m  P=5.88 kW
+
+--------------------------------------
+ Case 8/21: kEpsilon  V=5 m/s  Fri Jul  3 15:25:53 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for kEpsilon V=5 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/kEpsilon_V5/log.simpleFoam
+
+--------------------------------------
+ Case 9/21: kEpsilon  V=7 m/s  Fri Jul  3 15:26:12 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for kEpsilon V=7 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/kEpsilon_V7/log.simpleFoam
+
+--------------------------------------
+ Case 10/21: kEpsilon  V=10 m/s  Fri Jul  3 15:26:51 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for kEpsilon V=10 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/kEpsilon_V10/log.simpleFoam
+
+--------------------------------------
+ Case 11/21: kEpsilon  V=13 m/s  Fri Jul  3 15:27:02 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for kEpsilon V=13 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/kEpsilon_V13/log.simpleFoam
+
+--------------------------------------
+ Case 12/21: kEpsilon  V=15 m/s  Fri Jul  3 15:27:20 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for kEpsilon V=15 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/kEpsilon_V15/log.simpleFoam
+
+--------------------------------------
+ Case 13/21: kEpsilon  V=18 m/s  Fri Jul  3 15:27:51 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for kEpsilon V=18 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/kEpsilon_V18/log.simpleFoam
+
+--------------------------------------
+ Case 14/21: kEpsilon  V=21 m/s  Fri Jul  3 15:28:01 PDT 2026
+--------------------------------------
+[ERROR] simpleFoam failed for kEpsilon V=21 — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/kEpsilon_V21/log.simpleFoam
+
+--------------------------------------
+ Case 15/21: laminar  V=5 m/s  Fri Jul  3 15:28:17 PDT 2026
+--------------------------------------
+  laminar  V=5.0 m/s  |torque|=465.6 N·m  P=3.51 kW
+
+--------------------------------------
+ Case 16/21: laminar  V=7 m/s  Fri Jul  3 15:48:58 PDT 2026
+--------------------------------------
+  laminar  V=7.0 m/s  |torque|=487.0 N·m  P=3.67 kW
+
+--------------------------------------
+ Case 17/21: laminar  V=10 m/s  Fri Jul  3 16:09:48 PDT 2026
+--------------------------------------
+  laminar  V=10.0 m/s  |torque|=586.8 N·m  P=4.42 kW
+
+--------------------------------------
+ Case 18/21: laminar  V=13 m/s  Fri Jul  3 16:30:02 PDT 2026
+--------------------------------------
+  laminar  V=13.0 m/s  |torque|=625.2 N·m  P=4.71 kW
+
+--------------------------------------
+ Case 19/21: laminar  V=15 m/s  Fri Jul  3 16:49:48 PDT 2026
+--------------------------------------
+  laminar  V=15.0 m/s  |torque|=650.6 N·m  P=4.91 kW
+
+--------------------------------------
+ Case 20/21: laminar  V=18 m/s  Fri Jul  3 17:09:43 PDT 2026
+--------------------------------------
+  laminar  V=18.0 m/s  |torque|=750.6 N·m  P=5.66 kW
+
+--------------------------------------
+ Case 21/21: laminar  V=21 m/s  Fri Jul  3 17:29:24 PDT 2026
+--------------------------------------
+  laminar  V=21.0 m/s  |torque|=902.9 N·m  P=6.81 kW
+
+==============================
+ All cases complete!
+ Started:  Fri Jul  3 11:14:35 PDT 2026
+ Finished: Fri Jul  3 17:49:01 PDT 2026
+==============================
+
+Saved: /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/postProcess/../plots/turbulence_model_validation.png
+
+Torque error vs experiment:
+    V∞    Exp [N·m]     Laminar         k-ε     k-ω SST
+     5          130     +258.2%         N/A     +192.5%
+     7          420      +16.0%         N/A       -0.2%
+    10         1490      -60.6%         N/A      -66.5%
+    13         1620      -61.4%         N/A      -65.9%
+    15         1490      -56.3%         N/A      -62.7%
+    18         1400      -46.4%         N/A      -52.4%
+    21         1370      -34.1%         N/A      -43.1%
+Plot: /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/plots/turbulence_model_validation.png

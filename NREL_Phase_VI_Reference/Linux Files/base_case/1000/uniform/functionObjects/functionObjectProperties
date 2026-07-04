@@ -1,0 +1,62 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "1000/uniform/functionObjects";
+    object      functionObjectProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+results
+{
+    forces
+    {
+        vector
+        {
+            normalForce     ( 715.52847 81.72329000000001 -1.1817572 );
+            tangentialForce ( 0.10184689 0.42671755 2.3248911 );
+            porousForce     ( 0 0 0 );
+            normalMoment    ( -215.17193 2032.9007 -19.190373 );
+            tangentialMoment ( -1.3434641 0.070917338 -0.073072995 );
+            porousMoment    ( 0 0 0 );
+        }
+    }
+    residuals
+    {
+        scalar
+        {
+            Ux_initial      0.0010860858;
+            Ux_final        5.8870714e-05;
+            Uy_initial      0.00065532809;
+            Uy_final        3.4028493e-05;
+            Uz_initial      0.00075361422;
+            Uz_final        3.7212528e-05;
+            k_initial       0.00030554864;
+            k_final         2.0298292e-05;
+            p_initial       0.0013655417;
+            p_final         1.1735537e-05;
+            omega_initial   9.877421200000001e-05;
+            omega_final     5.8556794e-06;
+        }
+        label
+        {
+            Ux_iters        4;
+            Uy_iters        4;
+            Uz_iters        4;
+            k_iters         2;
+            p_iters         3;
+            omega_iters     2;
+        }
+    }
+}
+
+
+// ************************************************************************* //

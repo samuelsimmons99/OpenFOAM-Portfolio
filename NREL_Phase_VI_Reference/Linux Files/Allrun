@@ -1,0 +1,104 @@
+#!/bin/bash
+# NREL Phase VI — Allrun
+# MRF (Multiple Reference Frame) + simpleFoam
+# Compares laminar / kEpsilon / kOmegaSST at V∞ = 5, 7, 10, 13, 15, 20 m/s
+#
+# Mesh is built once from base_case; each turbulence+wind variant copies the mesh
+# and runs simpleFoam with updated BCs and turbulence model.
+#
+# Usage:
+#   ./Allrun                          # all models, all wind speeds
+#   ./Allrun kOmegaSST                # one model, all wind speeds
+#   ./Allrun kOmegaSST 7              # single case (quick test)
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+source /home/rinkoa/OpenFOAM-v2012/etc/bashrc
+
+MODELS="${1:-laminar kEpsilon kOmegaSST}"
+WINDSPEEDS="${2:-5 7 10 13 15 18 21}"
+
+NPROC=8
+
+# ---------------------------------------------------------------------------
+# STEP 1 — Build mesh (once) in base_case
+# ---------------------------------------------------------------------------
+MESH_DIR="$SCRIPT_DIR/base_case"
+
+if [ ! -d "$MESH_DIR/constant/polyMesh" ]; then
+    echo "=== Building mesh ==="
+    cd "$MESH_DIR"
+    mkdir -p constant/triSurface
+    cp "$SCRIPT_DIR/geometry/blade.stl" constant/triSurface/
+    blockMesh      2>&1 | tee log.blockMesh
+    surfaceFeatureExtract 2>&1 | tee log.surfaceFeatureExtract
+    snappyHexMesh -overwrite 2>&1 | tee log.snappyHexMesh
+    topoSet        2>&1 | tee log.topoSet
+    cd "$SCRIPT_DIR"
+else
+    echo "=== Mesh exists, skipping ==="
+fi
+
+mkdir -p "$SCRIPT_DIR/cases" "$SCRIPT_DIR/results"
+
+# ---------------------------------------------------------------------------
+# STEP 2 — Wind speed loop
+# ---------------------------------------------------------------------------
+OMEGA=7.5398   # rad/s
+
+for MODEL in $MODELS; do
+    for VWIND in $WINDSPEEDS; do
+        CASE_NAME="${MODEL}_V${VWIND}"
+        CASE_DIR="$SCRIPT_DIR/cases/${CASE_NAME}"
+        echo ""
+        echo "=== $CASE_NAME ==="
+
+        # Copy base case (mesh + system + constant)
+        rm -rf "$CASE_DIR"
+        cp -r "$MESH_DIR" "$CASE_DIR"
+
+        # Set turbulence model
+        cp "$CASE_DIR/constant/turbulenceProperties.${MODEL}" \
+           "$CASE_DIR/constant/turbulenceProperties"
+
+        # Recompute k for this wind speed (I=0.5%)
+        K=$(python3 -c "I=0.005; V=$VWIND; print(f'{1.5*(V*I)**2:.4e}')")
+        # omega_turb = sqrt(k)/(Cmu^0.25 * L)
+        OM=$(python3 -c "import math; k=1.5*($VWIND*0.005)**2; L=0.3; print(f'{math.sqrt(k)/(0.5477*L):.4f}')")
+        # epsilon = Cmu^0.75 * k^1.5 / L
+        EPS=$(python3 -c "import math; k=1.5*($VWIND*0.005)**2; L=0.3; print(f'{0.1644*k**1.5/L:.4e}')")
+
+        # Patch U, k, omega, epsilon
+        sed -i "s|uniform (7 0 0)|uniform ($VWIND 0 0)|g" "$CASE_DIR/0/U"
+        sed -i "s|uniform 1.84e-3|uniform $K|g"             "$CASE_DIR/0/k"
+        sed -i "s|uniform 0.261|uniform $OM|g"              "$CASE_DIR/0/omega"
+        sed -i "s|uniform 4.33e-5|uniform $EPS|g"           "$CASE_DIR/0/epsilon"
+        sed -i "s|inletValue uniform 1.84e-3|inletValue uniform $K|g" "$CASE_DIR/0/k"
+
+        # For laminar: remove turbulence fields from 0/
+        if [ "$MODEL" = "laminar" ]; then
+            rm -f "$CASE_DIR/0/k" "$CASE_DIR/0/omega" "$CASE_DIR/0/epsilon" "$CASE_DIR/0/nut"
+        fi
+
+        cd "$CASE_DIR"
+        decomposePar 2>&1 | tee log.decomposePar
+        mpirun -np $NPROC simpleFoam -parallel 2>&1 | tee log.simpleFoam
+        reconstructPar 2>&1 | tee log.reconstructPar
+
+        # Extract torque
+        python3 "$SCRIPT_DIR/postProcess/extract_torque.py" \
+            --case "$CASE_DIR" \
+            --model "$MODEL" \
+            --vwind "$VWIND" \
+            --output "$SCRIPT_DIR/results/torque_${MODEL}.csv"
+
+        cd "$SCRIPT_DIR"
+        echo "  Done: $CASE_NAME"
+    done
+done
+
+echo ""
+echo "=== Complete. Run postProcess/plot_validation.py for plots ==="

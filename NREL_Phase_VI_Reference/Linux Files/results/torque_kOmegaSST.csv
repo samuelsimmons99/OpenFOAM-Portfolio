@@ -1,0 +1,8 @@
+model,V_inf_ms,torque_Nm,power_kW
+kOmegaSST,5.0,380.2,2.867
+kOmegaSST,7.0,419.2,3.161
+kOmegaSST,10.0,498.9,3.762
+kOmegaSST,13.0,552.0,4.162
+kOmegaSST,15.0,556.0,4.192
+kOmegaSST,18.0,665.8,5.020
+kOmegaSST,21.0,779.7,5.879

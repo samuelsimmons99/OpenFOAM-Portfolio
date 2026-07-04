@@ -1,0 +1,35 @@
+nohup: ignoring input
+==============================
+ realizableKE — failed cases retry
+ Sat Jul  4 00:12:26 PDT 2026
+==============================
+
+--- realizableKE V=5 m/s  Sat Jul  4 00:12:26 PDT 2026 ---
+  No donor solution found — using cold start
+  [ERROR] simpleFoam failed — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/realizableKE_V5/log.simpleFoam
+
+--- realizableKE V=13 m/s  Sat Jul  4 00:12:50 PDT 2026 ---
+  Using kOmegaSST V=13 solution as IC
+  [ERROR] simpleFoam failed — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/realizableKE_V13/log.simpleFoam
+
+--- realizableKE V=18 m/s  Sat Jul  4 00:13:19 PDT 2026 ---
+  Using kOmegaSST V=18 solution as IC
+  [ERROR] simpleFoam failed — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/realizableKE_V18/log.simpleFoam
+
+--- realizableKE V=21 m/s  Sat Jul  4 00:13:44 PDT 2026 ---
+  Using kOmegaSST V=21 solution as IC
+  [ERROR] simpleFoam failed — check /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/cases/realizableKE_V21/log.simpleFoam
+
+Done. Regenerating plot...
+Saved: /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/postProcess/../plots/turbulence_model_validation.png
+
+Torque error vs experiment:
+    V∞    Exp [N·m]     Laminar  Realizable k-ε     k-ω SST
+     5          130     +258.2%         N/A     +192.5%
+     7          420      +16.0%       -2.5%       -0.2%
+    10         1490      -60.6%      -69.1%      -66.5%
+    13         1620      -61.4%         N/A      -65.9%
+    15         1490      -56.3%      -65.1%      -62.7%
+    18         1400      -46.4%         N/A      -52.4%
+    21         1370      -34.1%         N/A      -43.1%
+Plot: /home/rinkoa/OpenFOAM-v2012/sims/NREL_Phase_VI/plots/turbulence_model_validation.png
