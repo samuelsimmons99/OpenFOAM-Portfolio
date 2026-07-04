@@ -1,0 +1,26 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      k;
+}
+
+dimensions      [0 2 -2 0 0 0 0];
+
+// k = 1.5*(I*U)^2, I=0.05. Placeholder — overwritten per case.
+internalField   uniform 8.4375e-01;
+
+boundaryField
+{
+    inlet   { type cyclic; }
+    outlet  { type cyclic; }
+    wall
+    {
+        type            kLowReWallFunction;
+        value           uniform 8.4375e-01;
+    }
+    front   { type wedge; }
+    back    { type wedge; }
+    axis    { type empty; }
+}

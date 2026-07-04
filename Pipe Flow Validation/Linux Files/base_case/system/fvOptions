@@ -1,0 +1,19 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvOptions;
+}
+
+// Drives flow at target bulk velocity Ubar (axial = z-direction).
+// Adjusts body force each iteration; body force = -dP/dz used to get f.
+// Ubar is overwritten by run_sweep.sh via sed before each case.
+
+pressureGradient
+{
+    type            meanVelocityForce;
+    selectionMode   all;
+    fields          (U);
+    Ubar            (0 0 0.15);   // placeholder — overwritten per case
+}

@@ -1,0 +1,49 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+
+application     simpleFoam;
+
+startFrom       startTime;
+startTime       0;
+stopAt          endTime;
+endTime         500;
+deltaT          1;
+
+writeControl    timeStep;
+writeInterval   500;
+purgeWrite      1;
+
+writeFormat     ascii;
+writePrecision  8;
+
+runTimeModifiable true;
+
+functions
+{
+    wallShearStress
+    {
+        type            wallShearStress;
+        libs            ("libfieldFunctionObjects.so");
+        patches         (wall);
+        writeControl    writeTime;
+        log             true;
+    }
+
+    patchAverage
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    writeTime;
+        log             true;
+        writeFields     false;
+        regionType      patch;
+        name            wall;
+        operation       areaAverage;
+        fields          (wallShearStress);
+    }
+}
