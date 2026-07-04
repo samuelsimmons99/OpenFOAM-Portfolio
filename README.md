@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Six simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, and external aerodynamics: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Seven simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, and external aerodynamics: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -21,7 +21,7 @@ Six simulation projects spanning compressible aerothermodynamics, conjugate heat
 | **Mesh generation** | blockMesh, snappyHexMesh, parametric Python meshing, axisymmetric wedge, multi-region |
 | **Parallel & HPC** | OpenMPI, up to 16 cores, decomposePar, serial/parallel cross-verification |
 | **Post-processing** | ParaView, Python/matplotlib, forceCoeffs, probes, mesh convergence plots |
-| **Validation** | Isentropic nozzle theory, Churchill–Chu Nu correlation, Moody chart friction factor, fan curve comparison, serial vs parallel agreement |
+| **Validation** | Isentropic nozzle theory, Churchill–Chu Nu correlation, Moody chart friction factor, Dittus–Boelter Nu, Graetz laminar Nu = 3.658, fan curve comparison, serial vs parallel agreement |
 
 ---
 
@@ -102,6 +102,20 @@ The transition zone (Re 2 300–4 000) is intentionally omitted: steady RANS can
 
 ---
 
+### [Pipe Heat Transfer - Forced Convection Nu Validation](./Pipe%20Heat%20Transfer/)
+**Solver:** `buoyantSimpleFoam` &nbsp;|&nbsp; **Mesh:** axisymmetric wedge, D = 50 mm, L = 2.5 m (50D), wall-refined &nbsp;|&nbsp; **Re:** 500 · 1000 · 2000 · 5000 · 10000 · 20000 · 50000
+
+<img src="Pipe Heat Transfer/nu_validation.png" width="700">
+
+Forced-convection heat transfer in a circular pipe from laminar through turbulent, validated against classical analytical correlations. Constant wall temperature (350 K) with 300 K air inlet; Nusselt number extracted at 48D from inlet, well inside the thermally fully-developed zone.
+
+- **Laminar (Re 500–2000)** — compared against Nu = 3.658 (Graetz solution, constant T_w, fully developed)
+- **k-ω SST (Re 5000–50000)** — compared against Dittus–Boelter: Nu = 0.023 Re⁰·⁸ Pr⁰·⁴
+
+Demonstrates the solver's ability to reproduce both the exact laminar Nusselt limit and the turbulent convection enhancement (Nu increases ~13× from laminar to Re = 50 000).
+
+---
+
 ### [Cylinder Flow - Reynolds Number Sweep](./Cylinder%20Flow/)
 **Solver:** `pimpleFoam` &nbsp;|&nbsp; **Mesh:** background box + snappyHexMesh cylinder &nbsp;|&nbsp; **Re:** 3 · 40 · 30 000 · 800 000 · 5 000 000
 
@@ -150,6 +164,7 @@ OpenFOAM-Portfolio/
 ├── Parametric Heatsink Simulation/# Parametric CHT, fin sweep
 ├── Campfire Radiation/             # P1 radiation, buoyant plume, GCI mesh convergence
 ├── Pipe Flow Validation/          # Moody chart, laminar + turbulent, periodic domain
+├── Pipe Heat Transfer/            # Nu validation: Graetz (laminar) + Dittus-Boelter (turbulent)
 ├── Smoking Pipe Tutorial/         # Internal flow, full pipeline walkthrough
 ├── Vertical Plate Natural Convection/ # Ra sweep, Nu validation
 └── README.md                      # This file
