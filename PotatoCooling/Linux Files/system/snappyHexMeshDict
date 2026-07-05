@@ -1,0 +1,100 @@
+FoamFile { version 2.0; format ascii; class dictionary; object snappyHexMeshDict; }
+
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    potato_sphere
+    {
+        type searchableSphere;
+        centre (0 0 0);
+        radius 0.040;   // R = 40 mm
+    }
+}
+
+castellatedMeshControls
+{
+    maxLocalCells       1000000;
+    maxGlobalCells      5000000;
+    minRefinementCells  10;
+    nCellsBetweenLevels 3;
+    maxLoadUnbalance    0.10;
+    resolveFeatureAngle 30;
+
+    features ();
+
+    refinementSurfaces
+    {
+        potato_sphere
+        {
+            level (3 4);   // 3 levels inside, 4 at surface → ~5 mm cells near surface
+            cellZone potato;
+            faceZone potato_face;
+            cellZoneInside inside;
+        }
+    }
+
+    refinementRegions
+    {
+        potato_sphere
+        {
+            mode inside;
+            levels ((1E15 4));
+        }
+    }
+
+    locationInMesh (0.15 0.15 0.30);   // point in air (away from sphere)
+    allowFreeStandingZoneFaces false;
+}
+
+snapControls
+{
+    nSmoothPatch    3;
+    tolerance       4.0;
+    nSolveIter      50;
+    nRelaxIter      5;
+    nFeatureSnapIter 10;
+}
+
+addLayersControls
+{
+    relativeSizes   true;
+    layers {}
+    expansionRatio  1.2;
+    finalLayerThickness 0.3;
+    minThickness    0.1;
+    nGrow           0;
+    featureAngle    130;
+    nRelaxIter      3;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals  3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedialAxisAngle 90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter      50;
+}
+
+meshQualityControls
+{
+    maxNonOrtho         65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave          80;
+    minVol              1e-13;
+    minTetQuality       1e-15;
+    minArea             -1;
+    minTwist            0.02;
+    minDeterminant      0.001;
+    minFaceWeight       0.02;
+    minVolRatio         0.01;
+    minTriangleTwist    -1;
+    nSmoothScale        4;
+    errorReduction      0.75;
+}
+
+writeFlags ( scalarLevels layerSets layerFields );
+mergeTolerance 1e-6;

@@ -1,0 +1,93 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _7bdb509494-20201222 OPENFOAM=2012
+Arch   : "LSB;label=32;scalar=64"
+Exec   : checkMesh
+Date   : Jul 04 2026
+Time   : 13:00:15
+Host   : rinkoalaptop
+PID    : 240118
+I/O    : uncollated
+Case   : /home/rinkoa/OpenFOAM-v2012/sims/PotatoCooling
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Time = 0
+
+Mesh stats
+    points:           45626
+    faces:            126166
+    internal faces:   125366
+    cells:            40357
+    faces per cell:   6.2326734
+    boundary patches: 1
+    point zones:      0
+    face zones:       1
+    cell zones:       1
+
+Overall number of cells of each type:
+    hexahedra:     37175
+    prisms:        0
+    wedges:        0
+    pyramids:      0
+    tet wedges:    0
+    tetrahedra:    0
+    polyhedra:     3182
+    Breakdown of polyhedra by number of faces:
+        faces   number of cells
+            6   1238
+            9   1074
+           12   554
+           15   316
+
+Checking topology...
+    Boundary definition OK.
+    Cell to face addressing OK.
+    Point usage OK.
+    Upper triangular ordering OK.
+    Face vertices OK.
+    Number of regions: 1 (OK).
+
+Checking patch topology for multiply connected surfaces...
+                   Patch    Faces   Points                  Surface topology
+                   sides      800      802      ok (closed singly connected)
+
+Checking faceZone topology for multiply connected surfaces...
+                FaceZone    Faces   Points                  Surface topology
+             potato_face     4872     4874      ok (closed singly connected)
+
+Checking basic cellZone addressing...
+                CellZone        Cells       Points       VolumeBoundingBox
+                 potato        17256        19789 0.00026764341 (-0.039999121 -0.039999 -0.039999283) (0.039999268 0.039999211 0.039998054)
+
+Checking geometry...
+    Overall domain bounding box (-0.20000068 -0.20000069 -0.20000011) (0.20000067 0.20000067 0.4)
+    Mesh has 3 geometric (non-empty/wedge) directions (1 1 1)
+    Mesh has 3 solution (non-empty) directions (1 1 1)
+    Boundary openness (-1.3633064e-16 6.7979636e-17 2.0667604e-17) OK.
+    Max cell openness = 2.6160343e-16 OK.
+    Max aspect ratio = 3.0165144 OK.
+    Minimum face area = 1.6646719e-06. Maximum face area = 0.0016010821.  Face area magnitudes OK.
+    Min volume = 4.4808845e-09. Max volume = 6.4024228e-05.  Total volume = 0.096.  Cell volumes OK.
+    Mesh non-orthogonality Max: 65.345293 average: 12.662231
+    Non-orthogonality check OK.
+    Face pyramids OK.
+    Max skewness = 0.49333384 OK.
+    Coupled point location match (average 0) OK.
+
+Mesh OK.
+
+End
+

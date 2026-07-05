@@ -1,0 +1,19 @@
+#!/bin/bash
+source /home/rinkoa/OpenFOAM-v2012/etc/bashrc
+cd /home/rinkoa/OpenFOAM-v2012/sims/PotatoCooling
+
+echo "=== blockMesh ==="
+blockMesh > log.blockMesh 2>&1 && echo "OK" || { echo "FAILED"; tail -5 log.blockMesh; exit 1; }
+
+echo "=== snappyHexMesh ==="
+snappyHexMesh -overwrite > log.snappy 2>&1 && echo "OK" || { echo "FAILED"; tail -10 log.snappy; exit 1; }
+
+echo "=== checkMesh ==="
+checkMesh > log.checkMesh 2>&1
+grep -E "cells:|faces:|points:|Mesh OK|FAILED" log.checkMesh
+
+echo "=== splitMeshRegions ==="
+splitMeshRegions -cellZones -overwrite > log.split 2>&1 && echo "OK" || { echo "FAILED"; tail -10 log.split; exit 1; }
+
+echo "Regions created:"
+ls -d */0 2>/dev/null | sed 's|/0||'

@@ -1,0 +1,7 @@
+FoamFile { version 2.0; format ascii; class dictionary; object fvSolution; }
+solvers
+{
+    h           { solver smoothSolver; smoother symGaussSeidel; tolerance 1e-8; relTol 0.1; }
+    hFinal      { $h; relTol 0; }
+}
+PIMPLE { nNonOrthogonalCorrectors 0; }
