@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Seven simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, and external aerodynamics: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Eight simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, and external aerodynamics: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -13,7 +13,7 @@ Seven simulation projects spanning compressible aerothermodynamics, conjugate he
 |--------|----------------------|
 | **Compressible flow** | Density-based explicit (rhoCentralFoam), supersonic nozzle, Mach 3+ expansion fan, shock structure |
 | **Reacting flow** | rhoReactingFoam, JANAF thermodynamics, single-step Arrhenius, species transport (C₁₂H₂₆ / O₂ / CO₂ / H₂O) |
-| **Conjugate heat transfer** | chtMultiRegionSimpleFoam, foamMultiRun, solid–fluid coupling, CPU junction temperature prediction |
+| **Conjugate heat transfer** | chtMultiRegionSimpleFoam, chtMultiRegionFoam, foamMultiRun, solid–fluid coupling, CPU junction temperature, transient natural convection CHT |
 | **Radiation** | P1 radiation model via fvModels, participating medium, GCI mesh convergence, radiant heat load prediction |
 | **Natural convection** | buoyantFoam, Boussinesq approximation, validated against Churchill–Chu correlation |
 | **External aerodynamics** | pimpleFoam, Re sweep (3 → 8×10⁵), kOmegaSST, Cd/Cl time-averaged |
@@ -21,7 +21,7 @@ Seven simulation projects spanning compressible aerothermodynamics, conjugate he
 | **Mesh generation** | blockMesh, snappyHexMesh, parametric Python meshing, axisymmetric wedge, multi-region |
 | **Parallel & HPC** | OpenMPI, up to 16 cores, decomposePar, serial/parallel cross-verification |
 | **Post-processing** | ParaView, Python/matplotlib, forceCoeffs, probes, mesh convergence plots |
-| **Validation** | Isentropic nozzle theory, Churchill–Chu Nu correlation, Moody chart friction factor, Dittus–Boelter Nu, Graetz laminar Nu = 3.658, fan curve comparison, serial vs parallel agreement |
+| **Validation** | Isentropic nozzle theory, Churchill–Chu Nu correlation, Churchill–Bernstein sphere Nu, Moody chart friction factor, Dittus–Boelter Nu, Graetz laminar Nu = 3.658, fan curve comparison, Biot number CHT justification |
 
 ---
 
@@ -116,6 +116,20 @@ Demonstrates the solver's ability to reproduce both the exact laminar Nusselt li
 
 ---
 
+### [Potato Cooling - Transient Natural Convection CHT](./Potato%20Cooling/)
+**Solver:** `chtMultiRegionFoam` &nbsp;|&nbsp; **Mesh:** snappyHexMesh sphere, 40 357 cells, 2 regions &nbsp;|&nbsp; **Run time:** 600 s real time, adaptive Δt
+
+<img src="Potato Cooling/potato_cooling.png" width="700">
+
+Transient conjugate heat transfer of an 80 mm potato (T=180 °C) cooling in still air (T=25 °C). The Biot number Bi=0.53 exceeds the lumped-capacitance limit — the interior and surface are at significantly different temperatures and must be resolved with CHT.
+
+- **Churchill–Bernstein** sphere correlation gives Ra=2.0×10⁶, Nu=19.1, h=7.47 W/(m²K)
+- **Spatial gradient at t=600 s**: centre 179 °C vs equator surface 155 °C — 24 °C centre-to-surface difference that lumped capacitance misses entirely
+- **Circumferential asymmetry**: equator surface (155 °C) colder than top surface (174 °C) due to boundary layer thickening as the buoyant flow rises
+- **Hot plume**: air 20 mm above the potato reaches 105 °C by t=600 s; plume cools to 50 °C at 110 mm above — natural convection confirmed active
+
+---
+
 ### [Cylinder Flow - Reynolds Number Sweep](./Cylinder%20Flow/)
 **Solver:** `pimpleFoam` &nbsp;|&nbsp; **Mesh:** background box + snappyHexMesh cylinder &nbsp;|&nbsp; **Re:** 3 · 40 · 30 000 · 800 000 · 5 000 000
 
@@ -165,6 +179,7 @@ OpenFOAM-Portfolio/
 ├── Campfire Radiation/             # P1 radiation, buoyant plume, GCI mesh convergence
 ├── Pipe Flow Validation/          # Moody chart, laminar + turbulent, periodic domain
 ├── Pipe Heat Transfer/            # Nu validation: Graetz (laminar) + Dittus-Boelter (turbulent)
+├── Potato Cooling/                # Transient CHT, natural convection, Biot number analysis
 ├── Smoking Pipe Tutorial/         # Internal flow, full pipeline walkthrough
 ├── Vertical Plate Natural Convection/ # Ra sweep, Nu validation
 └── README.md                      # This file
