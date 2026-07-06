@@ -40,6 +40,14 @@ The lumped time constant is 6 746 s, so only ~13 °C of total cooling occurs in 
 
 ## Results
 
+### Natural convection flow field
+
+![Natural convection](potato_convection.png)
+
+Mid-plane temperature (colour) and velocity streamlines at four time steps. At t=0 the fluid is quiescent; by t=100 s a buoyancy-driven plume has formed at the apex, with counter-rotating circulation cells drawing cool air in from below. Stream colour indicates speed — magenta near the fast-rising plume, blue in the slower recirculation zones. The thin thermal boundary layer around the potato is clearly resolved by the CHT mesh.
+
+### Cooling curves
+
 ![Cooling curves](potato_cooling.png)
 
 | t (s) | T_centre (°C) | T_surface equator (°C) | T_surface top (°C) | ΔT centre–equator (°C) | T_lumped (°C) |
