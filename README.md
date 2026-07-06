@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Eight simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, and external aerodynamics: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Nine simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, and external aerodynamics: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -15,6 +15,7 @@ Eight simulation projects spanning compressible aerothermodynamics, conjugate he
 | **Reacting flow** | rhoReactingFoam, JANAF thermodynamics, single-step Arrhenius, species transport (C₁₂H₂₆ / O₂ / CO₂ / H₂O) |
 | **Conjugate heat transfer** | chtMultiRegionSimpleFoam, chtMultiRegionFoam, foamMultiRun, solid–fluid coupling, CPU junction temperature, transient natural convection CHT |
 | **Radiation** | P1 radiation model via fvModels, participating medium, GCI mesh convergence, radiant heat load prediction |
+| **Multiphase / phase change** | multiphaseEuler two-fluid solver, interfacial evaporation, nucleate wall boiling (RPI model), conjugate heat transfer with phase change |
 | **Natural convection** | buoyantFoam, Boussinesq approximation, validated against Churchill–Chu correlation |
 | **External aerodynamics** | pimpleFoam, Re sweep (3 → 8×10⁵), kOmegaSST, Cd/Cl time-averaged |
 | **Turbulence modelling** | k-ε, k-ω SST, laminar - applied and compared across cases |
@@ -84,6 +85,16 @@ CPU + fin-array heatsink in a fan-driven duct. Mesh is generated parametrically 
 <img src="Campfire Radiation/images/radiation_field.png" width="700">
 
 Transient buoyant plume from a 1200 K campfire radiating onto a person modelled as a 2 m x 0.3 m obstacle, using the P1 participating-medium radiation model activated as an fvModel (OF13's `foamRun -solver fluid` pathway) together with a perfectGas equation of state to handle the 4:1 temperature ratio. A three-level Grid Convergence Index study (Roache 1994) confirms the 5,600-cell medium mesh is grid-independent (GCI = 0.14%, apparent order p = 1.86, asymptotic ratio 1.01). The person's front face receives 21 kW/m2 combined convective and radiative heat flux at 1.5 m standoff, with a front-to-back flux ratio of 2.59x from radiation shadowing - well above the roughly 1,000 W/m2 NIOSH threshold for radiant heat stress.
+
+---
+
+### [Boiling Water on a Stove - Evaporation vs Nucleate Boiling](./Boiling%20Water/)
+**Solver:** `multiphaseEuler` two-fluid (foamRun / foamMultiRun CHT) &nbsp;|&nbsp; **Study:** interfacial evaporation vs full nucleate wall boiling, matched heat flux
+
+<img src="Boiling Water/images/nucleate_vapour_fraction_field.png" width="700">
+<img src="Boiling Water/images/comparison_liquid_volume.png" width="700">
+
+Two comparative cases for a pot of water heated on a stove: a simplified diffusive evaporation model and a full nucleate wall-boiling model (RPI-style nucleation site density, bubble departure diameter and frequency, conjugate heat transfer through a heater plate), both built on the same `multiphaseEuler` two-fluid framework at matched heat flux so the comparison isolates model fidelity rather than solver choice. The nucleate boiling case shows the classic bubbly "level swell" (interface rising ~20% from entrained vapour) within 82 s, while the evaporation case stays essentially flat over 408 s at the same flux. Getting both cases numerically stable was the real challenge: the write-up documents the multi-round debugging path (boundary condition compatibility, turbulence field dependencies, nucleation onset softening) rather than presenting only a clean final result.
 
 ---
 
@@ -177,6 +188,7 @@ OpenFOAM-Portfolio/
 ├── Nozzle Simulation/             # Compressible + reacting, 3 cases
 ├── Parametric Heatsink Simulation/# Parametric CHT, fin sweep
 ├── Campfire Radiation/             # P1 radiation, buoyant plume, GCI mesh convergence
+├── Boiling Water/                 # multiphaseEuler: evaporation vs nucleate wall boiling
 ├── Pipe Flow Validation/          # Moody chart, laminar + turbulent, periodic domain
 ├── Pipe Heat Transfer/            # Nu validation: Graetz (laminar) + Dittus-Boelter (turbulent)
 ├── Potato Cooling/                # Transient CHT, natural convection, Biot number analysis
