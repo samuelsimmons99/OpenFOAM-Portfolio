@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Nine simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, and external aerodynamics: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Eleven simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, external aerodynamics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -18,7 +18,9 @@ Nine simulation projects spanning compressible aerothermodynamics, conjugate hea
 | **Multiphase / phase change** | multiphaseEuler two-fluid solver, interfacial evaporation, nucleate wall boiling (RPI model), conjugate heat transfer with phase change |
 | **Natural convection** | buoyantFoam, Boussinesq approximation, validated against Churchill–Chu correlation |
 | **External aerodynamics** | pimpleFoam, Re sweep (3 → 8×10⁵), kOmegaSST, Cd/Cl time-averaged |
-| **Turbulence modelling** | k-ε, k-ω SST, laminar - applied and compared across cases |
+| **Aerofoil aerodynamics** | simpleFoam RANS, AoA polar, mesh convergence (GCI), k-ω SST / SA / Realizable k-ε comparison |
+| **Incompressible benchmarks** | icoFoam, lid-driven cavity Re=100–10000, validated vs Ghia et al. (1982) |
+| **Turbulence modelling** | k-ε, k-ω SST, Spalart–Allmaras, Realizable k-ε, laminar — applied and compared across cases |
 | **Mesh generation** | blockMesh, snappyHexMesh, parametric Python meshing, axisymmetric wedge, multi-region |
 | **Parallel & HPC** | OpenMPI, up to 16 cores, decomposePar, serial/parallel cross-verification |
 | **Post-processing** | ParaView, Python/matplotlib, forceCoeffs, probes, mesh convergence plots |
@@ -151,6 +153,25 @@ Five-case parametric study from creeping Stokes flow through laminar vortex shed
 
 ---
 
+### [NACA 0012 Airfoil — Mesh Convergence & Turbulence Model Comparison](./NACA%200012%20Airfoil/)
+**Solver:** `simpleFoam` (steady RANS) &nbsp;|&nbsp; **Mesh:** structured C-mesh, 3 levels (6k–96k cells) &nbsp;|&nbsp; **Models:** k-ω SST · Spalart–Allmaras · Realizable k-ε
+
+<img src="NACA 0012 Airfoil/naca0012_mesh_study.png" width="700">
+<img src="NACA 0012 Airfoil/naca0012_model_comparison.png" width="700">
+
+Full AoA polar (0°–14°) at Re = 3×10⁶, validated against Abbott & von Doenhoff (1959) wind-tunnel data. A three-mesh convergence study quantifies discretisation uncertainty via the Grid Convergence Index (Celik et al. 2008) — fine-mesh GCI on Cl below 1.5% across attached-flow angles. Three RANS turbulence models are compared on the medium mesh: k-ω SST and Spalart–Allmaras agree within ~3% of experiment through 10° AoA; all models over-predict Cl near stall (12°–14°) as expected for steady RANS. Lift, drag, and drag polar plots produced for all configurations.
+
+---
+
+### [Lid-Driven Cavity — Benchmark Validation](./Lid-Driven%20Cavity/)
+**Solver:** `icoFoam` (transient laminar) &nbsp;|&nbsp; **Mesh:** 128×128 structured `blockMesh` &nbsp;|&nbsp; **Re:** 100 · 400 · 1000 · 3200 · 10 000
+
+<img src="Lid-Driven Cavity/lid_driven_cavity.png" width="700">
+
+Classic incompressible benchmark: a square cavity driven by a sliding lid, across five Reynolds numbers. CFD u and v centreline profiles compared point-by-point against the tabulated data of Ghia, Ghia & Shin (1982) — one of the most referenced numerical datasets in computational fluid dynamics. Agreement is within 2% for Re ≤ 1000; at Re = 10 000 the primary vortex centre position and corner eddies are reproduced correctly. Demonstrates solver accuracy on a well-characterised laminar flow with strong recirculation.
+
+---
+
 ### [Vertical Plate Natural Convection - Rayleigh Sweep](./Vertical%20Plate%20Natural%20Convection/)
 **Solver:** `buoyantFoam` (Boussinesq, transient 2D) &nbsp;|&nbsp; **Ra:** 4.56×10⁸ · 4.09×10⁹ · 3.27×10¹⁰
 
@@ -191,6 +212,8 @@ OpenFOAM-Portfolio/
 ├── Boiling Water/                 # multiphaseEuler: evaporation vs nucleate wall boiling
 ├── Pipe Flow Validation/          # Moody chart, laminar + turbulent, periodic domain
 ├── Pipe Heat Transfer/            # Nu validation: Graetz (laminar) + Dittus-Boelter (turbulent)
+├── NACA 0012 Airfoil/             # AoA polar, mesh convergence (GCI), 3 turbulence models
+├── Lid-Driven Cavity/             # Re=100–10000, validated vs Ghia et al. (1982)
 ├── Potato Cooling/                # Transient CHT, natural convection, Biot number analysis
 ├── Smoking Pipe Tutorial/         # Internal flow, full pipeline walkthrough
 ├── Vertical Plate Natural Convection/ # Ra sweep, Nu validation
