@@ -98,7 +98,20 @@ What was tried, in order:
 
 Each fix bought meaningfully more stable runtime (Case B's crash point moved from t = 52.8 s to t = 82 s; Case A ran to t = 408 s before its own eventual divergence) without fully eliminating the underlying stiffness. Both cases were also interrupted at least once by the WSL virtual machine restarting mid-run (unrelated to the physics) and were resumed from their last written checkpoint rather than restarted from zero.
 
-**Bottom line**: getting a fully stable multiphase phase-change simulation to a specified end time is a genuinely hard numerics problem, not just a case-setup problem. The results below are reported honestly as partial: Case A reached 408 of 600 target seconds (68%), Case B reached 82 of 600 (14%), and both are presented as valid, physically meaningful data up to those points.
+### Follow-up investigation: hot start and the pressure-cap fix
+
+Two further, more targeted experiments were run after the above, both worth recording because they narrow down what the real problem is.
+
+**Hot start (starting already at 100 C).** To skip the slow heat-up phase and get to boiling behaviour faster, both cases were re-run with the entire domain initialised at 373.15 K instead of 293 K. Counter-intuitively, this made both cases *less* stable, not more: Case B crashed at t = 0.007 s (versus 82 s from a cold start) and Case A at t = 0.07 s (versus 408 s). Backing off slightly to a 370 K start (a small subcooling margin) let both run further, but they still failed well short of a cold start's endurance. The interpretation: right at exact saturation, the phase-change source term has zero driving temperature difference, which is the point of maximum numerical sensitivity, so a tiny perturbation is amplified rather than damped. A cold start gives the solver a large, well-defined thermal gradient to converge toward before the stiff near-saturation regime is even reached, which turns out to be a numerically gentler path in even though it is physically slower.
+
+**The missing pressure cap.** Every crash trace, regardless of which specific function it died in (a heat-transfer correlation, a drag law, the departure-frequency model), was consistent with a field being fed an already-corrupted upstream value. Since vapour density scales directly with pressure through the ideal-gas-like equation of state, an unbounded pressure spike would explain every downstream symptom in one shot. Checking the `limitPressure` fvConstraint confirmed the bug: only `min 1e4` had been set, with no `max`, so pressure was free to run away upward without limit. Adding `max 500000` (5x atmospheric) and resuming both cases from their last checkpoints did measurably help: both pushed further than their previous hard limits before failing again. But it did not fully fix the problem, and it changed *how* each case failed:
+
+- Case A still diverged outright, slightly later (t = 408.27 s versus 408.08 s), this time with the alpha (volume fraction) solve itself blowing up to absurd values.
+- Case B avoided the floating-point crash entirely, but the adaptive time step collapsed instead, shrinking to roughly 2 x 10-9 s. At that step size the solver was technically still running but advancing about 0.004 simulated seconds per 10 hours of wall-clock time. This is a stall dressed up as a running process, not genuine progress, and it was stopped manually rather than left to "finish."
+
+**Bottom line**: the missing pressure cap was a real, confirmed bug, and fixing it measurably improved both cases. But the underlying stiffness at the transition into vigorous, sustained phase change is not fully resolved by configuration fixes alone. Both cases capture the *onset* of their respective phase-change mechanisms convincingly (Case A: measurable evaporation; Case B: real sustained bubble departure and level swell) but neither can be pushed through that onset into a long-duration, steady boiling/evaporating regime with the current mesh resolution and closure coefficients. The nucleation closure coefficients in particular were borrowed from a high-pressure refrigerant flow-boiling experiment (DEBORA) and adapted by inspection rather than re-derived or validated for atmospheric water pool boiling; getting genuinely sustained nucleate boiling would likely require either re-deriving those coefficients from water-specific pool-boiling literature, refining the near-wall mesh, or moving to a more fully implicit treatment of the phase-change source term than OpenFOAM's segregated PIMPLE loop provides by default. All of these are substantial follow-on efforts, not incremental tuning, and are left as a stated limitation rather than pursued further here.
+
+The results below are reported honestly as partial: Case A reached 408 of 600 target seconds (68%), Case B reached 82 of 600 (14%), and both are presented as valid, physically meaningful data up to those points, representing the onset of phase change rather than a fully sustained boiling/evaporation process.
 
 ---
 
@@ -194,6 +207,8 @@ Python field-parsing + matplotlib (temperature, vapour/liquid fraction fields,
 | Case B run | Partial - reached 82/600 s before divergence |
 | Post-processing (volume tracking, field images) | Done |
 | Full 10-minute depletion target | Not achieved - see Numerical Stability Notes |
+| Hot-start experiment (start at 100 C) | Done - found less stable than cold start, documented |
+| Pressure cap fix (missing max limit) | Done - real bug fixed, improved but did not resolve onset instability |
 
 ---
 
