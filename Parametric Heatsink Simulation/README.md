@@ -75,7 +75,7 @@ CPU maximum temperature is monitored each iteration via the `cpuTmax` `volFieldV
 - **3 mm**: T_max plateaus to 336.96 K; 16,000-step run (~21.8 h wall-clock on a single core)
 
 ### Thermal performance
-All three cases dissipate 150 W from the CPU die with fan-curve-driven (not fixed-velocity) airflow. The 5 mm baseline reaches a converged fan exit velocity of 3.87 m/s. Tightening the fin pitch from 5 mm to 4 mm saves **5.84 K** (the dominant effect, substantially more fin surface area); going further to 3 mm saves an additional **1.10 K** (diminishing returns as channel restriction begins offsetting the surface area gain). The data suggest the thermal optimum for this fan/duct combination lies in the 3–4 mm range, with little benefit expected below 3 mm.
+All three cases dissipate 150 W from the CPU die with fan-curve-driven (not fixed-velocity) airflow. The 5 mm baseline reaches a converged fan exit velocity of 3.87 m/s. Tightening the fin pitch from 5 mm to 4 mm saves **5.84 K** (the dominant effect, substantially more fin surface area); going further to 3 mm saves an additional **1.10 K** (diminishing returns as channel restriction begins offsetting the surface area gain). The data suggest the thermal optimum for this fan/duct combination lies in the 3-4 mm range, with little benefit expected below 3 mm.
 
 ### Pitch Sweep Summary
 
@@ -130,7 +130,7 @@ All three cases of the fin-pitch sweep are complete:
 | `p4_cpu` | 4 mm | 18 | ✅ Converged, 16,000 it. | 338.06 K |
 | `p3_cpu` | 3 mm | 24 | ✅ Converged, 16,000 it. | 336.96 K |
 
-The sweep confirms a clear trend: tighter pitch lowers CPU temperature, with strongly diminishing returns below 4 mm. The 3–4 mm range represents the practical thermal optimum for this fan/duct geometry.
+The sweep confirms a clear trend: tighter pitch lowers CPU temperature, with strongly diminishing returns below 4 mm. The 3-4 mm range represents the practical thermal optimum for this fan/duct geometry.
 
 ---
 

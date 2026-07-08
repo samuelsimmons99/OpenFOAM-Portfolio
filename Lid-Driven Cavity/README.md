@@ -26,7 +26,7 @@ The lid moves in the +x direction. All other walls are no-slip. The 2D simulatio
 
 ## Validation reference
 
-Ghia, U., Ghia, K.N. & Shin, C.T. (1982) "High-Re solutions for incompressible flow using the Navier–Stokes equations and a multigrid method." *Journal of Computational Physics*, 48:387–411.
+Ghia, U., Ghia, K.N. & Shin, C.T. (1982) "High-Re solutions for incompressible flow using the Navier-Stokes equations and a multigrid method." *Journal of Computational Physics*, 48:387-411.
 
 Tabulated u-velocity profiles along the vertical centreline (x = 0.5) and v-velocity profiles along the horizontal centreline (y = 0.5) for Re = 100 to 10 000.
 
@@ -41,6 +41,6 @@ CFD results agree closely with Ghia et al. across all five Reynolds numbers. At 
 
 ## Key observations
 
-- Re = 100–1000: excellent point-wise agreement (<2% deviation on centreline extrema)
-- Re = 3200–10000: very good agreement; slight underprediction of the negative u peak near the bottom wall at Re = 10 000 is consistent with marginal time-convergence at this Reynolds number
-- No turbulence model required — purely laminar throughout
+- Re = 100-1000: excellent point-wise agreement (<2% deviation on centreline extrema)
+- Re = 3200-10000: very good agreement; slight underprediction of the negative u peak near the bottom wall at Re = 10 000 is consistent with marginal time-convergence at this Reynolds number
+- No turbulence model required - purely laminar throughout

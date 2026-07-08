@@ -16,16 +16,16 @@ Validation of forced-convection heat transfer in a circular pipe across laminar 
 
 **Mesh:** 25 radial × 250 axial cells, `simpleGrading (0.1 1 1)` (wall-refined).  
 **Solver:** `buoyantSimpleFoam` with `perfectGas` equation of state.  
-**Turbulence:** k–ω SST for turbulent cases; laminar for Re < 2 300.  
-**Thermal entry length:** L_th ≈ 0.05 Re Pr D — for Re = 500 this is ≈ 0.89 m, leaving 1.6 m of fully-developed flow.
+**Turbulence:** k-ω SST for turbulent cases; laminar for Re < 2 300.  
+**Thermal entry length:** L_th ≈ 0.05 Re Pr D - for Re = 500 this is ≈ 0.89 m, leaving 1.6 m of fully-developed flow.
 
 ## Analytical references
 
-**Laminar — constant wall temperature (Graetz solution, fully developed):**
+**Laminar - constant wall temperature (Graetz solution, fully developed):**
 
 Nu = 3.658
 
-**Turbulent — Dittus–Boelter (heating, Pr ≈ 0.71):**
+**Turbulent - Dittus-Boelter (heating, Pr ≈ 0.71):**
 
 Nu = 0.023 Re^0.8 Pr^0.4
 
@@ -51,24 +51,24 @@ Nu extracted at z = 2.475 m (49.5D from inlet). Laminar compared against Graetz 
 
 **Laminar:** all three cases capture Nu = 3.658 within +5.6%. The lam_Re2000 result is slightly elevated because the thermal entry length (L_th ≈ 3.56 m) exceeds the pipe length (2.5 m), meaning the outlet is still in the thermally developing region where Nu > 3.658.
 
-**Turbulent:** k-ω SST under-predicts Gnielinski by 7–20%. The primary cause is the low first-cell y⁺ (≈ 2–4) being below the wall-function range (30–300); these cells fall in the viscous sublayer where standard wall functions overestimate the thermal resistance. Agreement improves at Re = 50 000 (larger y⁺).
+**Turbulent:** k-ω SST under-predicts Gnielinski by 7-20%. The primary cause is the low first-cell y⁺ (≈ 2-4) being below the wall-function range (30-300); these cells fall in the viscous sublayer where standard wall functions overestimate the thermal resistance. Agreement improves at Re = 50 000 (larger y⁺).
 
 ## Key physics
 
 - The Nusselt number measures how much convection enhances heat transfer over pure conduction: Nu = hD/k.
 - For laminar fully-developed flow, Nu = 3.658 is exact (Graetz solution) regardless of Re.
 - Turbulent flow significantly enhances heat transfer: at Re = 50 000, Nu ≈ 13× higher than laminar.
-- The thermal entry region (high Nu near inlet) is excluded from validation — only the fully-developed section is compared.
+- The thermal entry region (high Nu near inlet) is excluded from validation - only the fully-developed section is compared.
 
 ## Files
 
 ```
-base_case/          — OpenFOAM case template
-  constant/         — thermophysicalProperties, turbulenceProperties.*
-  0/                — T, U, p_rgh, alphat boundary conditions
-  system/           — blockMeshDict, fvSchemes, fvSolution, controlDict
-run_sweep.sh        — Runs all 7 Re cases sequentially
+base_case/          - OpenFOAM case template
+  constant/         - thermophysicalProperties, turbulenceProperties.*
+  0/                - T, U, p_rgh, alphat boundary conditions
+  system/           - blockMeshDict, fvSchemes, fvSolution, controlDict
+run_sweep.sh        - Runs all 7 Re cases sequentially
 postProcess/
-  extract_nu.py     — Reads field files, computes Nu at z=2.4m
-  plot_nu.py        — Nu vs Re comparison plot
+  extract_nu.py     - Reads field files, computes Nu at z=2.4m
+  plot_nu.py        - Nu vs Re comparison plot
 ```
