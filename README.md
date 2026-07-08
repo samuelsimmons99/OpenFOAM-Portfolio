@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Eleven simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, external aerodynamics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Twelve simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, external aerodynamics, rotating-body aerodynamics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -18,6 +18,7 @@ Eleven simulation projects spanning compressible aerothermodynamics, conjugate h
 | **Multiphase / phase change** | multiphaseEuler two-fluid solver, interfacial evaporation, nucleate wall boiling (RPI model), conjugate heat transfer with phase change |
 | **Natural convection** | buoyantFoam, Boussinesq approximation, validated against Churchill-Chu correlation |
 | **External aerodynamics** | pimpleFoam, Re sweep (3 → 8×10⁵), kOmegaSST, Cd/Cl time-averaged |
+| **Rotating-body aerodynamics** | Magnus effect, rotatingWallVelocity BC, spin ratio sweep, laminar + turbulent validation |
 | **Aerofoil aerodynamics** | simpleFoam RANS, AoA polar, mesh convergence (GCI), k-ω SST / SA / Realizable k-ε comparison |
 | **Incompressible benchmarks** | icoFoam, lid-driven cavity Re=100-10000, validated vs Ghia et al. (1982) |
 | **Turbulence modelling** | k-ε, k-ω SST, Spalart-Allmaras, Realizable k-ε, laminar - applied and compared across cases |
@@ -163,6 +164,15 @@ Full AoA polar (0°-14°) at Re = 3×10⁶, validated against Abbott & von Doenh
 
 ---
 
+### [Magnus Effect - Rotating Cylinder Aerodynamics](./Magnus%20Effect/)
+**Solver:** `pimpleFoam` &nbsp;|&nbsp; **Re:** 200 (laminar) · 1x10^5 (turbulent k-omega SST) &nbsp;|&nbsp; **Spin ratio alpha:** 0-5
+
+<img src="Magnus Effect/magnus_polar.png" width="700">
+
+Validation of the Magnus effect on a 2D rotating cylinder. Lift and drag polars versus spin ratio alpha = omega*D/(2*U) compared against Mittal & Kumar (2003) DNS at Re = 200 and Tokumaru & Dimotakis (1993) experiments at Re = 1x10^5. Uses `rotatingWallVelocity` boundary condition. Laminar results show excellent agreement across all spin ratios; turbulent results capture the qualitative Magnus trend with quantitative spread at high alpha where vortex-rotation coupling increases unsteadiness.
+
+---
+
 ### [Lid-Driven Cavity - Benchmark Validation](./Lid-Driven%20Cavity/)
 **Solver:** `icoFoam` (transient laminar) &nbsp;|&nbsp; **Mesh:** 128×128 structured `blockMesh` &nbsp;|&nbsp; **Re:** 100 · 400 · 1000 · 3200 · 10 000
 
@@ -213,6 +223,7 @@ OpenFOAM-Portfolio/
 ├── Pipe Flow Validation/          # Moody chart, laminar + turbulent, periodic domain
 ├── Pipe Heat Transfer/            # Nu validation: Graetz (laminar) + Dittus-Boelter (turbulent)
 ├── NACA 0012 Airfoil/             # AoA polar, mesh convergence (GCI), 3 turbulence models
+├── Magnus Effect/                 # Rotating cylinder, spin ratio sweep, Magnus lift validation
 ├── Lid-Driven Cavity/             # Re=100-10000, validated vs Ghia et al. (1982)
 ├── Potato Cooling/                # Transient CHT, natural convection, Biot number analysis
 ├── Smoking Pipe Tutorial/         # Internal flow, full pipeline walkthrough
