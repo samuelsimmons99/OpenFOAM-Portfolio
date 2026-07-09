@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Seventeen simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Eighteen simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, RANS turbulence model comparison, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -211,6 +211,15 @@ Validation of laminar vortex shedding frequency across the full laminar shedding
 <img src="Backward Facing Step/bfs_validation.png" width="700">
 
 Validation of laminar reattachment length against Armaly et al. (1983) across the steady laminar regime (Re_h = 50–300). The 2D simulation with ER=2 and uniform inlet systematically overpredicts the experimental data by ~1.5×, consistent with three well-understood differences: higher expansion ratio (ER=2 vs 1.94), uniform vs parabolic inlet profile, and 2D vs 3D geometry. The corrected slope d(x_r/h)/d(Re) ≈ 0.026 from the simulation matches published 2D numerical predictions for this configuration. SIMPLE residuals plateau at Re ≥ 400, confirming the onset of oscillatory flow, consistent with published critical Re for ER=2 BFS unsteadiness.
+
+---
+
+### [Turbulent Backward-Facing Step: RANS Model Comparison](./Turbulent%20BFS/)
+**Solver:** `simpleFoam` (steady RANS) &nbsp;|&nbsp; **Mesh:** 3-block blockMesh, 8,500 cells (Δy = 1 mm, y⁺ ≈ 32) &nbsp;|&nbsp; **Models:** k-ε · k-ω SST · Spalart-Allmaras
+
+<img src="Turbulent BFS/turbulent_bfs_validation.png" width="700">
+
+Three RANS turbulence models compared on the same ER=2, Re_h = 5100 BFS geometry against the Le, Moin & Kim (1997) DNS benchmark (x_r/h = 6.28). All three models converge in under 1200 iterations. k-ε underpredicts (-4.3%): excessive isotropic diffusion in the free shear layer collapses the bubble prematurely. k-ω SST overpredicts (+12.5%): the shear-stress limiter suppresses mixing in the separated zone, allowing the recirculation to persist further downstream. Spalart-Allmaras is intermediate (+5.9%). All three are within 13% of DNS — acceptable for engineering — but each errs in the physically expected direction, demonstrating quantitatively why model choice matters for separated-flow predictions.
 
 ---
 
