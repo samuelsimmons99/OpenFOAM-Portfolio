@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Eighteen simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, RANS turbulence model comparison, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Nineteen simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, RANS turbulence model comparison, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -211,6 +211,15 @@ Validation of laminar vortex shedding frequency across the full laminar shedding
 <img src="Backward Facing Step/bfs_validation.png" width="700">
 
 Validation of laminar reattachment length against Armaly et al. (1983) across the steady laminar regime (Re_h = 50–300). The 2D simulation with ER=2 and uniform inlet systematically overpredicts the experimental data by ~1.5×, consistent with three well-understood differences: higher expansion ratio (ER=2 vs 1.94), uniform vs parabolic inlet profile, and 2D vs 3D geometry. The corrected slope d(x_r/h)/d(Re) ≈ 0.026 from the simulation matches published 2D numerical predictions for this configuration. SIMPLE residuals plateau at Re ≥ 400, confirming the onset of oscillatory flow, consistent with published critical Re for ER=2 BFS unsteadiness.
+
+---
+
+### [Mesh Convergence and GCI Study](./Mesh%20Convergence%20GCI/)
+**Solver:** `buoyantBoussinesqSimpleFoam` &nbsp;|&nbsp; **Mesh:** 25×25 · 50×50 · 100×100 · 200×200 &nbsp;|&nbsp; **Ra:** 10⁵
+
+<img src="Mesh Convergence GCI/gci_convergence.png" width="700">
+
+Formal mesh independence study following the Celik et al. (2008) Grid Convergence Index procedure on the differentially-heated square cavity benchmark. Four mesh levels with refinement ratio r = 2; Richardson extrapolation to the h→0 limit. Observed convergence order **p = 1.95** (expected 2.0 for Gauss linear FVM). Extrapolated Nu = 4.521 is within **0.05%** of the de Vahl Davis (1983) spectral benchmark value of 4.519 — demonstrating solver consistency with the PDE. GCI_fine (50→100) = **0.42%**, confirming grid independence at 100×100; refinement to 200×200 yields GCI = 0.013%.
 
 ---
 
