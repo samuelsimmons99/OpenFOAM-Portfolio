@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Twelve simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, external aerodynamics, rotating-body aerodynamics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Fourteen simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -21,6 +21,8 @@ Twelve simulation projects spanning compressible aerothermodynamics, conjugate h
 | **Rotating-body aerodynamics** | Magnus effect, rotatingWallVelocity BC, spin ratio sweep, laminar + turbulent validation |
 | **Aerofoil aerodynamics** | simpleFoam RANS, AoA polar, mesh convergence (GCI), k-ω SST / SA / Realizable k-ε comparison |
 | **Incompressible benchmarks** | icoFoam, lid-driven cavity Re=100-10000, validated vs Ghia et al. (1982) |
+| **Free-surface flow** | interFoam VOF, dam break collapse, validated vs Martin & Moyce (1952) |
+| **Vortex shedding** | pimpleFoam transient, von Kármán street, Strouhal number vs Williamson (1988) |
 | **Turbulence modelling** | k-ε, k-ω SST, Spalart-Allmaras, Realizable k-ε, laminar - applied and compared across cases |
 | **Mesh generation** | blockMesh, snappyHexMesh, parametric Python meshing, axisymmetric wedge, multi-region |
 | **Parallel & HPC** | OpenMPI, up to 16 cores, decomposePar, serial/parallel cross-verification |
@@ -182,6 +184,24 @@ Classic incompressible benchmark: a square cavity driven by a sliding lid, acros
 
 ---
 
+### [Vortex Shedding - Strouhal Number Validation](./Vortex%20Shedding/)
+**Solver:** `pimpleFoam` (transient laminar) &nbsp;|&nbsp; **Mesh:** 4-block O-mesh (blockMesh), 12,000 cells &nbsp;|&nbsp; **Re:** 100
+
+<img src="Vortex Shedding/strouhal_validation.png" width="700">
+
+Validation of laminar vortex shedding frequency against the Williamson (1988) Strouhal–Reynolds correlation. Flow past a circular cylinder at Re = 100 produces a periodic von Kármán vortex street; shedding frequency extracted via FFT of the lift coefficient time history. A small cross-flow perturbation (0.1% of U∞) is applied to the initial condition to trigger symmetry breaking. St = fD/U∞ compared against the Williamson correlation St = 0.2663 − 1.0166/√Re, giving St ≈ 0.165 at Re = 100.
+
+---
+
+### [Dam Break - Free Surface Validation](./Dam%20Break/)
+**Solver:** `interFoam` (VOF, two-phase) &nbsp;|&nbsp; **Mesh:** 240 × 120 uniform Cartesian (28,800 cells) &nbsp;|&nbsp; **Column:** 0.292 m × 0.292 m
+
+<img src="Dam Break/dambreak_validation.png" width="700">
+
+Validation of free-surface collapse against the Martin & Moyce (1952) dam break experiment. A square water column collapses under gravity; surge front position and column height are extracted and non-dimensionalised (τ = t√(2g/a), X = x/(2a), Z = z/H). Column height matches M&M closely throughout the collapse; surge front shows the characteristic early overprediction documented across VOF literature, attributed to the finite gate removal time in the physical experiment. Initial condition set via `setFields`.
+
+---
+
 ### [Vertical Plate Natural Convection - Rayleigh Sweep](./Vertical%20Plate%20Natural%20Convection/)
 **Solver:** `buoyantFoam` (Boussinesq, transient 2D) &nbsp;|&nbsp; **Ra:** 4.56×10⁸ · 4.09×10⁹ · 3.27×10¹⁰
 
@@ -224,6 +244,8 @@ OpenFOAM-Portfolio/
 ├── Pipe Heat Transfer/            # Nu validation: Graetz (laminar) + Dittus-Boelter (turbulent)
 ├── NACA 0012 Airfoil/             # AoA polar, mesh convergence (GCI), 3 turbulence models
 ├── Magnus Effect/                 # Rotating cylinder, spin ratio sweep, Magnus lift validation
+├── Vortex Shedding/               # Laminar cylinder shedding, St vs Williamson (1988)
+├── Dam Break/                     # interFoam VOF, surge front + column height vs Martin & Moyce (1952)
 ├── Lid-Driven Cavity/             # Re=100-10000, validated vs Ghia et al. (1982)
 ├── Potato Cooling/                # Transient CHT, natural convection, Biot number analysis
 ├── Smoking Pipe Tutorial/         # Internal flow, full pipeline walkthrough
