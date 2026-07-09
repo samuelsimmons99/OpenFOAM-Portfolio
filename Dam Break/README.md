@@ -17,7 +17,7 @@ where *a* = 0.146 m (half column width), *H* = 0.292 m (initial column height).
 | Parameter | Value |
 |-----------|-------|
 | Solver | `interFoam` (VOF, two-phase) |
-| Mesh | 240 × 120 × 1 uniform Cartesian (28,800 cells, Δx = Δy = 5 mm) |
+| Mesh | 480 × 240 × 1 uniform Cartesian (115,200 cells, Δx = Δy = 2.5 mm) |
 | Water | ρ = 1000 kg/m³, ν = 1×10⁻⁶ m²/s |
 | Air | ρ = 1 kg/m³, ν = 1.48×10⁻⁵ m²/s |
 | Surface tension | σ = 0.07 N/m |
@@ -31,7 +31,9 @@ Initial condition set with `setFields`: α_water = 1 inside the column, 0 elsewh
 
 ![Dam break validation](dambreak_validation.png)
 
-The surge front shows the characteristic CFD overprediction relative to M&M — well-documented in the literature and attributed to the finite gate removal time in the physical experiment (Koshizuka & Oka 1995; Colagrossi & Landrini 2003). Column height agrees closely throughout the collapse. Both metrics reproduce the correct non-dimensional scaling and qualitative physics of inertia-driven free-surface collapse.
+**Surge front** tracks M&M closely through τ ≈ 3, with a small lead consistent with published VOF results — commonly attributed to the finite gate removal time in the physical experiment (Koshizuka & Oka 1995; Colagrossi & Landrini 2003). The plateau at τ ≈ 4.5 is the surge reaching the right wall.
+
+**Column height** matches well at early times (τ < 1.5) but overpredicts the late-collapse phase (τ > 2). This is a known VOF limitation: the rapid thinning and detachment of the column near τ ≈ 2.5–3 requires sub-millimetre resolution to resolve the interface geometry accurately (Hu & Adams 2009). Meshes of Δ < 1 mm or particle-based methods (SPH) are typically required for full column-height agreement at τ > 2.5. The correct qualitative behaviour — monotonic column collapse, correct time scale, and volume conservation — are all reproduced.
 
 ## References
 
