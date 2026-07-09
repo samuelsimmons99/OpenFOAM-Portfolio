@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Sixteen simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Seventeen simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -102,6 +102,16 @@ Transient buoyant plume from a 1200 K campfire radiating onto a person modelled 
 <img src="Boiling Water/images/comparison_liquid_volume.png" width="700">
 
 Two comparative cases for a pot of water heated on a stove: a simplified diffusive evaporation model and a full nucleate wall-boiling model (RPI-style nucleation site density, bubble departure diameter and frequency, conjugate heat transfer through a heater plate), both built on the same `multiphaseEuler` two-fluid framework at matched heat flux so the comparison isolates model fidelity rather than solver choice. The nucleate boiling case shows the classic bubbly "level swell" (interface rising ~20% from entrained vapour) within 82 s, while the evaporation case stays essentially flat over 408 s at the same flux. Getting both cases numerically stable was the real challenge: the write-up documents the multi-round debugging path (boundary condition compatibility, turbulence field dependencies, nucleation onset softening) rather than presenting only a clean final result.
+
+---
+
+### [Film Condensation - Tool-Selection Investigation](./Film%20Condensation/)
+**Solver:** `multiphaseEuler` two-fluid &nbsp;|&nbsp; **Target:** Nusselt (1916) laminar film condensation &nbsp;|&nbsp; **Outcome:** inconclusive, documented negative finding
+
+<img src="Film Condensation/images/film_thickness_mismatch.png" width="700">
+<img src="Film Condensation/images/film_evaporation_finding.png" width="700">
+
+A follow-up to Boiling Water, attempting to validate against a second classic phase-change benchmark: laminar film condensation on a cold vertical plate versus the closed-form Nusselt correlation. Two genuinely transferable numerical findings came out of it (a mesh-resolution/timestep trade-off for thin-film cells, and a `residualAlpha` sensitivity that generalises to any two-fluid Euler-Euler case), but the core validation failed for a structural reason rather than a tuning one: `multiphaseEuler` is a dispersed droplet/bubble two-fluid solver, and at low water fraction it treats the condensate as droplets suspended in vapour rather than a continuous film adhering to the wall, so net evaporation won out over condensation everywhere the model mattered. A full search of this OpenFOAM 13 install's dedicated thin-film framework (`surfaceFilmModels`) found no phase-change submodel available either. Kept in the portfolio as a documented, evidence-based tool-selection finding rather than a forced-fit result.
 
 ---
 
@@ -260,6 +270,7 @@ OpenFOAM-Portfolio/
 ├── Parametric Heatsink Simulation/# Parametric CHT, fin sweep
 ├── Campfire Radiation/             # P1 radiation, buoyant plume, GCI mesh convergence
 ├── Boiling Water/                 # multiphaseEuler: evaporation vs nucleate wall boiling
+├── Film Condensation/             # Nusselt film condensation attempt, tool-selection finding
 ├── Pipe Flow Validation/          # Moody chart, laminar + turbulent, periodic domain
 ├── Pipe Heat Transfer/            # Nu validation: Graetz (laminar) + Dittus-Boelter (turbulent)
 ├── NACA 0012 Airfoil/             # AoA polar, mesh convergence (GCI), 3 turbulence models
