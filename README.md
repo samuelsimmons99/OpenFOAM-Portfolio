@@ -195,21 +195,21 @@ Validation of laminar vortex shedding frequency across the full laminar shedding
 
 ---
 
-### [Backward-Facing Step — Reattachment Length Validation](./Backward%20Facing%20Step/)
+### [Backward-Facing Step: Reattachment Length Validation](./Backward%20Facing%20Step/)
 **Solver:** `simpleFoam` (SIMPLE, laminar) &nbsp;|&nbsp; **Mesh:** 3-block blockMesh, 17,000 cells (Δx=1mm) &nbsp;|&nbsp; **Re sweep:** 50 · 100 · 150 · 200 · 300
 
 <img src="Backward Facing Step/bfs_validation.png" width="700">
 
-Validation of laminar reattachment length against Armaly et al. (1983) across the steady laminar regime (Re_h = 50–300). The 2D simulation with ER=2 and uniform inlet systematically overpredicts the experimental data by ~1.5×, consistent with three well-understood differences: higher expansion ratio (ER=2 vs 1.94), uniform vs parabolic inlet profile, and 2D vs 3D geometry. The corrected slope d(x_r/h)/d(Re) ≈ 0.026 from the simulation matches published 2D numerical predictions for this configuration. SIMPLE residuals plateau at Re ≥ 400, confirming the onset of oscillatory flow — consistent with published critical Re for ER=2 BFS unsteadiness.
+Validation of laminar reattachment length against Armaly et al. (1983) across the steady laminar regime (Re_h = 50–300). The 2D simulation with ER=2 and uniform inlet systematically overpredicts the experimental data by ~1.5×, consistent with three well-understood differences: higher expansion ratio (ER=2 vs 1.94), uniform vs parabolic inlet profile, and 2D vs 3D geometry. The corrected slope d(x_r/h)/d(Re) ≈ 0.026 from the simulation matches published 2D numerical predictions for this configuration. SIMPLE residuals plateau at Re ≥ 400, confirming the onset of oscillatory flow, consistent with published critical Re for ER=2 BFS unsteadiness.
 
 ---
 
-### [Differentially-Heated Cavity — Natural Convection Validation](./Heated%20Cavity/)
+### [Differentially-Heated Cavity: Natural Convection Validation](./Heated%20Cavity/)
 **Solver:** `buoyantBoussinesqSimpleFoam` (Boussinesq) &nbsp;|&nbsp; **Mesh:** 50×50 (Ra≤10⁵), 100×100 (Ra=10⁶) &nbsp;|&nbsp; **Ra sweep:** 10³ · 10⁴ · 10⁵ · 10⁶
 
 <img src="Heated Cavity/cavity_validation.png" width="700">
 
-Four-case Rayleigh sweep for natural convection in a differentially-heated square cavity (Pr=0.71 air), validated against the spectral benchmark of de Vahl Davis (1983) — the most widely cited reference for this configuration. Average Nusselt number on the hot wall matches the benchmark within **0.04–1.4%** across all four Ra values. Results span the transition from conduction-dominated transport (Ra=10³, Nu≈1.12) through the convection-dominated thin-boundary-layer regime (Ra=10⁶, Nu≈8.92).
+Four-case Rayleigh sweep for natural convection in a differentially-heated square cavity (Pr=0.71 air), validated against the spectral benchmark of de Vahl Davis (1983), the most widely cited reference for this configuration. Average Nusselt number on the hot wall matches the benchmark within **0.04–1.4%** across all four Ra values. Results span the transition from conduction-dominated transport (Ra=10³, Nu≈1.12) through the convection-dominated thin-boundary-layer regime (Ra=10⁶, Nu≈8.92).
 
 ---
 

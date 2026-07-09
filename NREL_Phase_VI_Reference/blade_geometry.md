@@ -1,4 +1,4 @@
-# NREL Phase VI — Blade Geometry & Reference Data
+# NREL Phase VI: Blade Geometry & Reference Data
 
 Source: Giguère & Selig, NREL/SR-500-26173, April 1999
 "Design of a Tapered and Twisted Blade for the NREL Combined Experiment Rotor"
@@ -92,7 +92,7 @@ Rotor speed: 72 rpm (tip speed ratio λ = ω R / V∞)
 
 ---
 
-## BEM performance predictions (Appendix B — 3-bladed, 72 rpm, 5° pitch)
+## BEM performance predictions (Appendix B: 3-bladed, 72 rpm, 5° pitch)
 
 These are BEM model predictions from SR-500-26173, NOT experimental measurements.
 For CFD validation against experiment, use data from **NREL/TP-500-29494** (Hand et al. 2001).
@@ -116,7 +116,7 @@ For CFD validation against experiment, use data from **NREL/TP-500-29494** (Hand
 
 ---
 
-## Power coefficient vs tip-speed ratio (Appendix B — 5° pitch, baseline R = 5.03 m)
+## Power coefficient vs tip-speed ratio (Appendix B: 5° pitch, baseline R = 5.03 m)
 
 Peak Cp ≈ 0.483 at λ ≈ 5.29
 
@@ -166,7 +166,7 @@ Designed by Somers (NREL/SR-440-6918).
 - Coordinates: Somers 1997, also available from UIUC Airfoil Database
 
 Key 2D aerodynamic behaviour:
-- Stall at α ≈ 14° (clean, Re = 1×10⁶) — earlier than NACA 4-digit equivalents
+- Stall at α ≈ 14° (clean, Re = 1×10⁶), earlier than NACA 4-digit equivalents
 - Gentle stall characteristic (designed for stall-regulated turbines)
 - Max Cl/Cd in attached regime at α ≈ 8°
 

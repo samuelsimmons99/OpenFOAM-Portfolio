@@ -1,4 +1,4 @@
-# Differentially-Heated Square Cavity — Natural Convection Validation
+# Differentially-Heated Square Cavity: Natural Convection Validation
 
 Validation of the OpenFOAM Boussinesq natural convection solver against the spectral benchmark of de Vahl Davis (1983), considered the gold standard for this configuration.
 

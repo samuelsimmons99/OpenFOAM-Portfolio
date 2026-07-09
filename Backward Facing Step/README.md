@@ -1,4 +1,4 @@
-# Backward-Facing Step — Reattachment Length Validation
+# Backward-Facing Step: Reattachment Length Validation
 
 Validation of laminar reattachment length vs Reynolds number against the Armaly et al. (1983) experimental benchmark.
 
@@ -31,17 +31,17 @@ Reattachment length extracted from the wall-adjacent velocity (y = 0.25 mm) samp
 |------|-------------|----------------------|-------|
 | 50   | 2.80        | 1.90  (Re=73, exp)  | 1.47× |
 | 100  | 4.79        | 2.53  (Re=100, exp) | 1.89× |
-| 150  | 6.38        | 5.07  (Re≈229, exp) | —     |
+| 150  | 6.38        | 5.07  (Re≈229, exp) | N/A   |
 | 200  | 7.62        | 5.07  (Re=229, exp) | 1.50× |
 | 300  | 9.21        | 6.40  (Re=304, exp) | 1.44× |
 
 **Systematic offset**: 2D CFD with ER=2 and uniform inlet consistently overpredicts the Armaly experiment. Three well-understood sources account for this:
 
-1. **Expansion ratio** — ER=2 vs. ER≈1.94 increases x_r (higher expansion drives stronger recirculation).
-2. **Inlet profile** — Uniform inlet vs. parabolic/developed inlet: at the step lip the full freestream momentum acts on the shear layer, intensifying the separated zone.
-3. **Dimensionality** — Armaly's experiment has a finite-width 3D channel; transverse flow (Taylor–Görtler vortices and end-wall boundary layers) shortens the 2D reattachment length.
+1. **Expansion ratio:** ER=2 vs. ER≈1.94 increases x_r (higher expansion drives stronger recirculation).
+2. **Inlet profile:** Uniform inlet vs. parabolic/developed inlet: at the step lip the full freestream momentum acts on the shear layer, intensifying the separated zone.
+3. **Dimensionality:** Armaly's experiment has a finite-width 3D channel; transverse flow (Taylor–Görtler vortices and end-wall boundary layers) shortens the 2D reattachment length.
 
-The **slope** d(x_r/h)/d(Re) ≈ 0.026 from our simulation is consistent with published 2D uniform-inlet predictions at comparable Re (Barton 1997). Armaly's experimental slope is ≈ 0.018, lower by ≈1.4× — matching the ratio above at moderate Re.
+The **slope** d(x_r/h)/d(Re) ≈ 0.026 from our simulation is consistent with published 2D uniform-inlet predictions at comparable Re (Barton 1997). Armaly's experimental slope is ≈ 0.018, lower by ≈1.4×, matching the ratio above at moderate Re.
 
 **Unsteady onset**: At Re_h ≥ 400, the SIMPLE residuals plateau rather than converge, indicating the flow has entered the oscillatory regime. This is physically consistent: the critical Re for onset of 2D BFS unsteadiness is reported in the range Re ≈ 350–500 for ER=2 (Fernandez-Feria & Sanmiguel-Rojas 2021). A transient solver (`pimpleFoam`) and time-averaging would be required for Re ≥ 400.
 

@@ -1,4 +1,4 @@
-# Vortex Shedding — Strouhal Number Validation
+# Vortex Shedding: Strouhal Number Validation
 
 Validation of laminar vortex shedding frequency against the Williamson (1988) correlation at Re = 100.
 
@@ -23,7 +23,7 @@ St = 0.2663 − 1.0166 / √Re → **St ≈ 0.165 at Re = 100**
 | End time | 80 s (~13 shedding periods) |
 | Time stepping | Adaptive, max Co = 0.5 |
 | Turbulence | Laminar |
-| IC | Uniform (1, 0.001, 0) m/s — 0.1% cross-flow perturbation to trigger shedding |
+| IC | Uniform (1, 0.001, 0) m/s; 0.1% cross-flow perturbation to trigger shedding |
 
 Frequency extracted via FFT of the lift coefficient C_L(t), using only t > 100 s to exclude transient startup. A 10% cross-flow perturbation (U_y = 0.1 m/s) is applied in the initial condition to trigger shedding within ~80 convective time units.
 
