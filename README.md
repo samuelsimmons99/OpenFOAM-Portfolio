@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Nineteen simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, RANS turbulence model comparison, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Twenty-one simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, RANS turbulence model comparison, transient flow physics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -13,10 +13,10 @@ Nineteen simulation projects spanning compressible aerothermodynamics, conjugate
 |--------|----------------------|
 | **Compressible flow** | Density-based explicit (rhoCentralFoam), supersonic nozzle, Mach 3+ expansion fan, shock structure |
 | **Reacting flow** | rhoReactingFoam, JANAF thermodynamics, single-step Arrhenius, species transport (C₁₂H₂₆ / O₂ / CO₂ / H₂O) |
-| **Conjugate heat transfer** | chtMultiRegionSimpleFoam, chtMultiRegionFoam, foamMultiRun, solid-fluid coupling, CPU junction temperature, transient natural convection CHT |
+| **Conjugate heat transfer** | chtMultiRegionSimpleFoam (3-region HX, counter-flow coupling), chtMultiRegionFoam, foamMultiRun, solid-fluid coupling, CPU junction temperature, NTU-effectiveness validation |
 | **Radiation** | P1 radiation model via fvModels, participating medium, GCI mesh convergence, radiant heat load prediction |
 | **Multiphase / phase change** | multiphaseEuler two-fluid solver, interfacial evaporation, nucleate wall boiling (RPI model), conjugate heat transfer with phase change |
-| **Natural convection** | buoyantFoam, Boussinesq approximation, validated against Churchill-Chu correlation |
+| **Natural convection** | buoyantFoam, Boussinesq (steady + transient), startup transient vs Christon et al. (2002), Churchill-Chu correlation |
 | **External aerodynamics** | pimpleFoam, Re sweep (3 → 8×10⁵), kOmegaSST, Cd/Cl time-averaged |
 | **Rotating-body aerodynamics** | Magnus effect, rotatingWallVelocity BC, spin ratio sweep, laminar + turbulent validation |
 | **Aerofoil aerodynamics** | simpleFoam RANS, AoA polar, mesh convergence (GCI), k-ω SST / SA / Realizable k-ε comparison |
@@ -270,11 +270,21 @@ Full workflow demonstration on a smoking pipe geometry: STL import → snappyHex
 
 ---
 
-## What's next
+### [Counter-Flow Parallel-Plate Heat Exchanger](./Counter%20Flow%20HX/)
+**Solver:** `chtMultiRegionSimpleFoam` &nbsp;|&nbsp; **Regions:** 3 (hot water / aluminium wall / cold water) &nbsp;|&nbsp; **Re:** 20 · laminar counter-flow
 
-| Gap | Why it matters |
-|-----|---------------|
-| CHT with radiation coupling | Combine conduction, convection, and radiation in one domain - directly applicable to high-temperature electronics and spacecraft thermal control |
+<img src="Counter Flow HX/hx_validation.png" width="700">
+
+Three-region CHT simulation of a laminar counter-flow heat exchanger, validating against the NTU-effectiveness method (Shah & Sekulic 2003). Hot water (340 K) and cold water (300 K) exchange heat across a 0.2 mm aluminium wall; the coupled `turbulentTemperatureCoupledBaffleMixed` BC enforces flux continuity across the fluid-solid interfaces. CFD effectiveness ε = 67.2% matches the NTU analytical prediction of 65.9% to within **+1.9%** — the small overprediction is physically consistent with entrance effects at Gz = 2.8, where Nu temporarily exceeds the fully-developed value captured by the NTU formula. Energy balance is confirmed: both fluid streams show equal and opposite temperature shifts (±26.9 K).
+
+---
+
+### [Transient Natural Convection Startup](./Transient%20Cavity/)
+**Solver:** `buoyantBoussinesqPimpleFoam` (transient) &nbsp;|&nbsp; **Ra:** 10⁵ &nbsp;|&nbsp; **Mesh:** 100×100 &nbsp;|&nbsp; **Reference:** Christon, Gresho & Sutton (2002)
+
+<img src="Transient Cavity/transient_cavity.png" width="700">
+
+Transient simulation of natural convection startup in a differentially-heated square cavity from rest (U = 0, T = T_ref). At Ra = 10⁵ the flow is steady, providing a clean time-history comparison against the Christon et al. (2002) benchmark. The simulation captures the initial boundary-layer-driven Nu spike as temperature gradients build at the walls, followed by the establishment of the bulk convection cell and convergence to the de Vahl Davis (1983) steady-state Nu = 4.519. Demonstrates first-order Euler time integration with adjustable time-stepping (maxCo = 0.8) via the PIMPLE algorithm.
 
 ---
 
