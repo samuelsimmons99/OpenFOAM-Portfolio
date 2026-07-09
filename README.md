@@ -22,7 +22,7 @@ Fourteen simulation projects spanning compressible aerothermodynamics, conjugate
 | **Aerofoil aerodynamics** | simpleFoam RANS, AoA polar, mesh convergence (GCI), k-ω SST / SA / Realizable k-ε comparison |
 | **Incompressible benchmarks** | icoFoam, lid-driven cavity Re=100-10000, validated vs Ghia et al. (1982) |
 | **Free-surface flow** | interFoam VOF, dam break collapse, validated vs Martin & Moyce (1952) |
-| **Vortex shedding** | pimpleFoam transient, von Kármán street, Strouhal number vs Williamson (1988) |
+| **Vortex shedding** | pimpleFoam transient, von Kármán street, Re=50–180 sweep, St vs Williamson (1988) |
 | **Turbulence modelling** | k-ε, k-ω SST, Spalart-Allmaras, Realizable k-ε, laminar - applied and compared across cases |
 | **Mesh generation** | blockMesh, snappyHexMesh, parametric Python meshing, axisymmetric wedge, multi-region |
 | **Parallel & HPC** | OpenMPI, up to 16 cores, decomposePar, serial/parallel cross-verification |
@@ -185,11 +185,11 @@ Classic incompressible benchmark: a square cavity driven by a sliding lid, acros
 ---
 
 ### [Vortex Shedding - Strouhal Number Validation](./Vortex%20Shedding/)
-**Solver:** `pimpleFoam` (transient laminar) &nbsp;|&nbsp; **Mesh:** 4-block O-mesh (blockMesh), 12,000 cells &nbsp;|&nbsp; **Re:** 100
+**Solver:** `pimpleFoam` (transient laminar) &nbsp;|&nbsp; **Mesh:** 4-block O-mesh (blockMesh), 12,000 cells &nbsp;|&nbsp; **Re sweep:** 50 · 60 · 80 · 100 · 120 · 150 · 180
 
 <img src="Vortex Shedding/strouhal_validation.png" width="700">
 
-Validation of laminar vortex shedding frequency against the Williamson (1988) Strouhal–Reynolds correlation. Flow past a circular cylinder at Re = 100 produces a periodic von Kármán vortex street; shedding frequency extracted via FFT of the lift coefficient time history. A small cross-flow perturbation (0.1% of U∞) is applied to the initial condition to trigger symmetry breaking. St = fD/U∞ compared against the Williamson correlation St = 0.2663 − 1.0166/√Re, giving St ≈ 0.165 at Re = 100.
+Validation of laminar vortex shedding frequency across the full laminar shedding regime against the Williamson (1988) Strouhal–Reynolds correlation. Seven cases span Re = 50–180 (near onset through fully established shedding); shedding frequency extracted via FFT of the C_L time history for each. All seven CFD points fall within ±6.2% of the Williamson correlation St = 0.2663 − 1.0166/√Re, with a consistent slight underprediction from numerical dissipation on the coarse O-mesh. Cl amplitude at Re = 100 is ±0.32, matching DNS literature.
 
 ---
 

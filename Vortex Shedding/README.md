@@ -25,13 +25,25 @@ St = 0.2663 − 1.0166 / √Re → **St ≈ 0.165 at Re = 100**
 | Turbulence | Laminar |
 | IC | Uniform (1, 0.001, 0) m/s — 0.1% cross-flow perturbation to trigger shedding |
 
-Frequency extracted via FFT of the lift coefficient C_L(t), using only t > 36 s (latter 55% of run) to exclude transient startup.
+Frequency extracted via FFT of the lift coefficient C_L(t), using only t > 100 s to exclude transient startup. A 10% cross-flow perturbation (U_y = 0.1 m/s) is applied in the initial condition to trigger shedding within ~80 convective time units.
+
+A full **Re sweep** (Re = 50, 60, 80, 100, 120, 150, 180) was run using identical mesh and solver settings, varying only ν.
 
 ## Results
 
 ![Strouhal validation](strouhal_validation.png)
 
-The simulation reproduces the Williamson (1988) Strouhal number to within measurement uncertainty, confirming that the O-mesh topology and PIMPLE time integration correctly capture laminar cylinder shedding physics.
+| Re | St (CFD) | St (Williamson) | Error |
+|----|----------|-----------------|-------|
+| 50 | 0.1200 | 0.1225 | −2.1% |
+| 60 | 0.1267 | 0.1351 | −6.2% |
+| 80 | 0.1467 | 0.1526 | −3.9% |
+| 100 | 0.1600 | 0.1646 | −2.8% |
+| 120 | 0.1667 | 0.1735 | −3.9% |
+| 150 | 0.1733 | 0.1833 | −5.4% |
+| 180 | 0.1867 | 0.1905 | −2.0% |
+
+All seven points lie within ±6.2% of the Williamson correlation, with a consistent slight underprediction attributable to numerical dissipation on the 12k-cell mesh (coarser radial resolution damps the vortex convection speed slightly). The correct monotonic St-Re trend is reproduced across the full laminar shedding regime.
 
 ## References
 
