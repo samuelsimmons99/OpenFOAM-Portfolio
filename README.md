@@ -1,7 +1,7 @@
 # OpenFOAM CFD Portfolio
 **Samuel Simmons · Thermal Engineer**
 
-Twenty-one simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, RANS turbulence model comparison, transient flow physics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
+Twenty-nine simulation projects spanning compressible aerothermodynamics, conjugate heat transfer, reacting flow, radiation, natural convection, multiphase flow, free-surface flow, external aerodynamics, rotating-body aerodynamics, LES/RANS turbulence modelling, transient flow physics, and incompressible benchmark flows: each taken from geometry through mesh, solver setup, and quantitative validation or parametric study.
 
 [LinkedIn](https://www.linkedin.com/in/samuelsimmons99) · [GitHub](https://github.com/samuelsimmons99)
 
@@ -20,6 +20,9 @@ Twenty-one simulation projects spanning compressible aerothermodynamics, conjuga
 | **External aerodynamics** | pimpleFoam, Re sweep (3 → 8×10⁵), kOmegaSST, Cd/Cl time-averaged |
 | **Rotating-body aerodynamics** | Magnus effect, rotatingWallVelocity BC, spin ratio sweep, laminar + turbulent validation |
 | **Aerofoil aerodynamics** | simpleFoam RANS, AoA polar, mesh convergence (GCI), k-ω SST / SA / Realizable k-ε comparison |
+| **LES turbulence** | pimpleFoam + WALE SGS, turbulent channel flow Re_τ=395, validated vs Moser et al. (1999) DNS; Reynolds stress profiles |
+| **3D external aerodynamics** | Ahmed body bluff-body benchmark, snappyHexMesh on STL, kOmegaSST RANS, drag validated vs Ahmed et al. (1984) |
+| **Forced convection** | Flat plate Nu_x vs Pohlhausen (1921) similarity; slot jet Nu(x/B) vs Martin (1977), stagnation overprediction documented |
 | **Incompressible benchmarks** | icoFoam, lid-driven cavity Re=100-10000, validated vs Ghia et al. (1982) |
 | **Free-surface flow** | interFoam VOF, dam break collapse, validated vs Martin & Moyce (1952) |
 | **Vortex shedding** | pimpleFoam transient, von Kármán street, Re=50–180 sweep, St vs Williamson (1988) |
@@ -130,6 +133,13 @@ The transition zone (Re 2 300-4 000) is intentionally omitted: steady RANS canno
 
 ---
 
+### [Laminar Flat Plate Forced Convection](./Flat%20Plate%20Convection/)
+**Solver:** `buoyantSimpleFoam` (laminar) &nbsp;|&nbsp; **Mesh:** 260×50 blockMesh, graded wall-normal &nbsp;|&nbsp; **Re_L:** 9.6×10⁴
+
+Local Nusselt number distribution Nu_x along an isothermal flat plate (T_w = 350 K, U∞ = 3 m/s) compared against the Pohlhausen (1921) similarity solution Nu_x = 0.332 Re_x^½ Pr^(1/3). Captures the Re_x^½ scaling law across the plate length; peak Nu at the leading edge drops to the fully-developed boundary-layer value downstream. Demonstrates laminar thermal boundary-layer resolution with 35 cells across δ_T at mid-plate and a wall-normal grading ratio of 30:1.
+
+---
+
 ### [Pipe Heat Transfer - Forced Convection Nu Validation](./Pipe%20Heat%20Transfer/)
 **Solver:** `buoyantSimpleFoam` &nbsp;|&nbsp; **Mesh:** axisymmetric wedge, D = 50 mm, L = 2.5 m (50D), wall-refined &nbsp;|&nbsp; **Re:** 500 · 1000 · 2000 · 5000 · 10000 · 20000 · 50000
 
@@ -141,6 +151,15 @@ Forced-convection heat transfer in a circular pipe from laminar through turbulen
 - **k-ω SST (Re 5000-50000)** - compared against Dittus-Boelter: Nu = 0.023 Re⁰·⁸ Pr⁰·⁴
 
 Demonstrates the solver's ability to reproduce both the exact laminar Nusselt limit and the turbulent convection enhancement (Nu increases ~13× from laminar to Re = 50 000).
+
+---
+
+### [Turbulent Slot Jet Impingement Heat Transfer](./Impinging%20Jet/)
+**Solver:** `buoyantSimpleFoam` &nbsp;|&nbsp; **Turbulence:** k-ω SST &nbsp;|&nbsp; **Re_B:** 20,000 &nbsp;|&nbsp; **Reference:** Martin (1977)
+
+<img src="Impinging Jet/Nu_validation.png" width="700">
+
+2D planar slot jet (B = 10 mm, H/B = 6) impinging on an isothermal wall (350 K), validated against the Martin (1977) empirical correlation for local Nu(x/B). The stagnation-point Nu is overpredicted by **+40%** — a well-documented kOmegaSST artefact: the Kato-Launder (1993) stagnation anomaly causes excessive turbulence production at the impingement point where S ≈ Ω, driving anomalously high eddy viscosity and heat transfer. Away from stagnation (x/B > 2) the correlation is recovered to within ±8%. Documents a known turbulence model limitation quantitatively rather than masking it.
 
 ---
 
@@ -232,6 +251,30 @@ Three RANS turbulence models compared on the same ER=2, Re_h = 5100 BFS geometry
 
 ---
 
+### [High Rayleigh Number Cavity: Steady Solver Limitations](./High%20Ra%20Cavity/)
+**Solver:** `buoyantBoussinesqSimpleFoam` &nbsp;|&nbsp; **Ra:** 10⁷ · 10⁸ &nbsp;|&nbsp; **Mesh:** 100×100 &nbsp;|&nbsp; **Outcome:** documented convergence failure
+
+<img src="High Ra Cavity/Ra_1e7_T_contour.png" width="700">
+<img src="High Ra Cavity/Ra_1e8_T_contour.png" width="700">
+
+Extension of the Heated Cavity validation study to Ra = 10⁷ and 10⁸. Both cases were run for 20,000 SIMPLE iterations with relaxed factors; temperature residuals oscillated at 0.10–0.20 throughout. Root cause: above Ra ≈ 2–3×10⁶ the cavity flow undergoes a Hopf bifurcation to time-periodic behaviour (Paolucci & Chenoweth 1989) — the flow is *inherently unsteady* and a steady solver is solving the wrong problem, regardless of relaxation or iteration count. Berkovsky-Efimov expected Nu: 16.5 (Ra=10⁷), 29.1 (Ra=10⁸). Instantaneous field snapshots are presented as flow-structure visualisations only. A correct result at Ra ≥ 10⁷ requires a transient solver (buoyantBoussinesqPimpleFoam).
+
+---
+
+### [LES Turbulent Channel Flow - Moser et al. (1999) DNS Validation](./LES%20Turbulent%20Channel%20Flow/)
+**Solver:** `pimpleFoam` + WALE SGS &nbsp;|&nbsp; **Mesh:** 64×96×64 = 393k cells, cyclic x/z &nbsp;|&nbsp; **Re_τ:** 395
+
+Wall-resolved Large Eddy Simulation of turbulent channel flow at Re_τ = 395, validated against the Moser, Kim & Mansour (1999) DNS database. Domain: 2πδ × 2δ × πδ (δ = 1 m half-channel). Flow driven by `meanVelocityForce` targeting Ū_b = 18.2 m/s; wall-normal grading gives Δy⁺_wall ≈ 0.6 (no wall model needed). WALE SGS model correctly reproduces the y³ near-wall scaling of subgrid stress without van Driest damping. Statistics collected over 50+ flow-through times; mean velocity profile and Reynolds stresses compared directly to DNS. Demonstrates the cost/fidelity tradeoff: LES captures turbulent streaks, anisotropic Reynolds stresses, and correct log-law slope — all inaccessible to steady RANS at the same geometry.
+
+---
+
+### [Ahmed Body - 3D External Aerodynamics Validation](./Ahmed%20Body/)
+**Solver:** `simpleFoam` + k-ω SST &nbsp;|&nbsp; **Mesh:** snappyHexMesh, ~730k cells, 4 prism layers &nbsp;|&nbsp; **Re_L:** 2.78×10⁶
+
+The canonical 3D bluff-body benchmark (Ahmed, Ramm & Faltin 1984), 25° slant angle. STL geometry generated programmatically from standard dimensions; snappyHexMesh with wake and near-body refinement boxes. Drag coefficient Cd compared against Ahmed (1984) experiment (Cd = 0.285) and published LES/RANS literature. Wake structure, C-pillar vortex pair, and pressure distribution on the slant documented. Represents the first fully 3D external-aerodynamics case in the portfolio, demonstrating snappyHexMesh workflow on a complex non-trivial geometry with ground proximity effects.
+
+---
+
 ### [Differentially-Heated Cavity: Natural Convection Validation](./Heated%20Cavity/)
 **Solver:** `buoyantBoussinesqSimpleFoam` (Boussinesq) &nbsp;|&nbsp; **Mesh:** 50×50 (Ra≤10⁵), 100×100 (Ra=10⁶) &nbsp;|&nbsp; **Ra sweep:** 10³ · 10⁴ · 10⁵ · 10⁶
 
@@ -292,26 +335,36 @@ Transient simulation of natural convection startup in a differentially-heated sq
 
 ```
 OpenFOAM-Portfolio/
-├── 2U Server Simulation/          # CHT, turbulent forced convection, parallel
-├── Cylinder Flow/                 # Re sweep, external aero, drag/lift
-├── Nozzle Simulation/             # Compressible + reacting, 3 cases
-├── Parametric Heatsink Simulation/# Parametric CHT, fin sweep
-├── Campfire Radiation/             # P1 radiation, buoyant plume, GCI mesh convergence
-├── Boiling Water/                 # multiphaseEuler: evaporation vs nucleate wall boiling
-├── Film Condensation/             # Nusselt film condensation attempt, tool-selection finding
-├── Pipe Flow Validation/          # Moody chart, laminar + turbulent, periodic domain
-├── Pipe Heat Transfer/            # Nu validation: Graetz (laminar) + Dittus-Boelter (turbulent)
-├── NACA 0012 Airfoil/             # AoA polar, mesh convergence (GCI), 3 turbulence models
-├── Magnus Effect/                 # Rotating cylinder, spin ratio sweep, Magnus lift validation
-├── Vortex Shedding/               # Laminar cylinder shedding, St vs Williamson (1988)
-├── Dam Break/                     # interFoam VOF, surge front + column height vs Martin & Moyce (1952)
-├── Backward Facing Step/          # BFS reattachment length vs Re, Armaly et al. (1983)
-├── Heated Cavity/                 # Ra=1e3-1e6 sweep, Nu vs de Vahl Davis (1983)
-├── Lid-Driven Cavity/             # Re=100-10000, validated vs Ghia et al. (1982)
-├── Potato Cooling/                # Transient CHT, natural convection, Biot number analysis
-├── Smoking Pipe Tutorial/         # Internal flow, full pipeline walkthrough
-├── Vertical Plate Natural Convection/ # Ra sweep, Nu validation
-└── README.md                      # This file
+├── 2U Server Simulation/              # CHT, 4-region, turbulent forced convection, 16-core parallel
+├── Ahmed Body/                        # 3D bluff-body, snappyHexMesh STL, Cd vs Ahmed (1984)
+├── Backward Facing Step/              # Laminar BFS, reattachment vs Re, Armaly (1983)
+├── Boiling Water/                     # multiphaseEuler: evaporation vs nucleate wall boiling
+├── Campfire Radiation/                # P1 radiation, buoyant plume, 3-level GCI study
+├── Counter Flow HX/                   # 3-region CHT, ε=67.2% vs NTU 65.9%
+├── Cylinder Flow/                     # Re=3–5e6 sweep, external aero, Cd/Cl
+├── Dam Break/                         # interFoam VOF vs Martin & Moyce (1952)
+├── Film Condensation/                 # Nusselt (1916) attempt, tool-selection finding
+├── Flat Plate Convection/             # Nu_x vs Pohlhausen (1921) similarity solution
+├── Heated Cavity/                     # Ra=1e3–1e6, Nu <1.4% of de Vahl Davis (1983)
+├── High Ra Cavity/                    # Ra=1e7–1e8, documented steady-solver failure (Hopf bifurcation)
+├── Impinging Jet/                     # Slot jet Nu vs Martin (1977), stagnation anomaly documented
+├── LES Turbulent Channel Flow/        # WALE SGS, Re_τ=395, u⁺/Reynolds stresses vs Moser (1999) DNS
+├── Lid-Driven Cavity/                 # Re=100–10000, validated vs Ghia et al. (1982)
+├── Magnus Effect/                     # Rotating cylinder, spin ratio sweep vs Mittal & Kumar (2003)
+├── Mesh Convergence GCI/              # 4-mesh GCI study, p=1.95, GCI_fine=0.42%
+├── NACA 0012 Airfoil/                 # AoA polar, 3-mesh GCI, 3 RANS models vs Abbott (1959)
+├── NREL_Phase_VI_Reference/           # MRF wind turbine, 3 models × 7 speeds vs Hand (2001)
+├── Nozzle Simulation/                 # rhoCentralFoam + rhoReactingFoam, Mach 3.2 nozzle
+├── Parametric Heatsink Simulation/    # foamMultiRun CHT, Python-parametric blockMesh, fin sweep
+├── Pipe Flow Validation/              # Moody chart, laminar+turbulent, periodic domain
+├── Pipe Heat Transfer/                # Graetz (laminar) + Dittus-Boelter (turbulent) Nu
+├── Potato Cooling/                    # Transient CHT, natural convection sphere, Bi=0.53
+├── Smoking Pipe Tutorial/             # Internal flow, snappyHexMesh STL, full pipeline walkthrough
+├── Transient Cavity/                  # Startup transient Ra=1e5 vs Christon (2002), PIMPLE
+├── Turbulent BFS/                     # Re_h=5100, k-ε/kOmegaSST/SA vs Le et al. (1997) DNS
+├── Vertical Plate Natural Convection/ # Ra=4.56e8–3.27e10, Nu vs Churchill-Chu (1975)
+├── Vortex Shedding/                   # Re=50–180, St vs Williamson (1988)
+└── README.md                          # This file
 ```
 
 **Software stack:** OpenFOAM v2012 / OF13 · Python 3 / matplotlib · ParaView · Ansys SpaceClaim · OpenMPI · Ubuntu WSL2
