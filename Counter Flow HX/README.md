@@ -2,6 +2,76 @@
 
 Conjugate heat transfer simulation of a laminar counter-flow heat exchanger using `chtMultiRegionSimpleFoam`, with the three-region domain (hot fluid / aluminium wall / cold fluid) coupled through the turbulent-temperature-coupled baffle mixed boundary condition.
 
+## Geometry
+
+```
+    hot fluid inlet (T=340K, U=0.01 m/s) →─────────────────────────────→ hot outlet
+    ══════════════════════════════════════════════════════════════════════════════════
+    ──────────────────── aluminium wall (t = 0.2 mm, k = 200 W/(m·K)) ────────────
+    ══════════════════════════════════════════════════════════════════════════════════
+←─────────────────────────── cold outlet ←──────── cold fluid inlet (T=300K, U=0.01 m/s)
+
+    L = 100 mm,  H_channel = 1 mm each,  counter-flow (fluids moving in opposite directions)
+```
+
+| Dimension | Value |
+|-----------|-------|
+| Channel length L | 100 mm |
+| Channel height H | 1 mm (each channel) |
+| Wall thickness t | 0.2 mm |
+| Depth (2D) | 1 cell, empty |
+| Configuration | Three-region: hotFluid / wallSolid / coldFluid |
+
+## Mesh
+
+![Overview mesh](mesh.png)
+*Three-region mesh: hot fluid (top), aluminium wall (middle), cold fluid (bottom). All regions share conformal interfaces.*
+
+![Hot fluid mesh](hotFluid_mesh.png)
+
+| Property | Value |
+|----------|-------|
+| Hot fluid cells | uniform |
+| Cold fluid cells | uniform |
+| Wall solid cells | thin layer |
+| Interface type | `compressible::turbulentTemperatureCoupledBaffleMixed` |
+
+## Boundary Conditions
+
+### Hot fluid
+
+| Patch | U | T | p_rgh |
+|-------|---|---|-------|
+| `inlet` | fixedValue **(0.01, 0, 0) m/s** | fixedValue **340 K** | fixedFluxPressure |
+| `outlet` | zeroGradient | inletOutlet | fixedValue 0 |
+| `hot_wall_interface` | noSlip | coupled BC | fixedFluxPressure |
+
+### Cold fluid (counter-flow: flows in −x direction)
+
+| Patch | U | T | p_rgh |
+|-------|---|---|-------|
+| `inlet` | fixedValue **(−0.01, 0, 0) m/s** | fixedValue **300 K** | fixedFluxPressure |
+| `outlet` | zeroGradient | inletOutlet | fixedValue 0 |
+| `cold_wall_interface` | noSlip | coupled BC | fixedFluxPressure |
+
+### Wall solid
+
+| Patch | T |
+|-------|---|
+| `hot_wall_interface` | `turbulentTemperatureCoupledBaffleMixed` (coupled to hot fluid) |
+| `cold_wall_interface` | `turbulentTemperatureCoupledBaffleMixed` (coupled to cold fluid) |
+
+## Contour Plots
+
+![Hot fluid temperature](hotFluid_T_contour.png)
+*Hot fluid temperature field. The fluid cools from 340 K (left inlet) to ~313 K (right outlet) over 100 mm.*
+
+![Cold fluid temperature](coldFluid_T_contour.png)
+*Cold fluid temperature field flowing right-to-left, warming from 300 K (right inlet) to ~327 K (left outlet).*
+
+![Wall temperature](wallSolid_T_contour.png)
+*Aluminium wall temperature showing smooth gradient from ~327 K (right, near cold inlet) to ~314 K (left, near hot inlet).*
+
 ## Motivation
 
 Heat exchanger effectiveness prediction is one of the most common deliverables in thermal engineering. The analytical NTU-effectiveness method (Shah & Sekulic 2003) gives exact results for idealised conditions (uniform properties, fully-developed flow, no axial conduction). CFD resolves the actual temperature and velocity fields including entrance effects and axial wall conduction, enabling direct comparison against the analytical benchmark.

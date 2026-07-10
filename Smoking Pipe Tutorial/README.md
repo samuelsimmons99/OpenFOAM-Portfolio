@@ -8,6 +8,25 @@ Three progressively complex CFD simulations of airflow through a smoking pipe ge
 
 ---
 
+## Geometry
+
+```
+            Inlet (bowl)
+           ╭──────╮
+          /  bowl  \  ← tobacco burns here
+         │          │
+          ╲        ╱
+           ╰──┬───╯
+              │  stem (angled)
+              │
+              ╰──────────────→ Outlet (mouthpiece)
+    
+    Complex internal geometry imported from STL (SpaceClaim → Salome → snappyHexMesh)
+    807,523 cells  |  92% hexahedra  |  max non-orthogonality 53.4°
+```
+
+Fluid domain: the internal airflow path from the tobacco bowl through the stem to the mouthpiece.
+
 ## Tools
 | Stage | Tool |
 |---|---|

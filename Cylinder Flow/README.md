@@ -2,7 +2,53 @@
 
 **OpenFOAM v2012 · pimpleFoam / pimpleFoam + kOmegaSST · 4-Core Parallel · snappyHexMesh**
 
-A parametric study of 2D flow over a circular cylinder (diameter = 1 m) across a sweep of Reynolds numbers, from creeping Stokes flow through laminar vortex shedding onset into the turbulent regime. Developed as part of an OpenFOAM CFD portfolio demonstrating transient flow simulation and the diagnostic process behind getting a solver to reproduce known physics.
+A parametric study of 2D flow over a circular cylinder (diameter = 1 m) across a sweep of Reynolds numbers, from creeping Stokes flow through laminar vortex shedding onset into the turbulent regime.
+
+## Geometry
+
+```
+               inlet (uniform U)
+        ┌──────────────────────────────────────────────┐
+        │                                              │
+   −10  │              ┌───┐                           │  +20  → outlet
+        │              │ D │     wake                  │
+        │              └───┘                           │
+        └──────────────────────────────────────────────┘
+               bottom (slip)
+    y = −10 m ─────────────────── y = +10 m
+
+Domain: −10 m < x < 20 m, −10 m < y < 10 m (cylinder at origin)
+```
+
+| Dimension | Value |
+|-----------|-------|
+| Cylinder diameter D | 1 m |
+| Domain x range | −10 to +20 m (10D upstream, 20D downstream) |
+| Domain y range | −10 to +10 m (10D half-width) |
+| Depth (2D) | 1 m (1 cell, empty) |
+| Mesh cells | ≈ 115,000 per case |
+
+## Boundary Conditions
+
+| Patch | Type | U | p | k | ω |
+|-------|------|---|---|---|---|
+| `inlet` | patch | fixedValue (**U per Re**, see table) | zeroGradient | fixedValue k_in | fixedValue ω_in |
+| `outlet` | patch | zeroGradient | fixedValue **0 Pa** | zeroGradient | zeroGradient |
+| `cylinder` | wall | noSlip | zeroGradient | kqRWallFunction | omegaWallFunction |
+| `top` / `bottom` | patch | **slip** | zeroGradient | — | — |
+| `front` / `back` | empty | — | — | — | — |
+
+The `top`/`bottom` patches use `slip` (not `symmetryPlane`) to allow the asymmetric von Kármán wake to develop freely. `symmetryPlane` enforces mirror symmetry and prevents vortex shedding.
+
+## Inlet velocities
+
+| Case | Re | U (m/s) | ν (m²/s) | Model |
+|------|----|---------|-----------| ------|
+| Re_3 | 3 | 4.5×10⁻⁵ | 1.5×10⁻⁵ | Laminar |
+| Re_40 | 40 | 6.0×10⁻⁴ | 1.5×10⁻⁵ | Laminar |
+| Re_100 | 100 | 1.5×10⁻³ | 1.5×10⁻⁵ | Laminar |
+| Re_30000 | 30000 | 0.45 | 1.5×10⁻⁵ | k-ω SST |
+| Re_800000 | 800000 | 12.0 | 1.5×10⁻⁵ | k-ω SST |
 
 ---
 

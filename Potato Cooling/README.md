@@ -2,6 +2,62 @@
 
 Transient simulation of an 80 mm diameter potato (T=180 °C) cooling in still air (T=25 °C) via natural convection. Two-region conjugate heat transfer captures the spatial temperature non-uniformity inside the potato - something lumped-capacitance analysis cannot.
 
+## Geometry
+
+```
+    ┌─────────────────────────────────────────────────────────────────────┐ 600 mm
+    │                                                                     │
+    │                                                                     │
+    │                       ╭─────╮                                       │
+    │                      / potato \   D = 80 mm                        │ 400 mm
+    │                      \ sphere /   T_init = 180°C                   │ (air box)
+    │                       ╰─────╯                                       │
+    │                                                                     │ 400 mm
+    │              ↑↑↑  buoyancy plume  ↑↑↑                              │
+    └─────────────────────────────────────────────────────────────────────┘
+    
+    Two regions: domain0 (air, 400×400×600 mm box) + potato (solid sphere, D=80 mm)
+```
+
+| Dimension | Value |
+|-----------|-------|
+| Potato diameter D | 80 mm |
+| Air box | 400 × 400 × 600 mm |
+| Mesh | `snappyHexMesh` (40,357 cells, 4,872 interface faces) |
+| Regions | `domain0` (air fluid) + `potato` (solid) |
+
+## Boundary Conditions
+
+### domain0 (air)
+
+| Patch | Type | U | T | p_rgh |
+|-------|------|---|---|-------|
+| `potato_to_domain0` | wall / CHT interface | noSlip | `turbulentTemperatureCoupledBaffleMixed` | fixedFluxPressure |
+| `outer_walls` | wall | noSlip | fixedValue **25°C** | fixedFluxPressure |
+| `top` / `bottom` / side walls | wall | noSlip | fixedValue 25°C | fixedFluxPressure |
+
+### potato (solid)
+
+| Patch | Type | T |
+|-------|------|---|
+| `potato_to_domain0` | CHT interface | `turbulentTemperatureCoupledBaffleMixed` |
+
+Initial conditions: T_potato = 180°C (uniform), T_air = 25°C (uniform), U = 0 (rest).
+
+## Contour Plots
+
+![Potato mesh](potato_mesh.png)
+*snappyHexMesh surface around the 80mm sphere. The boundary layer mesh resolves the near-wall thermal gradients.*
+
+![Domain temperature](domain0_T_contour.png)
+*Air temperature field showing the thermal plume rising from the top of the potato. The natural convection boundary layer wraps the sphere.*
+
+![Potato temperature](potato_T_contour.png)
+*Potato interior temperature showing the spatial gradient — the surface cools first, the centre remains close to 180°C for hundreds of seconds.*
+
+![Domain velocity](domain0_U_contour.png)
+*Air velocity field showing the buoyancy-driven plume above the potato and the return flow drawing cool air from below.*
+
 ## Setup
 
 | Parameter | Value |

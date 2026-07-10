@@ -4,6 +4,20 @@
 
 Three coupled simulations of a De Laval (converging-diverging) rocket nozzle on an identical extended mesh that captures the supersonic core flow, the diverging plume, and the ambient far-field. The study progresses from a frozen-composition hot-gas model through premixed combustion to separate LOX/kerosene injection, isolating the effect of each modelling assumption on the exit flow and species distribution.
 
+## Overview Visualisations (Case 1: Hot Gas)
+
+![Mesh](mesh.png)
+*5-block axisymmetric wedge mesh (14,400 cells). Converging-diverging nozzle profile visible, with chamber at left and plume region at right.*
+
+![Temperature contour](T_contour.png)
+*Temperature field at t = 0.5 ms showing the rapid expansion from 3000 K chamber temperature through the throat and into the supersonic plume.*
+
+![Velocity contour](U_contour.png)
+*Velocity magnitude showing the sonic throat (peak gradient) and supersonic exit plume.*
+
+![Pressure contour](p_contour.png)
+*Static pressure field showing the pressure drop from 3 MPa chamber through the nozzle throat and plume. Shock structures visible in the over-expanded plume region.*
+
 ---
 
 ## Cases

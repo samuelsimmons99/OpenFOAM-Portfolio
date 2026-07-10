@@ -2,6 +2,53 @@
 
 Time-accurate simulation of natural convection startup from rest in a differentially-heated square cavity using `buoyantBoussinesqPimpleFoam`, validating the Nu(t) time history against the Christon, Gresho & Sutton (2002) benchmark.
 
+## Geometry
+
+```
+              adiabatic top wall (∂T/∂y = 0)
+    ┌─────────────────────────────────────────┐
+    │                                         │
+T_H │          ↑                              │ T_C
+300.5K │      buoyancy-                       │ 299.5K
+    │      driven                             │  applied
+    │     circulation                         │  as step
+    │                                         │  change at t=0
+    └─────────────────────────────────────────┘
+              adiabatic bottom wall (∂T/∂y = 0)
+    x = 0, hot wall                   x = 1 m, cold wall
+```
+
+Same geometry as the [Heated Cavity](../Heated%20Cavity/README.md) steady validation, but with a **step change** in wall temperatures at t = 0 (both walls start at T_ref = 300 K, then jump to 300.5 K / 299.5 K).
+
+## Boundary Conditions
+
+| Patch | Type | U | T | p_rgh |
+|-------|------|---|---|-------|
+| `hotWall` | wall | noSlip | fixedValue **300.5 K** (step at t=0) | fixedFluxPressure |
+| `coldWall` | wall | noSlip | fixedValue **299.5 K** (step at t=0) | fixedFluxPressure |
+| `topWall` | wall | noSlip | zeroGradient (adiabatic) | fixedFluxPressure |
+| `bottomWall` | wall | noSlip | zeroGradient (adiabatic) | fixedFluxPressure |
+| `front` / `back` | empty | — | — | — |
+
+Initial conditions: U = (0,0,0), T = 300 K uniform, p_rgh = 0.
+
+## Mesh
+
+![Computational mesh](mesh.png)
+
+| Property | Value |
+|----------|-------|
+| Total cells | 100 × 100 × 1 = **10,000** |
+| Distribution | Uniform (grid-independent confirmed by GCI study) |
+
+## Contour Plots
+
+![Temperature field](T_contour.png)
+*Temperature field at t = 5000 s (steady state). Thin thermal boundary layers on hot (left) and cold (right) walls, with linear stratification in the core.*
+
+![Velocity field](U_contour.png)
+*Velocity magnitude at t = 5000 s showing the established convection pattern.*
+
 ## Motivation
 
 The differentially-heated square cavity is well-characterised in its steady state (de Vahl Davis 1983), but the transient startup behaviour — how the flow evolves from rest to the established convection pattern — reveals the solver's time integration accuracy and physical fidelity. Christon et al. (2002) compiled results from multiple codes for this benchmark, providing a reference Nu(t) curve against which transient CFD can be directly validated.

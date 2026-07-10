@@ -1,8 +1,42 @@
-# NACA 0012 Airfoil - Aerodynamic Polar
+# NACA 0012 Airfoil: Aerodynamic Polar Validation
 
 Multi-configuration validation of lift and drag polars for the NACA 0012 symmetric aerofoil, including a mesh convergence study and turbulence model comparison at Re = 3×10⁶.
 
-## Geometry and setup
+## Geometry
+
+```
+              ← 25c far-field radius →
+    ┌─────────────────────────────────────────────────────────────┐
+    │         inlet (uniform U at AoA)                            │
+    │                                                             │
+    │         ╔══════╗                                            │ outlet
+    │       ══╝ NACA ╚══                                          │ (p=0)
+    │         ╚══════╝  ↗ AoA rotation                           │
+    │          c = 1 m                                            │
+    └─────────────────────────────────────────────────────────────┘
+    
+    C-mesh topology; AoA applied by rotating inlet velocity vector
+```
+
+| Dimension | Value |
+|-----------|-------|
+| Chord length c | 1 m |
+| Far-field radius | 25c = 25 m |
+| Domain type | C-mesh (structured, conformal near aerofoil) |
+| AoA method | Rotate inlet velocity vector: U_x = U∞ cos(AoA), U_y = U∞ sin(AoA) |
+
+## Boundary Conditions
+
+| Patch | Type | U | p | k | ω |
+|-------|------|---|---|---|---|
+| `inlet` (far-field) | patch | fixedValue (U∞ rotated by AoA) | zeroGradient | fixedValue | fixedValue |
+| `outlet` | patch | inletOutlet | fixedValue **0 Pa** | zeroGradient | zeroGradient |
+| `aerofoil` | wall | noSlip | zeroGradient | kqRWallFunction | omegaWallFunction |
+| `front` / `back` | empty | — | — | — | — |
+
+Inlet turbulence: I = 0.1%, L_t = 0.01c (freestream turbulence). Forces referenced to AoA-aligned lift/drag axes via `forceCoeffs`.
+
+## Setup
 
 | Parameter | Value |
 |-----------|-------|
@@ -25,6 +59,17 @@ Multi-configuration validation of lift and drag polars for the NACA 0012 symmetr
 **Turbulence models tested (medium mesh):** k-ω SST, Spalart-Allmaras, Realizable k-ε
 
 AoA is applied by rotating the inlet velocity vector in the x-z plane; lift and drag directions are updated accordingly. Force coefficients are extracted via `forceCoeffs` with a reference area of 1 m² (2D, unit span).
+
+## Mesh and Contour Plots (AoA = 6°)
+
+![Computational mesh](mesh.png)
+*C-mesh topology around the NACA 0012 aerofoil. High circumferential resolution near the leading edge and suction-side surface resolves the pressure gradient accurately.*
+
+![Velocity contour](U_contour.png)
+*Velocity magnitude at AoA = 6°. The stagnation point at the leading edge (blue), accelerated flow over the suction surface, and wake deficit are clearly visible.*
+
+![Pressure contour](p_contour.png)
+*Pressure coefficient distribution at AoA = 6°. The suction peak near the leading edge drives the lift force.*
 
 ## Discretisation uncertainty
 

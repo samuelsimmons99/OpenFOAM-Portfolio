@@ -2,6 +2,60 @@
 
 Validation of OpenFOAM's VOF (Volume of Fluid) free-surface solver against the classical Martin & Moyce (1952) dam break experiment.
 
+## Geometry
+
+```
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │                                                                     │
+    │   ████████                                                          │ 0.6 m
+    │   ████████  ← water column                                          │
+    │   ████████  0.292 m × 0.292 m                                       │
+    │   ████████                                                          │
+    └─────────────────────────────────────────────────────────────────────┘
+    x=0          x=0.292 m                              x = 1.2 m
+    
+    After gate removal: column collapses, surge front propagates rightward
+    Tracked: x_front (surge front position) and z_col (column height)
+```
+
+| Dimension | Value |
+|-----------|-------|
+| Tank length | 1.2 m |
+| Tank height | 0.6 m |
+| Column width 2a | 0.292 m (a = 0.146 m) |
+| Column height H | 0.292 m |
+| Depth (2D) | 1 cell, empty |
+
+## Mesh
+
+![Computational mesh](mesh.png)
+*480 × 240 uniform Cartesian mesh. Δx = Δy = 2.5 mm everywhere — required for the fine VOF interface tracking at the collapsing column.*
+
+| Property | Value |
+|----------|-------|
+| Total cells | 480 × 240 = **115,200** |
+| Cell size | 2.5 mm × 2.5 mm (uniform) |
+
+## Boundary Conditions
+
+| Patch | Type | U | p_rgh | alpha.water |
+|-------|------|---|-------|-------------|
+| `leftWall` | wall | noSlip | fixedFluxPressure | zeroGradient |
+| `rightWall` | wall | noSlip | fixedFluxPressure | zeroGradient |
+| `bottom` | wall | noSlip | fixedFluxPressure | zeroGradient |
+| `atmosphere` (top) | patch | pressureInletOutletVelocity | totalPressure 0 | inletOutlet |
+| `front` / `back` | empty | — | — | — |
+
+Initial condition: α_water = 1 (water) inside the 0.292×0.292 m column, α_water = 0 (air) elsewhere; set with `setFields`.
+
+## Contour Plots
+
+![Water phase contour](alpha.water_contour.png)
+*Volume fraction α_water showing the water column at an intermediate time. The VOF interface (α = 0.5 isoline) tracks the free surface.*
+
+![Velocity contour](U_contour.png)
+*Velocity magnitude during the collapse, showing the high-velocity surge front and internal flow within the water column.*
+
 ## Physics
 
 A square water column (0.292 m × 0.292 m) collapses under gravity in a 1.2 m × 0.6 m tank. The simulation captures the surge front propagation and column height decay, non-dimensionalised as:

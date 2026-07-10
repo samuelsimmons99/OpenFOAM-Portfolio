@@ -42,6 +42,17 @@ Generated using OpenFOAM's `snappyHexMesh` with `locationsInMesh` for multi-regi
 | `Heatsink` | Aluminium (k=202 W/m·K) | ~150,000 |
 | `FRONT_PANEL` | Steel (k=16 W/m·K) | ~50,000 |
 
+### Boundary Conditions
+
+| Patch | Type | U | T | p_rgh |
+|-------|------|---|---|-------|
+| `fan_inlet` (fans) | patch | fixedValue **(0, 0, −2.86) m/s** | fixedValue **300 K** | fixedFluxPressure |
+| `outlet` (rear vents) | patch | inletOutlet | inletOutlet 300 K | fixedValue 0 |
+| `chassis_walls` | wall | noSlip | zeroGradient (adiabatic) | fixedFluxPressure |
+| `*_to_*` interfaces | CHT | noSlip (fluid side) | `turbulentTemperatureCoupledBaffleMixed` | fixedFluxPressure |
+
+Heat source: `scalarSemiImplicitSource`, 1.863×10⁷ W/m³ in CPU silicon region (= 150 W / CPU volume).
+
 ### Solver Setup
 - **Thermophysical model**: `heRhoThermo` + `perfectGas` equation of state
 - **Turbulence**: k-epsilon RAS model

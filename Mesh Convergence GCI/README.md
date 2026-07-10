@@ -1,6 +1,48 @@
 # Mesh Convergence and GCI Study: Differentially-Heated Square Cavity
 
-Systematic mesh independence study following the Celik et al. (2008) Grid Convergence Index procedure, applied to the natural convection benchmark of de Vahl Davis (1983).
+Systematic mesh independence study following the Celik et al. (2008) Grid Convergence Index procedure, applied to the natural convection benchmark of de Vahl Davis (1983). Demonstrates Richardson extrapolation to the zero-mesh-spacing limit and quantifies remaining discretisation uncertainty.
+
+## Geometry
+
+```
+              adiabatic top wall (∂T/∂y = 0)
+    ┌─────────────────────────────────────────┐
+    │                                         │
+T_H │          ↑                              │ T_C
+300.5K │      buoyancy-                       │ 299.5K
+    │      driven                             │
+    │     circulation                         │
+    │                                         │
+    └─────────────────────────────────────────┘
+              adiabatic bottom wall (∂T/∂y = 0)
+    x = 0, hot wall                   x = 1 m, cold wall
+```
+
+Same geometry as [Heated Cavity](../Heated%20Cavity/README.md). Ra = 10⁵, the most mesh-sensitive of the laminar cases.
+
+## Boundary Conditions
+
+| Patch | Type | U | T | p_rgh |
+|-------|------|---|---|-------|
+| `hotWall` | wall | noSlip | fixedValue **300.5 K** | fixedFluxPressure |
+| `coldWall` | wall | noSlip | fixedValue **299.5 K** | fixedFluxPressure |
+| `topWall` | wall | noSlip | zeroGradient | fixedFluxPressure |
+| `bottomWall` | wall | noSlip | zeroGradient | fixedFluxPressure |
+| `front` / `back` | empty | — | — | — |
+
+## Mesh Levels
+
+![N200 mesh](mesh.png)
+*Finest mesh (N=200×200). At N=25×25 each cell is 16× larger.*
+
+| Level | Cells | h = 1/N |
+|-------|-------|---------|
+| N=25 | 625 | 0.0400 |
+| N=50 | 2,500 | 0.0200 |
+| N=100 | 10,000 | 0.0100 |
+| N=200 | 40,000 | 0.0050 |
+
+Refinement ratio r = 2 between all consecutive levels.
 
 ## Motivation
 
@@ -20,6 +62,14 @@ Most CFD validation studies report a single mesh result. The GCI procedure forma
 | QoI | Average Nusselt number Nu_avg on hot wall |
 
 Nu is extracted via one-sided finite difference from the hot-wall boundary to the first cell centre: Nu_local = -∂T/∂x|_{wall} · L/ΔT. The average is taken over all hot-wall cells.
+
+## Contour Plots (N=200 finest mesh)
+
+![Temperature contour](T_contour.png)
+*Temperature field at N=200. The thin vertical boundary layers on the hot/cold walls and the linearly stratified core are the signature of Ra=10⁵ convection.*
+
+![Velocity contour](U_contour.png)
+*Velocity magnitude at N=200 showing the wall-jet boundary layers and the slow core recirculation.*
 
 ## Results
 

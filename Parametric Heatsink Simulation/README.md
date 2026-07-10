@@ -31,6 +31,45 @@ Tighter pitch yields lower CPU temperature, with strongly diminishing returns be
 
 ---
 
+## Geometry
+
+```
+    duct inlet (fan)                                   duct outlet
+    ─────────────────────────────────────────────────────────────→
+    ┌─────────────────────────────────────────────────────────────┐
+    │    inlet plenum    │ ██ ██ ██ fins ██ ██  │  outlet plenum  │ 80 mm
+    │    (105 mm)        │ ██ ██ ██ (80mm)██ ██ │  (105 mm)       │
+    │                    │ ██ CPU 40×40mm ██    │                  │
+    │                    └─────────── ──────────┘                  │
+    │        baseplate (5 mm) + CPU (4.5 mm) centred below fins   │
+    └─────────────────────────────────────────────────────────────┘
+
+    Fin array: pitch = 3/4/5 mm · fin t = 1.5 mm · fin H = 35 mm · 24/18/15 fins
+```
+
+| Dimension | Value |
+|-----------|-------|
+| Duct cross-section | 80 mm × 80 mm |
+| Total duct length | 290 mm (105 inlet + 80 heatsink + 105 outlet) |
+| Fin height | 35 mm |
+| Fin thickness | 1.5 mm |
+| Base thickness | 5 mm |
+| CPU die | 40 × 40 × 4.5 mm (centred under fin array) |
+| Regions | `fluid` (air) + `solid` → `heatsink` (Al) + `cpu` (Si) |
+
+## Boundary Conditions
+
+| Patch | Type | U | T | p_rgh |
+|-------|------|---|---|-------|
+| `fan` (inlet) | `fanPressure` (Delta FFB0812VH curve) | `pressureInletOutletVelocity` | fixedValue **300 K** | `fanPressure` |
+| `outlet` | patch | `inletOutlet` | inletOutlet 300 K | fixedValue 0 |
+| `duct_walls` | wall | noSlip | zeroGradient | fixedFluxPressure |
+| `*_to_*` interfaces | CHT | coupled | `coupledTemperature` | — |
+
+Heat source: `heatSource` fvModel, `Q = 150 W`, applied to `allCpuCells` zone in the silicon CPU region.
+
+---
+
 ## Simulation Overview
 
 ### Geometry: Parametric, not hand-built

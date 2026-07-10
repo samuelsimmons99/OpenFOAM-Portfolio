@@ -6,6 +6,39 @@ Parametric study of natural convection on a heated vertical plate across three R
 
 ---
 
+## Geometry
+
+```
+    ┌──────────── outlet (top) ────────────┐
+    │                                      │
+    │  thermal boundary layer grows        │ L (1 m or 2 m)
+    │  upward along the hot plate →        │
+    │                                      │
+    │                                      │
+    └──────────────────────────────────────┘
+    ↑ inlet (bottom, U=0, T=T_inf)
+    
+    x = 0: plate (T = T_plate, noSlip)     x = W: far field (slip, T = T_inf)
+    W = 0.4 L (domain width)
+```
+
+| Dimension | Value |
+|-----------|-------|
+| Plate height L | 1 m (laminar/transitional) or 2 m (turbulent) |
+| Domain width W | 0.4 L |
+| Depth (2D) | 1 cell, empty |
+| Gravity | 9.81 m/s² (−y direction, upward flow) |
+
+## Boundary Conditions
+
+| Patch | Type | U | T | p_rgh |
+|-------|------|---|---|-------|
+| `plate` (x=0) | wall | noSlip | fixedValue **T_plate** | fixedFluxPressure |
+| `farField` (x=W) | patch | slip | fixedValue **T_inf = 300 K** | fixedValue 0 |
+| `inlet` (y=0) | patch | pressureInletOutletVelocity | fixedValue **T_inf** | fixedValue 0 |
+| `outlet` (y=L) | patch | pressureInletOutletVelocity | inletOutlet T_inf | fixedValue 0 |
+| `front` / `back` | empty | — | — | — |
+
 ## Problem Definition
 
 A vertical plate in quiescent air at 300 K is held at a fixed temperature. Buoyancy drives air upward along the plate, forming a thermal boundary layer. Three cases vary plate temperature and height to sweep Ra across three orders of magnitude.
