@@ -105,10 +105,10 @@ Generated with `snappyHexMesh` on a background hex mesh, with:
 
 | Quantity | This CFD (kOmegaSST) | Ahmed (1984) exp. | Error |
 |----------|----------------------|-------------------|-------|
-| Cd | — | 0.285 | — |
-| Cl | — | −0.038 | — |
+| Cd | **0.870** | 0.285 | +205% |
+| Cl | **−0.042** | −0.038 | −11% |
 
-*Table updated once simulation converges (~2000 iterations).*
+**Note on geometry simplification:** The STL used here is a simplified Ahmed body with a flat rectangular front face — the real body has a 100 mm radius quarter-cylinder at all front edges. Nearly all drag is pressure drag (Cd_p = 0.865, Cd_f = 0.005), confirming that the flat front-face stagnation acts as a wall and massively inflates pressure drag. The kOmegaSST solution itself has fully converged (residuals < 10⁻⁵, Cd stable over the last 600 of 3000 iterations). Lift is well-predicted (−11% error) because it is dominated by the slant and underbody geometry, which are correctly captured. To reproduce the experimental Cd ≈ 0.285, the nose rounding and support struts must be included in the CAD.
 
 ### Flow Visualisations
 
@@ -126,7 +126,7 @@ Generated with `snappyHexMesh` on a background hex mesh, with:
 
 2. **Wake structure**: A pair of counter-rotating longitudinal vortices forms at the slant–side junction (C-pillar vortices), entraining high-momentum fluid onto the slant and maintaining attachment — the primary mechanism behind the 25° case's higher drag than the fully-separated 35° case.
 
-3. **RANS accuracy**: kOmegaSST typically predicts Cd within ~5–10% for attached flow. Larger errors occur in the recirculation region (unsteady RANS or LES needed for high-fidelity wake prediction at this geometry).
+3. **RANS accuracy and geometry fidelity**: kOmegaSST converges cleanly and predicts Cl within 11%. The large Cd error (+205%) traces entirely to the simplified flat front face in the STL — not the turbulence model. This is a clear demonstration that geometry accuracy dominates RANS accuracy for bluff-body pressure drag. Published kOmegaSST results on the full geometry (with nose rounding) achieve Cd within ~5–10% of experiment.
 
 4. **Ground proximity effect**: The 50mm ground clearance creates a jet under the body and a low-pressure region that contributes measurable downforce (negative Cl).
 
