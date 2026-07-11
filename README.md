@@ -136,6 +136,9 @@ The transition zone (Re 2 300-4 000) is intentionally omitted: steady RANS canno
 ### [Laminar Flat Plate Forced Convection](./Flat%20Plate%20Convection/)
 **Solver:** `buoyantSimpleFoam` (laminar) &nbsp;|&nbsp; **Mesh:** 260×50 blockMesh, graded wall-normal &nbsp;|&nbsp; **Re_L:** 9.6×10⁴
 
+<img src="Flat Plate Convection/flat_plate.png" width="700">
+<img src="Flat Plate Convection/T_contour.png" width="700">
+
 Local Nusselt number distribution Nu_x along an isothermal flat plate (T_w = 350 K, U∞ = 3 m/s) compared against the Pohlhausen (1921) similarity solution Nu_x = 0.332 Re_x^½ Pr^(1/3). Captures the Re_x^½ scaling law across the plate length; peak Nu at the leading edge drops to the fully-developed boundary-layer value downstream. Demonstrates laminar thermal boundary-layer resolution with 35 cells across δ_T at mid-plate and a wall-normal grading ratio of 30:1.
 
 ---
@@ -270,6 +273,9 @@ Wall-resolved Large Eddy Simulation of turbulent channel flow at Re_τ = 395, va
 
 ### [Ahmed Body - 3D External Aerodynamics Validation](./Ahmed%20Body/)
 **Solver:** `simpleFoam` + k-ω SST &nbsp;|&nbsp; **Mesh:** snappyHexMesh, ~730k cells, 4 prism layers &nbsp;|&nbsp; **Re_L:** 2.78×10⁶
+
+<img src="Ahmed Body/U_contour.png" width="700">
+<img src="Ahmed Body/cd_convergence.png" width="700">
 
 The canonical 3D bluff-body benchmark (Ahmed, Ramm & Faltin 1984), 25° slant angle. STL geometry generated programmatically from standard dimensions; snappyHexMesh with wake and near-body refinement boxes. Drag coefficient Cd compared against Ahmed (1984) experiment (Cd = 0.285) and published LES/RANS literature. Wake structure, C-pillar vortex pair, and pressure distribution on the slant documented. Represents the first fully 3D external-aerodynamics case in the portfolio, demonstrating snappyHexMesh workflow on a complex non-trivial geometry with ground proximity effects.
 
