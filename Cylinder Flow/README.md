@@ -98,13 +98,13 @@ This mesh approach was chosen after an earlier hand-built O-grid `blockMeshDict`
 
 | Re = 3 | Re = 40 |
 |---|---|
-| ![Re_3 velocity](Linux%20Files/Re_3_U_contour.png) | ![Re_40 velocity](Linux%20Files/Re_40_U_contour.png) |
+| ![Re_3 velocity](Re_3_U_contour.png) | ![Re_40 velocity](Re_40_U_contour.png) |
 
 | Re = 100 | Re = 30,000 |
 |---|---|
-| ![Re_100 velocity](Linux%20Files/Re_100_U_contour.png) | ![Re_30000 velocity](Linux%20Files/Re_30000_U_contour.png) |
+| ![Re_100 velocity](Re_100_U_contour.png) | ![Re_30000 velocity](Re_30000_U_contour.png) |
 
-![Re_800000 velocity](Linux%20Files/Re_800000_U_contour.png)
+![Re_800000 velocity](Re_800000_U_contour.png)
 
 *Re = 800,000 velocity magnitude, showing a compact turbulent wake with tighter vortex spacing relative to the lower-Re cases.*
 
@@ -112,25 +112,25 @@ At Re = 3 and Re = 40 the wake stays attached and symmetric about the centreline
 
 ### Lift coefficient history
 
-![Re_100 Cl history](Linux%20Files/Re_100_Cl_history.png)
+![Re_100 Cl history](Re_100_Cl_history.png)
 
 Re = 100 lift coefficient over the full run. Cl starts near zero, grows as the shedding instability develops, then settles into a clean periodic oscillation.
 
-![Re_100 Cl zoom](Linux%20Files/Re_100_Cl_zoom.png)
+![Re_100 Cl zoom](Re_100_Cl_zoom.png)
 
 Final 20% of the Re = 100 run, showing the fully developed shedding cycle, period around 4000 s, amplitude about 0.31.
 
-![Re_30000 Cl zoom](Linux%20Files/Re_30000_Cl_zoom.png)
+![Re_30000 Cl zoom](Re_30000_Cl_zoom.png)
 
 Re = 30,000 lift coefficient over the last 20% of its run. Shedding is faster and stronger in this turbulent case, the amplitude is still growing toward saturation at the current end time.
 
-![Re_800000 Cl zoom](Linux%20Files/Re_800000_Cl_zoom.png)
+![Re_800000 Cl zoom](Re_800000_Cl_zoom.png)
 
 Re = 800,000 fully saturated periodic shedding over the last 20% of the run, amplitude around 1.22, with a noticeably higher frequency than Re = 30,000 due to the much higher inlet velocity.
 
 ### Drag coefficient convergence
 
-![Cd convergence](Linux%20Files/Cd_convergence_all.png)
+![Cd convergence](Cd_convergence_all.png)
 
 Drag coefficient versus time (log scale) for all four completed cases. Re_3 converges the slowest, a known feature of low-Reynolds-number cylinder drag, while the higher-Re cases settle within their much shorter convective timescales.
 
