@@ -100,12 +100,14 @@ Wall-normal grading: 48 cells each half-channel, expansion ratio 50 (fine at wal
 
 | Quantity | LES (WALE) | Moser DNS (1999) | Error |
 |----------|------------|------------------|-------|
-| Re_τ (realised) | — | 395 | — |
-| u⁺_centreline | — | 24.1 | — |
-| Peak ⟨u'u'⟩⁺ | — | 7.44 at y⁺≈13 | — |
-| Peak ⟨v'v'⟩⁺ | — | 0.91 at y⁺≈100 | — |
+| Re_τ (realised) | **361** | 395 | −9% |
+| u⁺_centreline | **22.8** | 24.1 | −5% |
+| Peak ⟨u'u'⟩⁺ | **18.7** at y⁺ ≈ 18 | 7.9 at y⁺ ≈ 13 | +137% |
+| Peak ⟨v'v'⟩⁺ | **0.90** at y⁺ ≈ 76 | 0.91 at y⁺ ≈ 55 | −1% |
+| Peak ⟨w'w'⟩⁺ | **1.58** at y⁺ ≈ 33 | 2.5 at y⁺ ≈ 20 | −37% |
+| Peak −⟨u'v'⟩⁺ | **0.92** at y⁺ ≈ 51 | 1.00 at y⁺ ≈ 50 | −8% |
 
-*Table updated once simulation completes statistics averaging (t > 30 s).*
+**Note on ⟨u'u'⟩⁺:** The streamwise normal stress is significantly overpredicted. The cause is statistical: the `periodicRestart 30 s` setting discarded all prior averaging at t = 60 s, leaving only 19.9 s of statistics in the final window. The streamwise stress requires far longer averaging to converge than the wall-normal or spanwise components because its integral timescale is much larger. ⟨v'v'⟩⁺ and −⟨u'v'⟩⁺ — which depend on shorter-timescale structures — agree with DNS to within 8%.
 
 ---
 
@@ -117,7 +119,9 @@ Wall-normal grading: 48 cells each half-channel, expansion ratio 50 (fine at wal
 
 3. **Computational cost vs RANS**: LES required ≈60 wall-clock hours on a single core vs minutes for kOmegaSST RANS; the additional cost buys physically correct time-dependent turbulence and flow structure.
 
-4. **meanVelocityForce vs fixed pressure gradient**: Driving the channel with a target bulk velocity (rather than imposing dp/dx) makes the achieved Re_τ a result of the simulation rather than an input, providing a clean convergence diagnostic.
+4. **meanVelocityForce vs fixed pressure gradient**: Driving the channel with a target bulk velocity (rather than imposing dp/dx) makes the achieved Re_τ a result of the simulation rather than an input, providing a clean convergence diagnostic. The achieved Re_τ = 361 vs the target 395 (−9%) because the target bulk velocity of 18.2 m/s corresponds to Re_τ ≈ 370 by Dean's (1978) correlation, not 395; a corrected Ūb ≈ 20.1 m/s would be required.
+
+5. **Statistical convergence**: Second-order statistics (Reynolds stresses) require substantially longer averaging than first-order quantities (mean velocity). With only 19.9 s of effective averaging in the final window (after the periodic restart at t = 60 s), the streamwise component ⟨u'u'⟩⁺ is significantly overpredicted (+137%). A single long averaging window (no periodic restart) from t = 30 s onward would improve convergence; running to t ≥ 120 s is recommended for production-quality statistics.
 
 ---
 
