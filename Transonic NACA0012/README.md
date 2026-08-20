@@ -66,6 +66,26 @@ Turbulence at inlet: I = 0.1%, L_t = 0.01 m → k = 0.111 m²/s², ω = 3 331 s�
 
 ---
 
+## Results — Flow Visualisation
+
+### Mach Number Distribution (iteration 20 000)
+
+![Mach contour](transonic_mach_contour.png)
+
+*Mach number field at iteration 20 000. A supersonic pocket (Ma > 1, enclosed by the white dashed sonic line) is visible on the upper surface of the aerofoil near x/c ≈ 0.4–0.7, with a local maximum of Ma ≈ 1.76. The shock terminating the pocket is smeared over several cells due to the non-converged, oscillating solution state.*
+
+### Pressure Coefficient Distribution (iteration 20 000)
+
+![Cp contour](transonic_cp_contour.png)
+
+*Pressure coefficient field showing the low-Cp (suction) region on the upper surface and the stagnation high-Cp region at the leading edge. Despite the non-convergence, the characteristic transonic Cp distribution is recognisable at iteration 20 000.*
+
+### Residual History
+
+![Residuals](transonic_residuals.png)
+
+---
+
 ## Results — Convergence Analysis
 
 ### Pressure Residual History

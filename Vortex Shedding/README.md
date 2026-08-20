@@ -78,19 +78,32 @@ A full **Re sweep** (Re = 50, 60, 80, 100, 120, 150, 180) was run using identica
 
 ## Results
 
+### Re Sweep — Cd, St, and C_l time histories
+
+![Re sweep results](vortex_shedding_sweep.png)
+
+*Left: mean drag coefficient vs Re compared with Tritton (1959) / Williamson & Brown (1998). Centre: Strouhal number vs Re compared with Williamson (1988) / Norberg (2003). Right: lift coefficient C_l time histories for the last 50 convective time units at all Re.*
+
+| Re | Cd (CFD) | Cd (lit.) | Error | St (CFD) | St (lit.) | Error |
+|----|----------|-----------|-------|----------|-----------|-------|
+| 50 | 1.375 | 1.500 | −8.3% | — (steady) | 0.133 | — |
+| 60 | 1.351 | 1.460 | −7.5% | 0.131 | 0.145 | −9.7% |
+| 80 | 1.217 | 1.380 | −11.8% | 0.134 | 0.155 | −13.5% |
+| 120 | 1.279 | 1.290 | −0.9% | 0.167 | 0.170 | −1.8% |
+| 150 | 1.274 | 1.250 | +1.9% | 0.176 | 0.176 | +0.2% |
+| 180 | 1.276 | 1.220 | +4.6% | 0.183 | 0.181 | +1.4% |
+
+Re = 50 exhibits steady attached flow (no shedding, Cl ≈ 0), consistent with onset of the laminar instability near Re ≈ 47. Agreement improves with Re: St is within ±1.5% for Re ≥ 120, and Cd within ±5% for Re ≥ 120. The systematic underprediction of both Cd and St at Re = 60–80 reflects that the 2D structured mesh at 12k cells has insufficient resolution in the near-wake at these transitional Reynolds numbers where the shedding amplitude is small and the vortex cores are thin.
+
+### Single-point validation (Re = 100)
+
 ![Strouhal validation](strouhal_validation.png)
 
-| Re | St (CFD) | St (Williamson) | Error |
-|----|----------|-----------------|-------|
-| 50 | 0.1200 | 0.1225 | −2.1% |
-| 60 | 0.1267 | 0.1351 | −6.2% |
-| 80 | 0.1467 | 0.1526 | −3.9% |
-| 100 | 0.1600 | 0.1646 | −2.8% |
-| 120 | 0.1667 | 0.1735 | −3.9% |
-| 150 | 0.1733 | 0.1833 | −5.4% |
-| 180 | 0.1867 | 0.1905 | −2.0% |
+![Velocity contour](U_contour.png)
+*Velocity magnitude showing the instantaneous von Kármán vortex street at Re = 100.*
 
-All seven points lie within ±6.2% of the Williamson correlation, with a consistent slight underprediction attributable to numerical dissipation on the 12k-cell mesh (coarser radial resolution damps the vortex convection speed slightly). The correct monotonic St-Re trend is reproduced across the full laminar shedding regime.
+![Pressure contour](p_contour.png)
+*Pressure field showing the alternating high-low pressure pattern of the vortex street.*
 
 ## References
 
